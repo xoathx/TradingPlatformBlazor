@@ -1,0 +1,259 @@
+﻿@page "/offer/{IdOffer:int}"
+@inject NavigationManager nav;
+@inject TradingPlatformBlazor.Data.Repository.IOffer SqlOffer
+@inject TradingPlatformBlazor.Data.Repository.ILot SqlLot
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IComment SqlComment
+@inject IHttpContextAccessor htp
+@implements IAsyncDisposable
+@attribute [Authorize]
+<AuthorizeView Context="any" Roles="@globalRoles">
+    @if (currentOffer == null)
+    {@message }
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Заказ #@currentOffer.IdentifierName</h1>
+                @if (currentOffer.StateOffer == StateOffer.Completed)
+                {
+                    selectorState = "completedOffer";
+                    messageState = "Завершено";
+                }
+                @if (currentOffer.StateOffer == StateOffer.Canceled)
+                {
+                    selectorState = "canseledOffer";
+                    messageState = "Отменен";
+                }
+                @if (currentOffer.StateOffer == StateOffer.InProcess)
+                {
+                    messageState = "В процессе...";
+                    selectorState = "inprocessOffer";
+                }
+                @if (currentOffer.StateOffer == StateOffer.ManyBack)
+                {
+                    selectorState = "manybackOffer";
+                    messageState = "Возврат";
+                }
+                <h4 class="@selectorState">@messageState</h4>
+                <div class="nameLot"><p class="h3">@currentOffer.LotsName</p></div>
+                <hr align="left" width="500px" color="#80CEFD" />
+                <div class="descpLot">
+                    <p>@currentOffer.LotsDesc</p>
+                </div>
+                <hr align="left" width="500px" color="#80CEFD" />
+                <div class="priceOffer">
+                    <p>@currentOffer.LotsPrice</p>
+                    <div class="payState">Оплачено</div>
+                </div>
+                <div class="panelButOffer">
+                    <AuthorizeView Roles="@SqlUser.GetUserById(currentOffer.CustomerId).NickName">
+                        @if (currentOffer.StateOffer == StateOffer.InProcess)
+                        {
+                            <button class="btn btn-success" @onclick="CustomerCompletedOffer">Завершить заказ</button>
+                            <button class="btn btn-danger" @onclick="CustomerCanseledOffer">Отменить заказ</button>
+                        }
+                        @if (currentOffer.StateOffer == StateOffer.Completed)
+                        {
+                            if(currentOffer.IsCommented == true) { } else { 
+                            <button class="btn btn-light" @onclick="OnDialogOpen">Оставить отзыв</button>}
+                        }
+                    </AuthorizeView>
+                    <AuthorizeView Roles="@Vendor.NickName">
+                        @if (currentOffer.StateOffer != StateOffer.Completed && currentOffer.IsManyBack == false)
+                        {
+                            <button class="btn btn-light" @onclick="ManyBack">Вернуть деньги</button>
+                        }
+                    </AuthorizeView>
+                </div>
+                <div class="comment-offer">
+                    @if (Comment != null)
+                    {
+                        <div class="row border comment-body">
+
+                            <a href="/user/@Comment.FromUserId" target="_top">
+                                <div class="col nickname-comment-user ">
+                                    <img class="avatar d-inline avatar-comment-user" src="/img/avatars/@SqlUser.GetUserById(Comment.FromUserId).PathAvatar" />
+                                    @SqlUser.GetUserById(Comment.FromUserId).NickName
+                                </div>
+                            </a>
+                            <div class="col-6 col-sm-3 bodytext-comment-user">
+                                <p>@Comment.BodyComment</p>
+                            </div>
+                            <div class="col">
+                                <div class="rating-mini rating-comment-user">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= Comment.ValueRating)
+                                        {
+                                            selector = "active";
+                                            <span class="@selector"></span>
+                                        }
+                                        else
+                                        {
+                                            <span></span>
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+            <div class="col">
+                <div class="offerChat">
+                    <AuthorizeView Roles="@Customer.NickName">
+                        <Chat ToUserId="currentOffer.VendorId"></Chat>
+                    </AuthorizeView>
+                    <AuthorizeView Roles="@Vendor.NickName">
+                        <Chat ToUserId="currentOffer.CustomerId"></Chat>
+                    </AuthorizeView>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if(OpenDialog) { <AddComment CurrentOffer="currentOffer" OnClose="OnDialogClose"></AddComment> }
+}
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public int IdOffer { get; set; }
+    HubConnection hubConnection;
+    private Offer currentOffer;
+    string message;
+    private string messageState = "В процессе...";
+    private string selectorState = "inprocessOffer";
+    private string currentUserName;
+    private string globalRoles;
+    private string selector;
+    private int customerId;
+    private User Vendor;
+    private User Customer;
+    private Comment Comment;
+    private bool OpenDialog { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentOffer = SqlOffer.GetOfferById(IdOffer);
+        if (currentOffer == null)
+        {
+            message = "Страница не найдена.";
+        }
+        else
+        {
+            Customer = SqlUser.GetUserById(currentOffer.CustomerId);
+            Vendor = SqlUser.GetUserById(currentOffer.VendorId);
+            Comment = SqlComment.GetCommentByOfferId(currentOffer.Id);
+            currentUserName = htp.HttpContext.User.Identity.Name;
+            customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            globalRoles = SqlUser.GetUserById(currentOffer.CustomerId).NickName + ", " + SqlUser.GetUserById(currentOffer.VendorId).NickName;
+        }
+        hubConnection = new HubConnectionBuilder()
+  .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+  {
+      if (htp.HttpContext.Request.Cookies.Count > 0)
+      {
+          opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
+      }
+  }).Build();
+        hubConnection.On<UpdateOffer>("UpdatingOffer", (update) =>
+        {
+            if (update.StateOffer == StateOffer.Canceled)
+            {
+                CanseledOffer();
+                StateHasChanged();
+            }
+            if (update.StateOffer == StateOffer.Completed)
+            {
+                CompletedOffer();
+                StateHasChanged();
+            }
+        });
+        await hubConnection.StartAsync();
+    }
+
+    void CompletedOffer()
+    {
+        selectorState = "completedOffer";
+        messageState = "Завершено";
+        currentOffer.IsOpenned = false;
+        currentOffer.DateClosing = DateTime.Now;
+        currentOffer.StateOffer = StateOffer.Completed;
+
+        SqlOffer.UpdateOffer(currentOffer);
+        SqlLot.DeleteLot(SqlLot.GetLotByID(currentOffer.LotId));
+
+        nav.NavigateTo(nav.Uri, true);
+        StateHasChanged();
+    }
+    void CanseledOffer()
+    {
+        selectorState = "canseledOffer";
+        messageState = "Отменен";
+        currentOffer.StateOffer = StateOffer.Canceled;
+        currentOffer.IsOpenned = false;
+        SqlUser.ManyBack(currentOffer.CustomerId, currentOffer.LotsPrice);
+        currentOffer.IsManyBack = true;
+        SqlOffer.UpdateOffer(currentOffer);
+        nav.NavigateTo(nav.Uri, true);
+        StateHasChanged();
+    }
+
+    void ManyBack()
+    {
+        selectorState = "manybackOffer";
+        messageState = "Возврат";
+        currentOffer.StateOffer = StateOffer.ManyBack;
+        currentOffer.IsOpenned = false;
+        SqlUser.ManyBack(currentOffer.CustomerId, currentOffer.LotsPrice);
+        currentOffer.IsManyBack = true;
+
+        SqlOffer.UpdateOffer(currentOffer);
+        nav.NavigateTo(nav.Uri, true);
+        StateHasChanged();
+    }
+    async Task CustomerCompletedOffer()
+    {
+        selectorState = "canseledOffer";
+        messageState = "Отменен";
+        UpdateOffer updateOffer = new UpdateOffer()
+        {
+            UserId = currentOffer.VendorId,
+            StateOffer = StateOffer.Completed
+        };
+        await hubConnection.SendAsync("UpdateOffer", updateOffer);
+        StateHasChanged();
+    }
+    async Task CustomerCanseledOffer()
+    {
+        selectorState = "canseledOffer";
+        messageState = "Отменен";
+        UpdateOffer updateOffer = new UpdateOffer()
+        {
+            UserId = currentOffer.VendorId,
+            StateOffer = StateOffer.Canceled
+        };
+        await hubConnection.SendAsync("UpdateOffer", updateOffer);
+        StateHasChanged();
+    }
+
+    private void OnDialogClose()
+    {
+        OpenDialog = false;
+    }
+    private void OnDialogOpen()
+    {
+        OpenDialog = true;
+    }
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}

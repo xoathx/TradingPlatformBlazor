@@ -1,0 +1,90 @@
+﻿
+@inject TradingPlatformBlazor.Data.Repository.IComment SqlComment
+@inject TradingPlatformBlazor.Data.Repository.IOffer SqlOffer
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Оставить комментарий</h4>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="comment">
+                    <div class="d-inline">
+                        <a href="#">                         
+                            <div class="d-inline"> <p>Testerovwik</p></div>  
+                            <div class="d-inline user-avatar-comment">
+                                <img class="avatar" src="img/avatars/1.jpg" />
+                            </div>
+                        </a>
+                    </div>
+                    <div class="offersComment">
+                        <div>
+                        @message
+                    </div>
+                        <div class="rating-area">
+                            <input type="radio" id="star-5" name="rating" @onclick="(() => { Rate = 5; })">
+                            <label for="star-5" title="Оценка «5»"></label>
+                            <input type="radio" id="star-4" name="rating" @onclick="(() => { Rate = 4; })">
+                            <label for="star-4" title="Оценка «4»"></label>
+                            <input type="radio" id="star-3" name="rating" @onclick="(() => { Rate = 3; })">
+                            <label for="star-3" title="Оценка «3»"></label>
+                            <input type="radio" id="star-2" name="rating" @onclick="(() => { Rate = 2; })">
+                            <label for="star-2" title="Оценка «2»"></label>
+                            <input type="radio" id="star-1" name="rating" @onclick="(() => { Rate = 1; })">
+                            <label for="star-1" title="Оценка «1»"></label>
+                        </div>
+                        
+                        <div class="body-comment">
+                            <textarea maxlength="300" class="form-control" rows="2" cols="100" @bind="BodyCommentText"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-light" @onclick="@ModalCancel">Cancel</button>
+                <button type="button" class="btn btn-primary" @onclick=@ModalOk>Отправить</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+    [Parameter]
+    public Offer CurrentOffer { get; set; }
+    private byte Rate;
+    private string message;
+    private string BodyCommentText;
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+    private Task ModalOk()
+    {
+        if (Rate < 1 || Rate > 5) {
+            message = "Выставите звезды!";
+            return Task.CompletedTask;
+        }
+        else {
+            Comment comment = new Comment()
+            {
+                FromUserId = CurrentOffer.CustomerId,
+                ToUserId = CurrentOffer.VendorId,
+                OfferId = CurrentOffer.Id,
+                BodyComment = BodyCommentText,
+                DateComment = DateTime.Now,
+                ValueRating = Rate
+            };
+            SqlComment.AddComment(comment);
+            CurrentOffer.IsCommented = true;
+            SqlOffer.UpdateOffer(CurrentOffer);
+            return OnClose.InvokeAsync(false);
+        }
+    }
+}

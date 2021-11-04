@@ -1,0 +1,64 @@
+﻿@inject NavigationManager Navigation
+@inject TradingPlatformBlazor.Data.Repository.IUser user;
+@page "/signup"
+<AuthorizeView>
+    <Authorized>
+        <p class="alert-info">Вы уже зарегистрированы</p>
+    </Authorized>
+    <NotAuthorized>
+        <h3>Registration</h3>
+        <p>@message</p>
+        <label for="input-login">Desired Login:</label>
+        <input type="text" id="input-login" class="form-control" placeholder="Login" @bind="login" />
+        <label for="input-nick">Desired Nickname:</label>
+        <input type="text" id="input-nick" class="form-control" placeholder="Nickname" @bind="nick" />
+        <label for="input-pass">Desired Password:</label>
+        <input type="password" id="input-pass" class="form-control" placeholder="Password" @bind="pass" />
+        <label for="input-apass">Password again:</label>
+        <input type="password" id="input-apass" class="form-control" placeholder="Password again" @bind="apass" />
+        <label for="input-email">Your e-mail:</label>
+        <input type="email" id="input-email" class="form-control" placeholder="E-mail" @bind="email" />
+        <button class="btn btn-primary" @onclick="Registr">Registrtation</button>
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    private string login;
+    private string pass;
+    private string apass;
+    private string email;
+    private string nick;
+    string message;
+    private string pattern = @"\p{IsCyrillic}";
+    void Registr()
+    {
+        if(Regex.IsMatch(login, pattern) || Regex.IsMatch(pass, pattern))
+        { message = "Логин и пароль не должны содержать кириллицу!"; }
+        else {
+            if (user.FindUserByLogin(login) != null)
+            {
+                message = "Данный логин уже есть.";
+            }
+            if (pass != apass)
+            {
+                message = "Пароли не совпадают.";
+            }
+            if (string.IsNullOrWhiteSpace(pass) || string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(apass) || string.IsNullOrWhiteSpace(email))
+            {
+                message = "Не все поля заполнены.";
+            }
+
+            User newUser = new User()
+            {
+                Login = login,
+                PassCrypt = pass,
+                NickName = nick,
+                DateRegistration = DateTime.UtcNow,
+                PathAvatar = "default-avatar.png",
+                Role = UserRole.User
+
+            };
+            user.CreateUser(newUser);
+            Navigation.NavigateTo("/login", true);
+        }
+    }
+}

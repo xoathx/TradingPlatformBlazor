@@ -1,0 +1,31 @@
+﻿@page "/shop/{NameShop}"
+@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
+
+
+
+<AuthorizeView>
+    <NotAuthorized>
+        Вы не авторизованы в системе
+    </NotAuthorized>
+    <Authorized>
+        @if (CurrentShop == null)
+        {@message }
+    else
+    {
+        <h3>@NameShop</h3>}
+    </Authorized>
+</AuthorizeView>
+@code {
+    [Parameter]
+    public string NameShop { get; set; }
+    private string message;
+    private Shop CurrentShop;
+    protected override void OnInitialized()
+    {
+        CurrentShop = SqlShop.GetShopByShortUrl(NameShop);
+        if (CurrentShop == null)
+        {
+            message = "Страница не найдена";
+        }
+    }
+}

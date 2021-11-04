@@ -1,0 +1,71 @@
+﻿@inject TradingPlatformBlazor.Data.Repository.ICategory category;
+@page "/add_category"
+@attribute [Authorize(Roles = nameof(UserRole.Administrator))]
+<AuthorizeView Roles="User">
+    <p>Страница не найдена.</p>
+</AuthorizeView>
+<AuthorizeView Roles="Administrator">
+    <h3>AddCategory</h3>
+
+    <table class="table">
+        <thead class="table table-striped">
+            <tr>
+                <th scope="col">Name Category</th>
+                <th scope="col">Desc Category</th>
+                <th scope="col">Move</th>
+            </tr>
+        </thead>
+
+        @foreach (var item in sorted)
+        {
+            <tbody>
+                <tr>
+                    <td>@item.NameCategory</td>
+                    <td>@item.Description</td>
+                    <td><input type="button" class="btn btn-outline-danger" value="Удалить" @onclick="(() => DeleteCategory(item.Id))" /></td>
+                </tr>
+            </tbody>
+        }
+    </table>
+    <input type="text" placeholder="Название" @bind="nameCategory" />
+    <input type="text" placeholder="Описание" @bind="descCategory" />
+    <input type="button" value="Добавить" @onclick="AddedCategory" />
+
+</AuthorizeView>
+
+@code {
+
+
+    IEnumerable<Category> categories = new List<Category>();
+    IEnumerable<Category> sorted = new List<Category>();
+
+    IEnumerable<IGrouping<char, Category>> group;
+
+    private string nameCategory;
+    private string descCategory;
+    protected override void OnInitialized()
+    {
+
+        categories = category.AllCategories();
+        sorted = from c in categories orderby c.NameCategory select c;
+
+        group = sorted.GroupBy(items => items.NameCategory[0]);
+
+    }
+    private void AddedCategory()
+    {
+        if (!string.IsNullOrEmpty(nameCategory) && !string.IsNullOrEmpty(descCategory))
+        {
+
+            category.AddCategory(nameCategory, descCategory);
+            nameCategory = string.Empty;
+            descCategory = string.Empty;
+
+        }
+    }
+
+    private void DeleteCategory(int id)
+    {
+        category.DeleteCategory(id);
+    }
+}

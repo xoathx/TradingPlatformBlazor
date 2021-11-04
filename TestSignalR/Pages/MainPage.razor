@@ -1,0 +1,45 @@
+﻿@inject TradingPlatformBlazor.Data.Repository.ICategory category;
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager nav
+@page "/"
+<h3>MainPage</h3>
+<div>
+    @foreach (var i in group)
+    {
+    <div>
+        <div class="text-info">
+            @i.Key
+
+        </div>
+        @foreach (var j in i)
+        {
+            <div class="text-dark">
+                <a href="/lots/@j.Id">@j.NameCategory</a>
+            </div>
+        }
+        <hr id="category-line" align="left" color="#4B6CDD" size="1" width="70%" />
+    </div>
+    }
+</div>
+
+@code {
+    IEnumerable<Category> categories = new List<Category>();
+    IEnumerable<Category> sorted = new List<Category>();
+    IEnumerable<IGrouping<char, Category>> group;
+
+
+
+
+    protected override void OnInitialized()
+    {
+
+        #region move DB
+        categories = category.AllCategories();
+        sorted = from c in categories orderby c.NameCategory select c;
+
+        group = sorted.GroupBy(items => items.NameCategory[0]);
+        #endregion
+
+    }
+
+}

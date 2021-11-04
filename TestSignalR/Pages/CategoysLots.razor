@@ -1,0 +1,79 @@
+﻿@inject TradingPlatformBlazor.Data.Repository.ILot lot;
+@inject TradingPlatformBlazor.Data.Repository.ICategory category;
+
+
+@page "/lots/{id:int}"
+
+<h1 class="display-1">@nameCategory</h1>
+<AuthorizeView>
+    <Authorized>
+        <button @onclick="OpenDialog">Добавить лот</button>
+    </Authorized>
+</AuthorizeView>
+<div class="content-categorylots">
+    <div class="container">
+        <div class="row">
+            <div class="col border-right name-lot-categorylots">Название лота</div>
+            <div class="col-6 border-right desc-lot-categorylots">Описание лота</div>
+            <div class="col price-lot-categorylots">Цена</div>
+        </div>
+
+        @foreach (var lot in allLots)
+        {
+
+        <a class="a-lot-categorylots" href="/lot/@lot.Id">
+                <div class="row border body-lot-categorylots">
+                    <div class="col border-right  name-lot-categorylots">@lot.NameLot</div>
+                    <div class="col-6 border-right desc-lot-categorylots">@MiniString(lot.DescLot)</div>
+                    <div class="col price-lot-categorylots">@lot.Price</div>
+                </div>
+         </a>
+
+    }
+</div>
+</div>
+@if (DialogOpen)
+{
+    <AddLots Title="@nameCategory" OnClose="OnDialogClose" CategoryId="@Id" />
+
+}
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private string nameCategory;
+    IEnumerable<Lot> allLots = new List<Lot>();
+    public bool DialogOpen { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        nameCategory = category.AllCategories().First(c => c.Id == Id).NameCategory;
+        allLots = lot.LotsByID(Id);
+    }
+
+    private void OnDialogClose()
+    {
+
+        DialogOpen = false;
+
+
+    }
+    private void OpenDialog()
+    {
+        DialogOpen = true;
+    }
+
+    string MiniString(string str)
+    {
+        if (string.IsNullOrWhiteSpace(str)) { return str; }
+        else
+        {
+            if (str.Length > 50)
+            {
+                return new string(str.Substring(0, 50) + "...");
+            }
+            return str;
+        }
+    }
+}

@@ -1,0 +1,159 @@
+﻿@page "/lot/{id:int}"
+
+@inject TradingPlatformBlazor.Data.Repository.ILot SqlLot;
+@inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IOffer SqlOffer 
+@inject NavigationManager Navigation
+@inject IHttpContextAccessor htp
+
+@if (currentLot == null || htp.HttpContext.User.Claims.Count() < 2)
+{
+    <p>@message</p>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                @message
+                <h3>@categoryName</h3>
+                <h2>@currentLot.NameLot</h2>
+                <hr align="left" width="500px" color="#80CEFD" />
+                <div class="descLot">
+                    <p>@currentLot.DescLot</p>
+                </div>
+                <hr align="left" width="500px" color="#80CEFD" />
+                <div class="priceLot">Цена: @currentLot.Price</div>
+                <AuthorizeView Roles="@rolesButton">
+                    <Authorized>
+                        <button class="btn btn-success" @onclick="BuyLot">Купить</button>
+                    </Authorized>
+                </AuthorizeView>
+                <AuthorizeView Roles="@roles">
+                    <button class="btn btn-light" @onclick="OpenDialog">Изменить лот</button>
+                </AuthorizeView>
+            </div>
+            <div class="col">
+                <AuthorizeView>
+                    <Authorized>
+                        @if (int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(t => t.Type == ClaimTypes.NameIdentifier).Value) != vendorId)
+                        {
+                            <Chat ToUserId="vendorId"></Chat>
+                        }
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+        </div>
+    </div>
+    
+
+    @if (DialogOpen)
+    {
+        <UpdateLot UpdatingLot="@currentLot" OnClose="OnDialogClose"></UpdateLot>
+    }
+
+}
+
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+    Lot currentLot;
+    string categoryName;
+    string roles;
+    string message;
+    string rolesButton;
+    private int vendorId;
+    public bool DialogOpen { get; set; }
+    private double CurrentBalanceCustomer;
+    private int currentUserId;
+    private bool Succes;
+    protected override void OnInitialized()
+    {
+
+        currentLot = SqlLot.GetLotByID(id);
+        if (currentLot == null || htp.HttpContext.User.Claims.Count() < 2)
+        {
+            message = "Авторизуйтесь.";
+        }
+        else
+        {
+            rolesButton = htp.HttpContext.User.Identity.Name;
+            if(rolesButton == currentLot.VendorsNick)
+            {
+                rolesButton = "0";
+            }
+            roles = currentLot.VendorsNick + ", " + UserRole.Administrator.ToString();
+            categoryName = SqlCategory.GetNameCategory(currentLot.CategoryId);
+            vendorId = currentLot.VendorId;
+            Succes = int.TryParse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value, out currentUserId);
+        }
+
+    }
+
+    private void OnDialogClose()
+    {
+
+        DialogOpen = false;
+
+
+    }
+    private void OpenDialog()
+    {
+        DialogOpen = true;
+    }
+
+    void BuyLot()
+    {
+        CurrentBalanceCustomer = SqlUser.GetUserBalanceById(currentUserId);
+        if (CurrentBalanceCustomer < currentLot.Price)
+        {
+            message = "Недостаточно средств!";
+        }
+        else {
+            SqlUser.ReduceBalance(currentUserId, currentLot.Price);
+            string identityName = RandomIdentityName();
+            Offer offer = new Offer()
+            {
+                IdentifierName = identityName,
+                CategoryId = currentLot.CategoryId,
+                LotId = currentLot.Id,
+                LotsName = currentLot.NameLot,
+                LotsDesc = currentLot.DescLot,
+                LotsPrice = currentLot.Price,
+                VendorId = currentLot.VendorId,
+                CustomerId = currentUserId,
+                IsOpenned = true,
+                IsManyBack = false,
+                DateOpenning = DateTime.Now,
+                StateOffer = StateOffer.InProcess
+
+            };
+            SqlOffer.AddOffer(offer);
+            string url = "/offer/" + SqlOffer.GetOfferByIdentityName(identityName).Id.ToString();
+            Navigation.NavigateTo(url, true);
+        }
+    }
+
+    string RandomIdentityName()
+    {
+        string result = string.Empty;
+        string ABC = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+        Random random = new Random();
+        for (int i = 0; i < 10; i++)
+        {
+            result += ABC[random.Next(0, ABC.Length)];
+        }
+        if(SqlOffer.GetOfferByIdentityName(result) != null)
+        {
+            return RandomIdentityName();
+        }
+        else
+        {
+            return result;
+        }
+    }
+
+}

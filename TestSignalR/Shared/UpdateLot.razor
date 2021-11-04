@@ -1,0 +1,64 @@
+﻿@inject TradingPlatformBlazor.Data.Repository.ILot lot;
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Изменить лот</h4>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <p class="text-danger">@message</p>
+            <label for="name-lot">Новое название:</label>
+            <input id="name-lot" type="text" class="form-control" placeholder="Новое название" @bind="newNameLot" />
+            <label for="desc-lot">Новое описание:</label>
+            <textarea class="form-control" @bind="DescLot" id="desc-lot"></textarea>
+            <label for="price">Новая цена:</label>
+            <input type="number" id="price" class="form-control" @bind="newPrice" />
+            <div class="modal-footer">
+
+                <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>
+                <button type="button" class="btn btn-primary" @onclick=@ModalOk>OK</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+    [Parameter]
+    public Lot UpdatingLot { get; set; }
+
+    public double newPrice;
+    public string newNameLot;
+    public string DescLot;
+    string message;
+
+    protected override void OnInitialized()
+    {
+        newNameLot = UpdatingLot.NameLot;
+        newPrice = UpdatingLot.Price;
+        DescLot = UpdatingLot.DescLot;
+    }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+    private Task ModalOk()
+    {
+        if (string.IsNullOrWhiteSpace(newNameLot) || (newPrice == 0))
+        {
+            message = "Поля не могут быть пустыми";
+        }
+
+        UpdatingLot.NameLot = newNameLot;
+        UpdatingLot.Price = newPrice;
+        UpdatingLot.DescLot = DescLot;
+        lot.UpdateLot(UpdatingLot);
+        return OnClose.InvokeAsync(true);
+    }
+}

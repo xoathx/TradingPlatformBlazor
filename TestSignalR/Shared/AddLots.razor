@@ -1,0 +1,96 @@
+﻿@inject TradingPlatformBlazor.Data.Repository.ILot SqlLot;
+@inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory;
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser;
+@inject ProtectedLocalStorage Provider
+@inject IHttpContextAccessor http;
+
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@Title</h4>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="text-danger">@message</div>
+                @if(Vendor.IdShop != 0) 
+                { 
+            <EditForm Model="@choiseVendor">
+                <InputRadioGroup class="form-check" @bind-Value="SelectedVendor">
+                    <InputRadio Value="Vendor.Id" /><span style="padding-left: 5px;">Свой лот</span>
+                    <InputRadio Value="Vendor.IdShop" /><span style="padding-left: 5px;">Лот от магазина</span>
+                </InputRadioGroup>
+            </EditForm>
+                }
+                <label for="name-lot">Название:</label>
+                <input class="form-control" @bind="@nameLot" id="name-lot" placeholder="Название лота" maxlength="50" />
+                <label for="desc-lot">Описание:</label>
+                <textarea id="desc-lot" class="form-control" @bind="descLot"></textarea>
+                <label for="price">Цена:</label>
+                <input class="form-control" @bind="@price" id="price" type="number" />
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>
+                <button type="button" class="btn btn-primary" @onclick=@ModalOk>OK</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+    [Parameter]
+    public int CategoryId { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+    string message;
+    private User Vendor;
+    public string nameLot;
+    public double price;
+    public string descLot;
+    private int SelectedVendor;
+    ChoiseVendor choiseVendor = new ChoiseVendor();
+    protected override void OnInitialized()
+    {
+        if (http.HttpContext.User.Claims.Any())
+        {
+            Vendor = SqlUser.GetUserById(int.Parse(http.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+        }
+    }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+    private Task ModalOk()
+    {
+        if(string.IsNullOrWhiteSpace(nameLot) || string.IsNullOrWhiteSpace(descLot))
+        {
+            message = "Заполните все поля!";
+            return Task.CompletedTask;
+        }
+        else {
+
+            Lot newLot = new Lot()
+            {
+                NameLot = nameLot,
+                DescLot = descLot,
+                VendorsNick = Vendor.NickName,
+                Price = price,
+                CategoryId = CategoryId,
+                VendorId = Vendor.Id
+            };
+            SqlLot.AddLot(newLot);
+            return OnClose.InvokeAsync(true);
+        }
+    }
+    public class ChoiseVendor
+    {
+        public int IdVendor { get; set; }
+    }
+}

@@ -1,0 +1,110 @@
+﻿@page "/createshop"
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
+@inject IHttpContextAccessor htp
+@inject NavigationManager nav
+
+
+@message
+<AuthorizeView>
+    <Authorized>
+        
+        @if(CurrentUser.LevelUser == UserLevel.Third && CurrentUser.IdShop == 0)
+        {
+        <h2>Ты получили Третий уровень нашего проекта!</h2>
+        <p>Теперь ты можешь создать свой магазин и приглашать сюда своих коллег 2-го уровня!</p>
+        <div class="inputs-creatshop">
+            <div class="container">
+                <div class="row">
+
+                    <label for="nameShop">Название магазина:</label>
+                    <input id="nameShop" class="form-control" type="text" maxlength="20" @bind="NameShop" />
+                    <label for="inlineFormInputGroup">Короткая ссылка:</label>
+                        <label class="sr-only" for="inlineFormInputGroup">URL</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">@url</div>
+                            </div>
+                            <input type="text" class="form-control" id="inlineFormInputGroup" @bind="ShortUrl" placeholder="URL">
+                        </div>
+
+                    <label for="descShop">Напишите пару слов о будущем магазине:</label>
+                    <textarea id="descShop" class="form-control" @bind="DescShop" rows="5"></textarea>
+                    <input type="button" class="btn btn-primary" @onclick="CreateShop" value="Создать магазин" />
+                </div>
+            </div>
+        </div>
+        } else { <h1>У вас недостаточно прав :(</h1> }
+    </Authorized>
+    <NotAuthorized>
+        Авторизуйтесь!
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    private string FilePath { get; set; }
+    private string NameShop { get; set; }
+    private string DescShop { get; set; }
+    private string ShortUrl { get; set; }
+    private string message;
+    private string url;
+    HubConnection hubConnection;
+    string pattern = @"\p{IsCyrillic}";
+    private User CurrentUser;
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+  .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+  {
+      if (htp.HttpContext.Request.Cookies.Count > 0)
+      {
+          opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
+      }
+  }).Build();
+        await hubConnection.StartAsync();
+
+        url = nav.BaseUri + "shop/";
+        if (url.Contains("https://")) { url = url.Replace("https://", ""); }
+        if (url.Contains("http://")) { url = url.Replace("http://", ""); }
+        if (htp.HttpContext.User.Claims.Any())
+        {
+            CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+        }
+    }
+    private async Task CreateShop()
+    {
+
+
+        if (Regex.IsMatch(ShortUrl, pattern)) { message = "Содержит кириллицу!"; }
+        else
+        {
+            if (SqlShop.IsNameTaken(NameShop))
+            {
+                message = "Имя магазина уже занято!";
+            }
+            else
+            {
+
+                if (string.IsNullOrWhiteSpace(FilePath)) { FilePath = "default-shop-avatar.png"; }
+                if (SqlShop.GetShopByCreatedId(CurrentUser.Id) == null)
+                {
+                    Shop NewShop = new Shop()
+                    {
+                        CreatedId = CurrentUser.Id,
+                        NameShop = NameShop,
+                        ShortNameShop = ShortUrl,
+                        DescShop = DescShop,
+                        PathAvatarShop = FilePath
+                    };
+
+                    SqlShop.AddShop(NewShop);
+                    CurrentUser.IdShop = SqlShop.GetShopByCreatedId(CurrentUser.Id).Id;
+                    SqlUser.UpdateUser(CurrentUser);
+                    await hubConnection.SendAsync("CreateGroup", CurrentUser.Id, ShortUrl);
+                    var urlString = nav.BaseUri + "shop/" + ShortUrl;
+                    nav.NavigateTo(urlString, true);
+                }
+                else { message = "У вас есть уже магазин"; }
+            }
+        }
+    }
+}

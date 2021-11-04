@@ -1,0 +1,158 @@
+﻿@page "/user/{Id:int}"
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.ILot SqlLot
+@inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory
+@inject TradingPlatformBlazor.Data.Repository.IComment SqlComment
+@inject NavigationManager Navigation
+
+
+@if (user == null)
+{
+    <p>@message</p>
+}
+else
+{
+    <h3>@user.NickName</h3>
+    <img class="profile-avatar" src="/img/avatars/@user.PathAvatar" />
+    <AuthorizeView Roles="@user.NickName">
+        <button class="btn btn-info" @onclick="OpenSettings">Настройки</button>
+    </AuthorizeView>
+
+    <div class="user-lots">
+        <div class="gds-user">
+            <p class="text-muted">Товары</p>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-sm-3 name-category-user border-right">
+                    Категория
+                </div>
+                <div class="col name-lot-user">
+                    Название лота
+                </div>
+                <div class="col desc-lot-user border-left">
+                    Описание
+                </div>
+            </div>
+            @foreach (var item in LotsOfVendor)
+            {
+                <a class="a-lot-user" href="/lot/@item.Id">
+                        <div class="row border lot-body">
+
+                            <div class="col-6 col-sm-3 name-category-user border-right">
+                                @CategoryName(item.CategoryId)
+                            </div>
+                            <div class="col name-lot-user ">
+                                @item.NameLot
+                            </div>
+                            <div class="col desc-lot-user border-left">
+                                @MiniString(item.DescLot)
+                            </div>
+                        </div>
+                </a>
+            }
+
+
+        </div>
+    </div>
+    <div class="comments-user ">
+        <div class="h-comments-user">
+            <p class="text-muted">Отзывы</p>
+        </div>
+        <div class="container">
+            @foreach (var item in CommentsAbUser)
+            {
+            <a class="a-comment-user" href="/offer/@item.OfferId">
+                <div class="row border comment-body">
+
+                    <a class="a-comment-user" href="/user/@item.FromUserId" target="_top">
+                        <div class="col nickname-comment-user ">
+                            <img class="avatar d-inline avatar-comment-user" src="/img/avatars/@SqlUser.GetUserById(item.FromUserId).PathAvatar" />
+                            @SqlUser.GetUserById(item.FromUserId).NickName
+                        </div>
+                    </a>
+                    <div class="col-6 col-sm-3 bodytext-comment-user">
+                        <p>@item.BodyComment</p>
+                    </div>
+                    <div class="col">
+                        <div class="rating-mini rating-comment-user">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= item.ValueRating)
+                                {
+                                    selector = "active";
+                                    <span class="@selector"></span>
+                                }
+                                else
+                                {
+                                    <span></span>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </a>
+             }
+            </div>
+    </div>
+            @if (DialogOpen)
+            {
+                <UserSettings Title="@user.NickName" OnClose="OnDialogClose"></UserSettings>
+            }
+
+        }
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    User user;
+    IEnumerable<Lot> LotsOfVendor;
+    IEnumerable<Comment> CommentsAbUser;
+    string message;
+    public int testRate = 3;
+    string selector;
+    public bool DialogOpen { get; set; }
+    protected override void OnInitialized()
+    {
+
+        if (SqlUser.GetUserById(Id) == null)
+        {
+
+            message = "Страница не найдена.";
+        }
+        else
+        {
+            user = SqlUser.GetUserById(Id);
+            LotsOfVendor = SqlLot.AllLotsOfVendor(Id).ToList();
+            CommentsAbUser = SqlComment.GetCommentsByToUserId(Id).ToList();
+        }
+
+    }
+    string CategoryName(int categoryID)
+    {
+        return SqlCategory.GetNameCategory(categoryID);
+    }
+
+    private void OpenSettings()
+    {
+        DialogOpen = true;
+    }
+
+    private void OnDialogClose()
+    {
+
+        DialogOpen = false;
+
+    }
+
+    string MiniString(string str)
+    {
+        if (string.IsNullOrWhiteSpace(str)) { return str; } else {
+            if (str.Length > 50)
+            {
+                return new string(str.Substring(0, 50) + "...");
+            }
+            return str;
+        }
+    }
+}
