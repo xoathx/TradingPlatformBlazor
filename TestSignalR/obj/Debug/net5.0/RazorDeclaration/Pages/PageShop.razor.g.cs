@@ -175,12 +175,14 @@ using System.Text.RegularExpressions;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 18 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageShop.razor"
+#line 60 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageShop.razor"
        
     [Parameter]
     public string NameShop { get; set; }
     private string message;
     private Shop CurrentShop;
+    private User CurrentUser;
+    IEnumerable<ShopLot> shopLots = new List<ShopLot>();
     protected override void OnInitialized()
     {
         CurrentShop = SqlShop.GetShopByShortUrl(NameShop);
@@ -188,12 +190,40 @@ using System.Text.RegularExpressions;
         {
             message = "Страница не найдена";
         }
+        else
+        {
+            if(htp.HttpContext.User.Claims.Count() > 0)
+            {
+                CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+            }
+            shopLots = SqlShopLot.GetShopLotsByShopId(CurrentShop.Id).ToList();
+        }
+    }
+    string CategoryName(int categoryId)
+    {
+        return SqlCategory.GetNameCategory(categoryId);
+    }
+    string MiniString(string str)
+    {
+        if (string.IsNullOrWhiteSpace(str)) { return str; }
+        else
+        {
+            if (str.Length > 50)
+            {
+                return new string(str.Substring(0, 50) + "...");
+            }
+            return str;
+        }
     }
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory SqlCategory { get; set; }
     }
 }
 #pragma warning restore 1591

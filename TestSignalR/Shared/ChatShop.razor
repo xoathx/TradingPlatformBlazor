@@ -1,0 +1,124 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager nav
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor htp
+@implements IAsyncDisposable
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
+@inject TradingPlatformBlazor.Data.Repository.IMessageShop SqlMessageShop
+
+
+<div class="page-content page-container" id="page-content">
+    <div class="row container d-flex justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-bordered">
+                <div class="card-header">
+                    <a href="/shop/@currentShop.ShortNameShop"><img class="avatar" src="/img/avatars/@currentShop.PathAvatarShop" alt="@currentShop.NameShop">  <h4 class="card-title"><strong>@currentShop.NameShop</strong></h4></a>
+                </div>
+                <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
+                    @foreach (var item in messages)
+                    {
+                        if (item.UserId == CurrentUser.Id)
+                        {
+                            selectorClass = "media media-chat media-chat-reverse";
+                        }
+                        else { selectorClass = "media media-chat"; }
+                        <div class="@selectorClass">
+                            <div class="media-body">
+                                <p>@item.BodyMessage</p>
+                                <p class="meta"><time datetime="@item.DateMessage.Year">@item.DateMessage.ToString("t")</time></p>
+                            </div>
+                        </div>
+                    }
+
+
+                    <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+                        <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                    </div>
+                    <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
+                        <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
+                    </div>
+                </div>
+                <div class="publisher bt-1 border-light">
+                    <img class="avatar avatar-xs" src="/img/avatars/@htp.HttpContext.User.Claims.First(i => i.Type == "PathAvatar").Value" alt="...">
+                    <input class="publisher-input" @bind="messageInput" type="text" placeholder="Write something"> <button @onclick="Send" class="btn publisher-btn">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int ToShopId { get; set; }
+    private string FromId;
+    private HubConnection hubConnection;
+    private List<MessageShop> messages = new List<MessageShop>();
+    private string messageInput;
+    private Shop currentShop;
+    private User CurrentUser;
+    private int ShopMemberId;
+    private string selectorClass;
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier).Value));
+        currentShop = SqlShop.GetShopById(ToShopId);
+        FromId = CurrentUser.Id.ToString();
+        messages = SqlMessageShop.GetMessagesByUserIdAndShopId(CurrentUser.Id, ToShopId).ToList();
+        hubConnection = new HubConnectionBuilder()
+   .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+   {
+       if (htp.HttpContext.Request.Cookies.Count > 0)
+       {
+           opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
+       }
+   }).Build();
+
+        hubConnection.On<MessageShop>("ReceiveMessageShop", (message) =>
+        {
+
+            messages.Add(message);
+            StateHasChanged();
+
+        });
+
+        await hubConnection.StartAsync();
+
+
+    }
+
+    async Task Send()
+    {
+        if(CurrentUser.IdShop != 0 && CurrentUser.IdShop == ToShopId)
+        {
+            ShopMemberId = CurrentUser.Id;
+        }
+        else
+        {
+            ShopMemberId = 0;
+        }
+        MessageShop messageShop = new MessageShop()
+        {
+            BodyMessage = messageInput,
+            DateMessage = DateTime.Now,
+            IsShopMessage = true,
+            UserId = CurrentUser.Id,
+            ShopId = ToShopId,
+            ShopMemberId = ShopMemberId
+        };
+        await hubConnection.SendAsync("SendShopMessage", messageShop);
+        messageInput = string.Empty;
+        SqlMessageShop.AddMessage(messageShop);
+        StateHasChanged();
+    }
+
+    public bool IsConnected =>
+    hubConnection.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}

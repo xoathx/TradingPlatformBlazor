@@ -207,7 +207,7 @@ using System.Text.RegularExpressions;
 
         hubConnection.On<Message>("ReceiveMessage", (message) =>
         {
-            if(message.FromUserId == IdСompanion || (message.ToUserId == IdСompanion && message.FromUserId == myId))
+            if (message.FromUserId == IdСompanion || (message.ToUserId == IdСompanion && message.FromUserId == myId))
             {
 
                 messages.Add(message);

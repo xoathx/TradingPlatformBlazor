@@ -1,6 +1,7 @@
 ﻿@inject TradingPlatformBlazor.Data.Repository.ILot SqlLot;
 @inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory;
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser;
+@inject TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot
 @inject ProtectedLocalStorage Provider
 @inject IHttpContextAccessor http;
 
@@ -75,18 +76,33 @@
             return Task.CompletedTask;
         }
         else {
-
-            Lot newLot = new Lot()
+            if(SelectedVendor == Vendor.Id)
             {
-                NameLot = nameLot,
-                DescLot = descLot,
-                VendorsNick = Vendor.NickName,
-                Price = price,
-                CategoryId = CategoryId,
-                VendorId = Vendor.Id
-            };
-            SqlLot.AddLot(newLot);
-            return OnClose.InvokeAsync(true);
+                Lot newLot = new Lot()
+                {
+                    NameLot = nameLot,
+                    DescLot = descLot,
+                    VendorsNick = Vendor.NickName,
+                    Price = price,
+                    CategoryId = CategoryId,
+                    VendorId = Vendor.Id
+                };
+                SqlLot.AddLot(newLot);
+                return OnClose.InvokeAsync(true);
+            }
+            else
+            {
+                ShopLot newShopLot = new ShopLot()
+                {
+                    NameLot = nameLot,
+                    DescLot = descLot,
+                    Price = price,
+                    CategoryId = CategoryId,
+                    ShopId = SelectedVendor
+                };
+                SqlShopLot.AddLot(newShopLot);
+                return OnClose.InvokeAsync(true);
+            }
         }
     }
     public class ChoiseVendor

@@ -1,0 +1,62 @@
+﻿@inject TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Изменить лот</h4>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <p class="text-danger">@message</p>
+            <label for="name-lot">Новое название:</label>
+            <input id="name-lot" type="text" class="form-control" placeholder="Новое название" @bind="NameLot" />
+            <label for="desc-lot">Новое описание:</label>
+            <textarea class="form-control" @bind="DescLot" id="desc-lot"></textarea>
+            <label for="price">Новая цена:</label>
+            <input type="number" id="price" class="form-control" @bind="Price" />
+            <div class="modal-footer">
+
+                <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>
+                <button type="button" class="btn btn-primary" @onclick=@ModalOk>OK</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ShopLot CurrentShopLot { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+    private string message;
+    private string NameLot;
+    private string DescLot;
+    private double Price;
+
+    protected override void OnInitialized()
+    {
+        NameLot = CurrentShopLot.NameLot;
+        DescLot = CurrentShopLot.DescLot;
+        Price = CurrentShopLot.Price;
+    }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+    private Task ModalOk()
+    {
+        if (string.IsNullOrWhiteSpace(NameLot) || (Price == 0))
+        {
+            message = "Поля не могут быть пустыми";
+        }
+
+        CurrentShopLot.NameLot = NameLot;
+        CurrentShopLot.Price = Price;
+        CurrentShopLot.DescLot = DescLot;
+        SqlShopLot.UpdateLot(CurrentShopLot);
+        return OnClose.InvokeAsync(true);
+    }
+}

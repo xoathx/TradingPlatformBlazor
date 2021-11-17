@@ -44,6 +44,11 @@ namespace TradingPlatformBlazor.Data.Repository
             return _context.Users.Where(i => i.Login == login).FirstOrDefault();
         }
 
+        public IEnumerable<User> GetShopMembersByShopId(int shopId)
+        {
+            return _context.Users.Where(u => u.IdShop == shopId).ToList();
+        }
+
         public double GetUserBalanceById(int userId)
         {
             return _context.Users.FirstOrDefault(u => u.Id == userId).Balance;

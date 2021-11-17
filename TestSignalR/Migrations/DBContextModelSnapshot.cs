@@ -85,9 +85,9 @@ namespace TradingPlatformBlazor.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CategoryID")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int")
-                        .HasColumnName("categoryId");
+                        .HasColumnName("category_id");
 
                     b.Property<string>("DescLot")
                         .HasColumnType("nvarchar(max)")
@@ -101,13 +101,9 @@ namespace TradingPlatformBlazor.Migrations
                         .HasColumnType("float")
                         .HasColumnName("price");
 
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int")
-                        .HasColumnName("shop_vendor");
-
                     b.Property<int>("VendorId")
                         .HasColumnType("int")
-                        .HasColumnName("vendorId");
+                        .HasColumnName("vendor_id");
 
                     b.Property<string>("VendorsNick")
                         .HasColumnType("nvarchar(max)")
@@ -145,6 +141,42 @@ namespace TradingPlatformBlazor.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("TradingPlatformBlazor.Data.Models.MessageShop", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BodyMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateMessage")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("date_message");
+
+                    b.Property<bool>("IsShopMessage")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_shop_message");
+
+                    b.Property<int>("ShopId")
+                        .HasColumnType("int")
+                        .HasColumnName("shop_id");
+
+                    b.Property<int>("ShopMemberId")
+                        .HasColumnType("int")
+                        .HasColumnName("shop_member_id");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MessageShops");
                 });
 
             modelBuilder.Entity("TradingPlatformBlazor.Data.Models.Offer", b =>
@@ -203,6 +235,10 @@ namespace TradingPlatformBlazor.Migrations
                         .HasColumnType("float")
                         .HasColumnName("lots_price");
 
+                    b.Property<int>("ShopLotId")
+                        .HasColumnType("int")
+                        .HasColumnName("shop_lot_id");
+
                     b.Property<int>("StateOffer")
                         .HasColumnType("int")
                         .HasColumnName("state_offer");
@@ -210,6 +246,10 @@ namespace TradingPlatformBlazor.Migrations
                     b.Property<int>("VendorId")
                         .HasColumnType("int")
                         .HasColumnName("vendor_id");
+
+                    b.Property<int>("VendorShopId")
+                        .HasColumnType("int")
+                        .HasColumnName("shop_vendor_id");
 
                     b.HasKey("Id");
 
@@ -247,6 +287,39 @@ namespace TradingPlatformBlazor.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Shops");
+                });
+
+            modelBuilder.Entity("TradingPlatformBlazor.Data.Models.ShopLot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int")
+                        .HasColumnName("category_id");
+
+                    b.Property<string>("DescLot")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("descLot");
+
+                    b.Property<string>("NameLot")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("nameLot");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float")
+                        .HasColumnName("price");
+
+                    b.Property<int>("ShopId")
+                        .HasColumnType("int")
+                        .HasColumnName("shop_Id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShopLots");
                 });
 
             modelBuilder.Entity("TradingPlatformBlazor.Data.Models.User", b =>

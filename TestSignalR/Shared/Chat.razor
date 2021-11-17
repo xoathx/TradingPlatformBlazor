@@ -11,7 +11,7 @@
             <div class="col-md-6">
                 <div class="card card-bordered">
                     <div class="card-header">
-                        <a href="/user/@currentUser.Id"><img class="avatar" src="/img/avatars/@currentUser.PathAvatar" alt="...">  <h4 class="card-title"><strong>@currentUser.NickName</strong></h4></a>
+                        <a href="/user/@currentUser.Id"><img class="avatar" src="/img/avatars/@currentUser.PathAvatar" alt="@currentUser.NickName">  <h4 class="card-title"><strong>@currentUser.NickName</strong></h4></a>
                     </div>
                     <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
                         @foreach(var item in messages)

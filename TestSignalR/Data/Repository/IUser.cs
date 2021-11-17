@@ -9,7 +9,7 @@ namespace TradingPlatformBlazor.Data.Repository
    public interface IUser
     {
         IEnumerable<User> AllUsers();
-
+        IEnumerable<User> GetShopMembersByShopId(int shopId);
         User FindUserByLogin(string login);
         User GetUserById(int id);
         double GetUserBalanceById(int userId);
@@ -18,5 +18,6 @@ namespace TradingPlatformBlazor.Data.Repository
         void ReduceBalance(int userId, double amount);
         void ManyBack(int userId, double amount);
         void UpdateUser(User updatedUser);
+
     }
 }

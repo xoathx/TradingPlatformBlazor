@@ -273,3 +273,9 @@ C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\R
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\PageCreateShop.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\PageShop.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\PageShop.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\PageShopLot.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\UpdateShopLot.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\PageShopLot.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\UpdateShopLot.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\ChatShop.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\ChatShop.razor.g.cs

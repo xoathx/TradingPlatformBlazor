@@ -18,11 +18,10 @@ namespace TradingPlatformBlazor.Data.Models
         public string VendorsNick { get; set; }
         [Column("price")]
         public double Price { get; set; }
-        [Column("categoryId")]
+        [Column("category_id")]
         public int CategoryId { get; set; }
-        [Column("vendorId")]
+        [Column("vendor_id")]
         public int VendorId { get; set; }
-        [Column("shop_vendor")]
-        public int ShopId { get; set; }
+
     }
 }

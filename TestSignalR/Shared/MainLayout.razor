@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager Navigation
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
 <div class="page">
     <!--<div class="sidebar">-->
     @*<NavMenu />*@
@@ -16,7 +17,7 @@
                     </AuthorizeView>
 
                     @if (user.IdShop != 0)
-                    {<a>Магазин</a>}
+                    {<a href="/shop/@ShopUrl(user.IdShop)">Магазин</a>}
                     @if (user.LevelUser == UserLevel.Third && user.IdShop == 0)
                     {<a href="/createshop">Создать магазин</a>}
                     <a href="/purchases">Покупки</a>
@@ -73,8 +74,8 @@
 
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    string ShopUrl(int shopId)
     {
-
+        return SqlShop.GetShopById(shopId).ShortNameShop;
     }
 }

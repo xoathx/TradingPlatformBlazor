@@ -51,6 +51,8 @@ namespace TradingPlatformBlazor
             services.AddScoped<IOffer, SQLOffer>();
             services.AddScoped<IComment, SQLComment>();
             services.AddScoped<IShop, SQLShop>();
+            services.AddScoped<IShopLot, SQLShopLot>();
+            services.AddScoped<IMessageShop, SQLMessageShop>();
             //services.AddScoped<ChatHubService>();
         }
 

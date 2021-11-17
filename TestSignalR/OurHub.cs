@@ -6,15 +6,20 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TradingPlatformBlazor.Data.Models;
+using TradingPlatformBlazor.Data.Repository;
 
 namespace TradingPlatformBlazor
 {
     public class OurHub : Hub
     {
+        private readonly IShop _context;
+        public OurHub(IShop context)
+        {
+            _context = context;
+        }
         
         public override Task OnConnectedAsync()
         {
-            
             return base.OnConnectedAsync();
         } 
         public async Task SendSpecific(Message message)
@@ -43,6 +48,12 @@ namespace TradingPlatformBlazor
         public Task AddToShopChat(int addedId, string nameShop)
         {
             return Groups.AddToGroupAsync(addedId.ToString(), nameShop);
+        }
+        public async Task SendShopMessage(MessageShop messageShop)
+        {
+            var group = _context.GetShopById(messageShop.ShopId).ShortNameShop;
+            await Clients.Group(group).SendAsync("ReceiveMessageShop", messageShop);
+            await Clients.User(messageShop.UserId.ToString()).SendAsync("ReceiveMessageShop", messageShop);
         }
     }
 }

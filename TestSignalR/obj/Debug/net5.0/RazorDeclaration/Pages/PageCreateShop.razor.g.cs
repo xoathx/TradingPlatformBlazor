@@ -183,10 +183,21 @@ using System.Text.RegularExpressions;
     private string ShortUrl { get; set; }
     private string message;
     private string url;
+    HubConnection hubConnection;
     string pattern = @"\p{IsCyrillic}";
     private User CurrentUser;
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        hubConnection = new HubConnectionBuilder()
+  .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+  {
+      if (htp.HttpContext.Request.Cookies.Count > 0)
+      {
+          opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
+      }
+  }).Build();
+        await hubConnection.StartAsync();
+
         url = nav.BaseUri + "shop/";
         if (url.Contains("https://")) { url = url.Replace("https://", ""); }
         if (url.Contains("http://")) { url = url.Replace("http://", ""); }
@@ -195,9 +206,9 @@ using System.Text.RegularExpressions;
             CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
         }
     }
-    private void CreateShop()
+    private async Task CreateShop()
     {
-        
+
 
         if (Regex.IsMatch(ShortUrl, pattern)) { message = "Содержит кириллицу!"; }
         else
@@ -224,13 +235,14 @@ using System.Text.RegularExpressions;
                     SqlShop.AddShop(NewShop);
                     CurrentUser.IdShop = SqlShop.GetShopByCreatedId(CurrentUser.Id).Id;
                     SqlUser.UpdateUser(CurrentUser);
+                    await hubConnection.SendAsync("CreateGroup", CurrentUser.Id, ShortUrl);
                     var urlString = nav.BaseUri + "shop/" + ShortUrl;
                     nav.NavigateTo(urlString, true);
                 }
                 else { message = "У вас есть уже магазин"; }
             }
-  }
-}
+        }
+    }
 
 #line default
 #line hidden

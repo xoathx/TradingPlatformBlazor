@@ -18,5 +18,7 @@ namespace TradingPlatformBlazor.Data
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Shop> Shops { get; set; }
+        public DbSet<ShopLot> ShopLots { get; set; }
+        public DbSet<MessageShop> MessageShops { get; set; }
     }
 }

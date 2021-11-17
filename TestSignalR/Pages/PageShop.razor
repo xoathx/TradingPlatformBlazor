@@ -1,7 +1,9 @@
 ﻿@page "/shop/{NameShop}"
+@inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory
 @inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
-
-
+@inject TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject IHttpContextAccessor htp
 
 <AuthorizeView>
     <NotAuthorized>
@@ -12,7 +14,47 @@
         {@message }
     else
     {
-        <h3>@NameShop</h3>}
+        <h3>@NameShop</h3>
+        <img class="profile-avatar" src="/img/avatars/@CurrentShop.PathAvatarShop" />
+
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-sm-3 name-category-user border-right">
+                    Категория
+                </div>
+                <div class="col name-lot-user">
+                    Название лота
+                </div>
+                <div class="col desc-lot-user border-left">
+                    Описание
+                </div>
+            </div>
+            @foreach (var item in shopLots)
+            {
+                <a class="a-lot-user" href="/shoplot/@item.Id">
+                    <div class="row border lot-body">
+
+                        <div class="col-6 col-sm-3 name-category-user border-right">
+                            @CategoryName(item.CategoryId)
+                        </div>
+                        <div class="col name-lot-user ">
+                            @item.NameLot
+                        </div>
+                        <div class="col desc-lot-user border-left">
+                            @MiniString(item.DescLot)
+                        </div>
+                    </div>
+                </a>
+            }
+
+
+        </div>
+
+        if(CurrentUser.IdShop != CurrentShop.Id)
+                    {
+                        <ChatShop ToShopId="CurrentShop.Id"></ChatShop>
+                    }
+    }
     </Authorized>
 </AuthorizeView>
 @code {
@@ -20,12 +62,38 @@
     public string NameShop { get; set; }
     private string message;
     private Shop CurrentShop;
+    private User CurrentUser;
+    IEnumerable<ShopLot> shopLots = new List<ShopLot>();
     protected override void OnInitialized()
     {
         CurrentShop = SqlShop.GetShopByShortUrl(NameShop);
         if (CurrentShop == null)
         {
             message = "Страница не найдена";
+        }
+        else
+        {
+            if(htp.HttpContext.User.Claims.Count() > 0)
+            {
+                CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+            }
+            shopLots = SqlShopLot.GetShopLotsByShopId(CurrentShop.Id).ToList();
+        }
+    }
+    string CategoryName(int categoryId)
+    {
+        return SqlCategory.GetNameCategory(categoryId);
+    }
+    string MiniString(string str)
+    {
+        if (string.IsNullOrWhiteSpace(str)) { return str; }
+        else
+        {
+            if (str.Length > 50)
+            {
+                return new string(str.Substring(0, 50) + "...");
+            }
+            return str;
         }
     }
 }

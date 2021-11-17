@@ -1,0 +1,168 @@
+﻿@page "/shoplot/{Id:int}"
+
+@inject TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot;
+@inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IOffer SqlOffer
+@inject NavigationManager Navigation
+@inject IHttpContextAccessor htp
+
+@if (CurrentShopLot == null || htp.HttpContext.User.Claims.Count() < 2)
+{
+    <p>@message</p>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                @message
+                <h3>@categoryName</h3>
+                <h2>@CurrentShopLot.NameLot</h2>
+                <hr align="left" width="500px" color="#80CEFD" />
+                <div class="descLot">
+                    <p>@CurrentShopLot.DescLot</p>
+                </div>
+                <hr align="left" width="500px" color="#80CEFD" />
+                <div class="priceLot">Цена: @CurrentShopLot.Price</div>
+                <AuthorizeView Roles="@rolesButton">
+                    <Authorized>
+                        <button class="btn btn-success" @onclick="BuyLot">Купить</button>
+                    </Authorized>
+                </AuthorizeView>
+                <AuthorizeView Roles="@roles"> 
+                    <button class="btn btn-light" @onclick="OpenDialog">Изменить лот</button>
+                </AuthorizeView>
+            </div>
+            <div class="col">
+                <AuthorizeView>
+                    <Authorized>
+                       @*  Вставить чат  *@
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+        </div>
+    </div>
+
+
+    @if (DialogOpen)
+    {
+        <UpdateShopLot CurrentShopLot="@CurrentShopLot" OnClose="OnDialogClose"></UpdateShopLot>
+    }
+
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    public bool DialogOpen { get; set; }
+    private ShopLot CurrentShopLot;
+    private string message;
+    private string categoryName;
+    private string roles;
+    private string rolesButton;
+    private User CurrentUser;
+    private string IdentityName;
+    IEnumerable<User> MembersShop = new List<User>();
+    protected override void OnInitialized()
+    {
+        CurrentShopLot = SqlShopLot.GetShopLotById(Id);
+        if(htp.HttpContext.User.Claims.Count() < 2)
+        {
+            message = "Авторизуйтесь";
+        }
+        if (CurrentShopLot == null)
+        {
+            message = "Страница не найдена";
+        }
+        else
+        {
+            CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+            MembersShop = SqlUser.GetShopMembersByShopId(CurrentShopLot.ShopId).ToList();
+            rolesButton = GetRolesButton(MembersShop);
+            roles = GetRoles(MembersShop);
+            categoryName = SqlCategory.GetNameCategory(CurrentShopLot.CategoryId);
+
+        }
+    }
+    private void OnDialogClose()
+    {
+        DialogOpen = false;
+    }
+    private void OpenDialog()
+    {
+        DialogOpen = true;
+    }
+
+    private string GetRoles(IEnumerable<User> members)
+    {
+        string roles = string.Empty;
+        foreach(var item in members)
+        {
+            roles += item.NickName + ", ";
+        }
+        return roles;
+    }
+    private string GetRolesButton(IEnumerable<User> members)
+    {
+        string roles = GetRoles(members);
+        if (roles.Contains(CurrentUser.NickName))
+        {
+            roles = "0";
+        }
+        else
+        {
+            roles = CurrentUser.NickName;
+        }
+        return roles;
+    }
+    private void BuyLot()
+    {
+        if(CurrentUser.Balance < CurrentShopLot.Price)
+        {
+            message = "Недостаточно средств";
+        }
+        else
+        {
+            SqlUser.ReduceBalance(CurrentUser.Id, CurrentShopLot.Price);
+            IdentityName = RandomIdentityName();
+            Offer offer = new Offer()
+            {
+                IdentifierName = IdentityName,
+                CategoryId = CurrentShopLot.CategoryId,
+                ShopLotId = CurrentShopLot.Id,
+                LotsName = CurrentShopLot.NameLot,
+                LotsDesc = CurrentShopLot.DescLot,
+                LotsPrice = CurrentShopLot.Price,
+                VendorShopId= CurrentShopLot.ShopId,
+                CustomerId = CurrentUser.Id,
+                IsOpenned = true,
+                IsManyBack = false,
+                DateOpenning = DateTime.Now,
+                StateOffer = StateOffer.InProcess
+            };
+            SqlOffer.AddOffer(offer);
+            string url = "/offer/" + SqlOffer.GetOfferByIdentityName(IdentityName).Id.ToString();
+            Navigation.NavigateTo(url, true);
+        }
+    }
+
+    string RandomIdentityName()
+    {
+        string result = string.Empty;
+        string ABC = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+        Random random = new Random();
+        for (int i = 0; i < 10; i++)
+        {
+            result += ABC[random.Next(0, ABC.Length)];
+        }
+        if (SqlOffer.GetOfferByIdentityName(result) != null)
+        {
+            return RandomIdentityName();
+        }
+        else
+        {
+            return result;
+        }
+    }
+}

@@ -167,7 +167,7 @@ using System.Text.RegularExpressions;
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageOffer.razor"
+#line 10 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageOffer.razor"
            [Authorize]
 
 #line default
@@ -182,7 +182,7 @@ using System.Text.RegularExpressions;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 122 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageOffer.razor"
+#line 126 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageOffer.razor"
        
     [Parameter]
     public int IdOffer { get; set; }
@@ -198,6 +198,8 @@ using System.Text.RegularExpressions;
     private User Vendor;
     private User Customer;
     private Comment Comment;
+    private Shop VendorShop;
+    IEnumerable<User> MembersShop = new List<User>();
     private bool OpenDialog { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -209,12 +211,25 @@ using System.Text.RegularExpressions;
         }
         else
         {
-            Customer = SqlUser.GetUserById(currentOffer.CustomerId);
-            Vendor = SqlUser.GetUserById(currentOffer.VendorId);
-            Comment = SqlComment.GetCommentByOfferId(currentOffer.Id);
-            currentUserName = htp.HttpContext.User.Identity.Name;
-            customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            globalRoles = SqlUser.GetUserById(currentOffer.CustomerId).NickName + ", " + SqlUser.GetUserById(currentOffer.VendorId).NickName;
+            if(currentOffer.ShopLotId == 0 && currentOffer.VendorShopId == 0)
+            {
+                Customer = SqlUser.GetUserById(currentOffer.CustomerId);
+                Vendor = SqlUser.GetUserById(currentOffer.VendorId);
+                Comment = SqlComment.GetCommentByOfferId(currentOffer.Id);
+                currentUserName = htp.HttpContext.User.Identity.Name;
+                customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                globalRoles = SqlUser.GetUserById(currentOffer.CustomerId).NickName + ", " + SqlUser.GetUserById(currentOffer.VendorId).NickName;
+            }
+            else
+            {
+                Customer = SqlUser.GetUserById(currentOffer.CustomerId);
+                VendorShop = SqlShop.GetShopById(currentOffer.VendorShopId);
+                Comment = SqlComment.GetCommentByOfferId(currentOffer.Id);
+                currentUserName = htp.HttpContext.User.Identity.Name;
+                customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                MembersShop = SqlUser.GetShopMembersByShopId(VendorShop.Id);
+                globalRoles = GetGlobalRoles(MembersShop) + Customer.NickName;
+            }
         }
         hubConnection = new HubConnectionBuilder()
   .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
@@ -321,10 +336,22 @@ using System.Text.RegularExpressions;
         }
     }
 
+    private string GetGlobalRoles(IEnumerable<User> members)
+    {
+        string result = string.Empty;
+        foreach(var item in members)
+            {
+                result += item.NickName + ",";
+            }
+        return result;
+
+    }
+
 #line default
 #line hidden
 #nullable disable
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IComment SqlComment { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ILot SqlLot { get; set; }

@@ -174,7 +174,7 @@ using System.Text.RegularExpressions;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 43 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MainLayout.razor"
+#line 44 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MainLayout.razor"
       
     [Inject] IHttpContextAccessor htp { get; set; }
     HubConnection hubConnection;
@@ -208,14 +208,15 @@ using System.Text.RegularExpressions;
 
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    string ShopUrl(int shopId)
     {
-
+        return SqlShop.GetShopById(shopId).ShortNameShop;
     }
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager Navigation { get; set; }
     }

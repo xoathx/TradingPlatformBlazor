@@ -14,6 +14,8 @@ namespace TradingPlatformBlazor.Data.Models
         public string IdentifierName { get; set; }
         [Column("category_id")]
         public int CategoryId { get; set; }
+        [Column("shop_lot_id")]
+        public int ShopLotId { get; set; }
         [Column("lot_id")]
         public int LotId { get; set; }
         [Column("lots_name")]
@@ -24,6 +26,8 @@ namespace TradingPlatformBlazor.Data.Models
         public double LotsPrice { get; set; }
         [Column("vendor_id")]
         public int VendorId { get; set; }
+        [Column("shop_vendor_id")]
+        public int VendorShopId { get; set; }
         [Column("customer_id")]
         public int CustomerId { get; set; }
         [Column("is_openned")]

@@ -4,6 +4,7 @@
 @inject TradingPlatformBlazor.Data.Repository.ILot SqlLot
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
 @inject TradingPlatformBlazor.Data.Repository.IComment SqlComment
+@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
 @inject IHttpContextAccessor htp
 @implements IAsyncDisposable
 @attribute [Authorize]
@@ -60,7 +61,7 @@ else
                             <button class="btn btn-light" @onclick="OnDialogOpen">Оставить отзыв</button>}
                         }
                     </AuthorizeView>
-                    <AuthorizeView Roles="@Vendor.NickName">
+                    <AuthorizeView Roles="@GetGlobalRoles(MembersShop)">
                         @if (currentOffer.StateOffer != StateOffer.Completed && currentOffer.IsManyBack == false)
                         {
                             <button class="btn btn-light" @onclick="ManyBack">Вернуть деньги</button>
@@ -105,12 +106,15 @@ else
             </div>
             <div class="col">
                 <div class="offerChat">
+                    @if(currentOffer.ShopLotId == 0 && currentOffer.VendorShopId == 0)
+                    { 
                     <AuthorizeView Roles="@Customer.NickName">
                         <Chat ToUserId="currentOffer.VendorId"></Chat>
                     </AuthorizeView>
                     <AuthorizeView Roles="@Vendor.NickName">
                         <Chat ToUserId="currentOffer.CustomerId"></Chat>
                     </AuthorizeView>
+                    }
                 </div>
             </div>
         </div>
@@ -134,6 +138,8 @@ else
     private User Vendor;
     private User Customer;
     private Comment Comment;
+    private Shop VendorShop;
+    IEnumerable<User> MembersShop = new List<User>();
     private bool OpenDialog { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -145,12 +151,25 @@ else
         }
         else
         {
-            Customer = SqlUser.GetUserById(currentOffer.CustomerId);
-            Vendor = SqlUser.GetUserById(currentOffer.VendorId);
-            Comment = SqlComment.GetCommentByOfferId(currentOffer.Id);
-            currentUserName = htp.HttpContext.User.Identity.Name;
-            customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            globalRoles = SqlUser.GetUserById(currentOffer.CustomerId).NickName + ", " + SqlUser.GetUserById(currentOffer.VendorId).NickName;
+            if(currentOffer.ShopLotId == 0 && currentOffer.VendorShopId == 0)
+            {
+                Customer = SqlUser.GetUserById(currentOffer.CustomerId);
+                Vendor = SqlUser.GetUserById(currentOffer.VendorId);
+                Comment = SqlComment.GetCommentByOfferId(currentOffer.Id);
+                currentUserName = htp.HttpContext.User.Identity.Name;
+                customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                globalRoles = SqlUser.GetUserById(currentOffer.CustomerId).NickName + ", " + SqlUser.GetUserById(currentOffer.VendorId).NickName;
+            }
+            else
+            {
+                Customer = SqlUser.GetUserById(currentOffer.CustomerId);
+                VendorShop = SqlShop.GetShopById(currentOffer.VendorShopId);
+                Comment = SqlComment.GetCommentByOfferId(currentOffer.Id);
+                currentUserName = htp.HttpContext.User.Identity.Name;
+                customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                MembersShop = SqlUser.GetShopMembersByShopId(VendorShop.Id);
+                globalRoles = GetGlobalRoles(MembersShop) + Customer.NickName;
+            }
         }
         hubConnection = new HubConnectionBuilder()
   .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
@@ -255,5 +274,16 @@ else
         {
             await hubConnection.DisposeAsync();
         }
+    }
+
+    private string GetGlobalRoles(IEnumerable<User> members)
+    {
+        string result = string.Empty;
+        foreach(var item in members)
+            {
+                result += item.NickName + ",";
+            }
+        return result;
+
     }
 }

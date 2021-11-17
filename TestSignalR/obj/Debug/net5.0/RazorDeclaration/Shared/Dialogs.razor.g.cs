@@ -175,80 +175,79 @@ using System.Text.RegularExpressions;
         #pragma warning restore 1998
 #nullable restore
 #line 47 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\Dialogs.razor"
-           
+       
 
-        [Parameter]
-        public EventCallback<int> OnCompanionIdChanhed { get; set; }
-        [Parameter]
-        public int TestId { get; set; }
-        HubConnection hubConnection;
-        private IEnumerable<Message> dialogs = new List<Message>();
-        public string notify;
-        private int currentId;
-        IEnumerable<IGrouping<int, Message>> GroupDialogs;
+    [Parameter]
+    public EventCallback<int> OnCompanionIdChanhed { get; set; }
+    [Parameter]
+    public int TestId { get; set; }
+    HubConnection hubConnection;
+    private IEnumerable<Message> dialogs = new List<Message>();
+    public string notify;
+    private int currentId;
+    IEnumerable<IGrouping<int, Message>> GroupDialogs;
 
 
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        if (!(htp.HttpContext.User.Claims.Count() < 2))
         {
-            if (!(htp.HttpContext.User.Claims.Count() < 2))
-            {
-                currentId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-                dialogs = SqlMessage.GetMessagesByToId(currentId).ToList().OrderBy(t => t.DateMessage).Reverse();
-                GroupDialogs = dialogs.GroupBy(g => g.FromUserId).ToList();
-                hubConnection = new HubConnectionBuilder()
-              .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+            currentId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            dialogs = SqlMessage.GetMessagesByToId(currentId).ToList().OrderBy(t => t.DateMessage).Reverse();
+            GroupDialogs = dialogs.GroupBy(g => g.FromUserId).ToList();
+            hubConnection = new HubConnectionBuilder()
+          .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+          {
+              if (htp.HttpContext.Request.Cookies.Count > 0)
               {
-                  if (htp.HttpContext.Request.Cookies.Count > 0)
-                  {
-                      opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
-                  }
-              }).Build();
-                hubConnection.On<Message>("ReceiveMessage", (message) =>
-                {
-                    UpdateWindow();
+                  opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
+              }
+          }).Build();
+            hubConnection.On<Message>("ReceiveMessage", (message) =>
+            {
+                UpdateWindow();
                 // dialogs.ToList().Add(message);
 
             });
-                await hubConnection.StartAsync();
-            }
-
+            await hubConnection.StartAsync();
         }
 
-        User Get(int id)
+    }
+
+    User Get(int id)
+    {
+        return SqlUser.GetUserById(id);
+    }
+    string MiniMessage(string str)
+    {
+        if (str.Length > 10)
         {
-            return SqlUser.GetUserById(id);
+            return new string(str.Substring(0, 10) + "...");
         }
-        string MiniMessage(string str)
+        return str;
+    }
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
         {
-            if (str.Length > 10)
-            {
-                return new string(str.Substring(0, 10) + "...");
-            }
-            return str;
+            await hubConnection.DisposeAsync();
         }
-        public async ValueTask DisposeAsync()
-        {
-            if (hubConnection is not null)
-            {
-                await hubConnection.DisposeAsync();
-            }
-        }
+    }
 
-        private async Task Change(int id)
-        {
+    private async Task Change(int id)
+    {
 
-            await hubConnection.SendAsync("UpdateCompanionId", id);
-            await OnCompanionIdChanhed.InvokeAsync(id);
-        }
+        await hubConnection.SendAsync("UpdateCompanionId", id);
+        await OnCompanionIdChanhed.InvokeAsync(id);
+    }
 
-        private void UpdateWindow()
-        {
+    private void UpdateWindow()
+    {
 
-            dialogs = SqlMessage.GetMessagesByToId(currentId).ToList().OrderBy(t => t.DateMessage).Reverse();
-            GroupDialogs = dialogs.GroupBy(g => g.FromUserId).ToList();
-            StateHasChanged();
-        }
-    
+        dialogs = SqlMessage.GetMessagesByToId(currentId).ToList().OrderBy(t => t.DateMessage).Reverse();
+        GroupDialogs = dialogs.GroupBy(g => g.FromUserId).ToList();
+        StateHasChanged();
+    }
 
 #line default
 #line hidden

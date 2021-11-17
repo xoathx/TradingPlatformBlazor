@@ -174,7 +174,7 @@ using System.Text.RegularExpressions;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 43 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\AddLots.razor"
+#line 44 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\AddLots.razor"
        
     [Parameter]
     public string Title { get; set; }
@@ -210,18 +210,33 @@ using System.Text.RegularExpressions;
             return Task.CompletedTask;
         }
         else {
-
-            Lot newLot = new Lot()
+            if(SelectedVendor == Vendor.Id)
             {
-                NameLot = nameLot,
-                DescLot = descLot,
-                VendorsNick = Vendor.NickName,
-                Price = price,
-                CategoryId = CategoryId,
-                VendorId = Vendor.Id
-            };
-            SqlLot.AddLot(newLot);
-            return OnClose.InvokeAsync(true);
+                Lot newLot = new Lot()
+                {
+                    NameLot = nameLot,
+                    DescLot = descLot,
+                    VendorsNick = Vendor.NickName,
+                    Price = price,
+                    CategoryId = CategoryId,
+                    VendorId = Vendor.Id
+                };
+                SqlLot.AddLot(newLot);
+                return OnClose.InvokeAsync(true);
+            }
+            else
+            {
+                ShopLot newShopLot = new ShopLot()
+                {
+                    NameLot = nameLot,
+                    DescLot = descLot,
+                    Price = price,
+                    CategoryId = CategoryId,
+                    ShopId = SelectedVendor
+                };
+                SqlShopLot.AddLot(newShopLot);
+                return OnClose.InvokeAsync(true);
+            }
         }
     }
     public class ChoiseVendor
@@ -234,6 +249,7 @@ using System.Text.RegularExpressions;
 #nullable disable
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor http { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private ProtectedLocalStorage Provider { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory SqlCategory { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ILot SqlLot { get; set; }
