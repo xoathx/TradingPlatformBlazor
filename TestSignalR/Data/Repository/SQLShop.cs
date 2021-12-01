@@ -34,6 +34,11 @@ namespace TradingPlatformBlazor.Data.Repository
             return _context.Shops.FirstOrDefault(item => item.ShortNameShop == shortUrl);
         }
 
+        public bool IsAvatarReserved(string Name)
+        {
+            return _context.Shops.Contains(_context.Shops.FirstOrDefault(item => item.PathAvatarShop == Name));
+        }
+
         public bool IsNameTaken(string nameShop)
         {
             return _context.Shops.Any(item => item.NameShop == nameShop);

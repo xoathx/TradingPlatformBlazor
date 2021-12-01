@@ -28,140 +28,161 @@ using Microsoft.AspNetCore.Authorization;
 #nullable disable
 #nullable restore
 #line 3 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Hosting;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 4 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 5 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 6 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 7 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using Microsoft.AspNetCore.Components.Web.Virtualization;
+using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 8 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 9 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using TradingPlatformBlazor;
+using Microsoft.JSInterop;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 10 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using TradingPlatformBlazor.Shared;
+using TradingPlatformBlazor;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 11 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using TradingPlatformBlazor.Data.Models;
+using TradingPlatformBlazor.Shared;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 12 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using Microsoft.AspNetCore.SignalR.Client;
+using TradingPlatformBlazor.Data.Models;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 13 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.SignalR.Client;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 14 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 15 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using System.Globalization;
+using System.Security.Claims;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 16 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 17 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using System.Web;
+using Microsoft.AspNetCore.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 18 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using System.Net;
+using System.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 19 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using System.Net;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 20 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using TradingPlatformBlazor.Data.Services;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 21 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
-using System.Text;
+using TradingPlatformBlazor.Data.Services;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 22 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using System.Text;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 23 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
 using System.Text.RegularExpressions;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 24 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using System.Threading;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 25 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using System.IO;
 
 #line default
 #line hidden
@@ -174,26 +195,72 @@ using System.Text.RegularExpressions;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 20 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\UserSettings.razor"
+#line 23 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\UserSettings.razor"
        
     [Parameter]
-    public string Title { get; set; }
+    public User CurrentUser { get; set; }
     [Parameter]
     public EventCallback<bool> OnClose { get; set; }
-    string filename;
+
+
+    private string filename;
+    private List<IBrowserFile> loadedFiles = new();
+    private long maxFileSize = 1024 * 1024 * 200;
+    private int maxAllowedFiles = 1;
+    private bool isLoading;
+    private IReadOnlyList<IBrowserFile> browserFile;
+    FileInfo file;
 
     private Task ModalCancel()
     {
         return OnClose.InvokeAsync(false);
     }
-    private Task ModalOk()
+    private async Task ModalOk()
     {
-        return OnClose.InvokeAsync(true);
+        if (isLoading)
+        {
+            var path = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", filename + file.Extension);
+            await using FileStream fs = new FileStream(path, FileMode.Create);
+            await browserFile[0].OpenReadStream(maxFileSize).CopyToAsync(fs);
+
+            var delPath = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", CurrentUser.PathAvatar);
+            File.Delete(delPath);
+            CurrentUser.PathAvatar = filename + file.Extension;
+            SqlUser.UpdateUser(CurrentUser);
+            isLoading = false;
+        }
+        await OnClose.InvokeAsync(true);
+    }
+
+    string GetRandomName()
+    {
+        string abc = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+        string result = string.Empty;
+        Random random = new Random();
+        for (int i = 0; i < 10; i++)
+        {
+            result += abc[random.Next(0, abc.Length - 1)];
+        }
+        if (!SqlShop.IsAvatarReserved(result) && !SqlUser.IsAvatarReserved(result)) { return result; } else { return GetRandomName(); }
+    }
+
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        isLoading = true;
+        loadedFiles.Clear();
+
+        filename = GetRandomName();
+
+        browserFile = e.GetMultipleFiles(1);
+        file = new FileInfo(browserFile[0].Name);
     }
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHostingEnvironment host { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }
     }
 }
 #pragma warning restore 1591

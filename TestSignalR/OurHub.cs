@@ -33,7 +33,11 @@ namespace TradingPlatformBlazor
             var ident = Context.User.Claims.Where(s => s.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
             await Clients.User(ident).SendAsync("Update", id);
         }
-
+        public async Task UpdateCompanionShopId(int shopId)
+        {
+            var ident = Context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            await Clients.User(ident).SendAsync("UpdateShop", shopId);
+        }
         public async Task UpdateOffer(UpdateOffer updateOffer)
         {
             var ident = Context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;

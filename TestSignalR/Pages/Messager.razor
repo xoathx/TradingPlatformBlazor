@@ -1,17 +1,12 @@
 ﻿@page "/messager"
-@inject NavigationManager nav
-@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
-@inject TradingPlatformBlazor.Data.Repository.IMessage SqlMessage
-@inject IHttpContextAccessor htp
+
 
     <div class="container p-0">
 		<div class="card">
             <div class="row g-0">
-                
-               <Dialogs OnCompanionIdChanhed="UserIdChanged"></Dialogs>
-              
+                <Dialogs></Dialogs>
                 <div class="col-12 col-lg-7 col-xl-9">
-                    <MessegerBox IdСompanion="Id" @ref="ChildComponent"></MessegerBox>
+                    <MessegerBox></MessegerBox>
                 </div>
             </div>
     </div>
@@ -19,43 +14,5 @@
 
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
-    HubConnection hubConnection;
-    private List<Message> messages = new List<Message>();
-    public int testId;
-    public string notify;
-    protected MessegerBox ChildComponent;
-    protected override async Task OnInitializedAsync()
-    {
-
-        hubConnection = new HubConnectionBuilder()
-      .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
-      {
-          if (htp.HttpContext.Request.Cookies.Count > 0)
-          {
-              opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
-          }
-      }).Build();
-        hubConnection.On<Message>("ReceiveMessage", (message) =>
-        {
-            messages.Add(message);
-
-            StateHasChanged();
-        });
-        hubConnection.On<int>("Update", (id) =>
-        {
-            ChildComponent.RefreshMe();
-
-        });
-        await hubConnection.StartAsync();
-
-    }
-    public void UserIdChanged(int id)
-    {
-        Id = id;
-
-    }
-    
-
+   
 }

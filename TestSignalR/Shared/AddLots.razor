@@ -60,6 +60,7 @@
         if (http.HttpContext.User.Claims.Any())
         {
             Vendor = SqlUser.GetUserById(int.Parse(http.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+            SelectedVendor = Vendor.Id;
         }
     }
 

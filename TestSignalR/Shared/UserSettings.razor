@@ -1,12 +1,15 @@
-﻿<h3>UserSettings</h3>
+﻿@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject IHostingEnvironment host
+
 <div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">@Title</h4>
+                <h4 class="modal-title">@CurrentUser.NickName</h4>
                 <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
             </div>
-            <input class="file-select" @bind="@filename" type="file" accept=".png,.jpg,.jpeg" placeholder="Обзор" />
+            <InputFile class="file-select" OnChange="@LoadFile" type="file" accept=".png,.jpg,.jpeg" placeholder="Обзор" />
             <div class="modal-footer">
 
                 <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>
@@ -19,17 +22,60 @@
 </div>
 @code {
     [Parameter]
-    public string Title { get; set; }
+    public User CurrentUser { get; set; }
     [Parameter]
     public EventCallback<bool> OnClose { get; set; }
-    string filename;
+
+
+    private string filename;
+    private List<IBrowserFile> loadedFiles = new();
+    private long maxFileSize = 1024 * 1024 * 200;
+    private int maxAllowedFiles = 1;
+    private bool isLoading;
+    private IReadOnlyList<IBrowserFile> browserFile;
+    FileInfo file;
 
     private Task ModalCancel()
     {
         return OnClose.InvokeAsync(false);
     }
-    private Task ModalOk()
+    private async Task ModalOk()
     {
-        return OnClose.InvokeAsync(true);
+        if (isLoading)
+        {
+            var path = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", filename + file.Extension);
+            await using FileStream fs = new FileStream(path, FileMode.Create);
+            await browserFile[0].OpenReadStream(maxFileSize).CopyToAsync(fs);
+
+            var delPath = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", CurrentUser.PathAvatar);
+            File.Delete(delPath);
+            CurrentUser.PathAvatar = filename + file.Extension;
+            SqlUser.UpdateUser(CurrentUser);
+            isLoading = false;
+        }
+        await OnClose.InvokeAsync(true);
+    }
+
+    string GetRandomName()
+    {
+        string abc = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+        string result = string.Empty;
+        Random random = new Random();
+        for (int i = 0; i < 10; i++)
+        {
+            result += abc[random.Next(0, abc.Length - 1)];
+        }
+        if (!SqlShop.IsAvatarReserved(result) && !SqlUser.IsAvatarReserved(result)) { return result; } else { return GetRandomName(); }
+    }
+
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        isLoading = true;
+        loadedFiles.Clear();
+
+        filename = GetRandomName();
+
+        browserFile = e.GetMultipleFiles(1);
+        file = new FileInfo(browserFile[0].Name);
     }
 }

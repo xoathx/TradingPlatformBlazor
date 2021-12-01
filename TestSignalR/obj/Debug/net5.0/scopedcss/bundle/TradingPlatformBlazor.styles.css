@@ -132,3 +132,19 @@
         display: block;
     }
 }
+/* _content/TradingPlatformBlazor/Shared/ShopSettings.razor.rz.scp.css */
+.members-shop[b-j4gtno1bjv]{
+    width: 60%;
+    height: 200px;
+    padding-top: 10px;
+}
+.nickname-member[b-j4gtno1bjv] {
+    padding-left: 5px;
+}
+.member[b-j4gtno1bjv] {
+    background-color: #EAEAEA;
+    height: 50px;
+}
+.avatar-member[b-j4gtno1bjv]{
+   padding:5px;
+}

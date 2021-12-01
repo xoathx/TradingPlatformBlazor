@@ -15,5 +15,6 @@ namespace TradingPlatformBlazor.Data.Repository
         Shop GetShopByCreatedId(int createdId);
         Shop GetShopByShortUrl(string shortUrl);
         bool IsNameTaken(string nameShop);
+        bool IsAvatarReserved(string Name);
     }
 }

@@ -279,3 +279,12 @@ C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\R
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\UpdateShopLot.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\ChatShop.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\ChatShop.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\MessegerShop.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\MessegerShop.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\DialogsShop.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\DialogsShop.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\MessagesBoxShop.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\MessagesBoxShop.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\ShopSettings.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\ShopSettings.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Shared\ShopSettings.razor.rz.scp.css

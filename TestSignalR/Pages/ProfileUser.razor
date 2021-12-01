@@ -98,7 +98,7 @@ else
     </div>
             @if (DialogOpen)
             {
-                <UserSettings Title="@user.NickName" OnClose="OnDialogClose"></UserSettings>
+                <UserSettings CurrentUser="user" OnClose="OnDialogClose"></UserSettings>
             }
 
         }

@@ -1,0 +1,143 @@
+﻿@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop 
+@inject IHttpContextAccessor htp
+@inject IHostingEnvironment host
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@CurrentShop.NameShop</h4>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body">
+                <InputFile OnChange="@LoadingFile" accept=".png, .jpg, .jpeg"></InputFile>
+                <div class="members-shop">
+
+                    @foreach (var member in MembersShop)
+                    {
+                        <div class="member">
+                            <div class="avatar avatar-member"><img class="avatar" src="img/avatars/@member.PathAvatar" /></div>
+                            <p class="d-inline nickname-member">@member.NickName</p>
+                            @if (member.Id == CurrentShop.CreatedId)
+                            {
+                                <span class="fst-italic fw-lighter">Владелец</span>
+
+                            }
+                            else
+                            {
+                                <button @onclick="(() => DeleteMember(member))">Delete</button>
+                            }
+
+                        </div>
+                    }
+                    @if (MembersShop.Count() < 3)
+                    {
+                        <input type="text" @bind="NickNewMember" placeholder="Введите ник" />
+                        <button class="btn btn-primary" @onclick="AddMember">Добавить участника</button>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>
+                <button type="button" class="btn btn-primary" @onclick=@ModalOk>OK</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Shop CurrentShop { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    private List<IBrowserFile> loadedFiles = new();
+    private long maxFileSize = 1024 * 1024 * 200;
+    private int maxAllowedFiles = 1;
+    private bool isLoading;
+    private IReadOnlyList<IBrowserFile> browserFile;
+    FileInfo file;
+    IEnumerable<User> MembersShop = new List<User>();
+    private User CurrentUser;
+    private string filename;
+
+    private string message;
+
+    private string NickNewMember;
+    protected override void OnInitialized()
+    {
+        isLoading = false;
+        MembersShop = SqlUser.GetShopMembersByShopId(CurrentShop.Id).ToList();
+        CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+    }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+    private async Task ModalOk()
+    {
+        if (isLoading)
+        {
+            var path = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", filename + file.Extension);
+            await using FileStream fs = new FileStream(path, FileMode.Create);
+            await browserFile[0].OpenReadStream(maxFileSize).CopyToAsync(fs);
+
+            var delPath = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", CurrentShop.PathAvatarShop);
+            File.Delete(delPath);
+            CurrentShop.PathAvatarShop = filename + file.Extension;
+            SqlShop.UpdateShop(CurrentShop);
+            isLoading = false;
+        }
+        await OnClose.InvokeAsync(true);
+    }
+
+
+    private async Task LoadingFile(InputFileChangeEventArgs e)
+    {
+        isLoading = true;
+        loadedFiles.Clear();
+
+        filename = GetRandomName();
+
+        browserFile = e.GetMultipleFiles(1);
+        file = new FileInfo(browserFile[0].Name);
+    }
+
+    string GetRandomName()
+    {
+        string abc = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+        string result = string.Empty;
+        Random random = new Random();
+        for(int i = 0; i < 10; i++)
+        {
+            result += abc[random.Next(0, abc.Length - 1)];
+        }
+        if (!SqlShop.IsAvatarReserved(result) && !SqlUser.IsAvatarReserved(result)) { return result; } else { return GetRandomName(); }
+    }
+
+    void AddMember()
+    {
+        var newUser = SqlUser.GetUserByNickname(NickNewMember);
+        if(newUser == null)
+        {
+            message = "Такого пользователя не существует!";
+        }
+        else
+        {
+            newUser.IdShop = CurrentShop.Id;
+            SqlUser.UpdateUser(newUser);
+            StateHasChanged();
+        }
+    }
+
+    void DeleteMember(User deletedUser)
+    {
+        deletedUser.IdShop = 0;
+        SqlUser.UpdateUser(deletedUser);
+    }
+}

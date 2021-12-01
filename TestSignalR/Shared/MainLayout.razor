@@ -24,7 +24,7 @@
                     <a href="/sales">Продажи</a>
                     <a href="/messager">@message</a>
                     <a href="/logout">Log out</a>
-                    <a href="/user/@context.User.FindFirst(ClaimTypes.NameIdentifier).Value" target="_top"><img class="user-img-top" src="/img/avatars/@context.User.Claims.FirstOrDefault(i => i.Type == "PathAvatar").Value" /></a>
+                    <a href="/user/@user.Id" target="_top"><img class="user-img-top" src="/img/avatars/@user.PathAvatar" /></a>
                 </div>
             </Authorized>
             <NotAuthorized>
@@ -73,6 +73,8 @@
         await hubConnection.StartAsync();
 
     }
+
+
 
     string ShopUrl(int shopId)
     {

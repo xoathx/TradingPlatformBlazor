@@ -1,0 +1,159 @@
+﻿@inject TradingPlatformBlazor.Data.Repository.IMessageShop SqlMessageShop
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop; 
+@inject IHttpContextAccessor htp
+@inject NavigationManager nav
+@implements IAsyncDisposable
+
+<AuthorizeView>
+    <NotAuthorized>Авторизуйтесь!</NotAuthorized>
+    <Authorized>
+        @if (CompanionShop == null)
+        {
+
+
+            <h1>Тут будут ваши сообщения</h1>
+        }
+        else
+        {
+            <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                <div class="d-flex align-items-center py-1">
+                    <div class="position-relative">
+                        <img src="/img//avatars/@CompanionShop.PathAvatarShop" class="rounded-circle mr-1" alt="@CompanionShop.NameShop" width="40" height="40">
+                    </div>
+                    <div class="flex-grow-1 pl-3">
+                        <strong>@CompanionShop.NameShop</strong>
+                        <div class="text-muted small"><em>Online</em></div>
+                    </div>
+                    <div>
+
+                        <button class="btn btn-light border btn-lg px-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal feather-lg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="position-relative">
+                <div class="chat-messages p-4">
+
+                    @foreach (var item in MessagesShop)
+                    {
+                        if (!item.IsShopMessage)
+                        {
+                            selectorClass = "chat-message-right pb-4";
+                        }
+                        else
+                        {
+                            selectorClass = "chat-message-left pb-4";
+                        }
+                        <div class="@selectorClass">
+                            <div>
+                                @if(item.IsShopMessage) { avatar = CompanionShop.PathAvatarShop; nick = CompanionShop.NameShop; } else { avatar = CurrentUser.PathAvatar; nick = CurrentUser.NickName; }
+                                <img src="/img/avatars/@avatar" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40" />
+                                <div class="text-muted small text-nowrap mt-2">@item.DateMessage.ToString("t")</div>
+                            </div>
+                            <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                <div class="font-weight-bold mb-1">@nick</div>
+                                @item.BodyMessage
+                            </div>
+                        </div>
+                    }
+
+
+                    <div class="flex-grow-0 py-3 px-4 border-top">
+                        <div class="input-group">
+                            <input type="text" @bind="messageInput" class="form-control" placeholder="Type your message">
+                            <button class="btn btn-primary" @onclick="Send">Send</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    private HubConnection hubConnection;
+    private User CurrentUser;
+    private Shop CompanionShop;
+    private List<MessageShop> MessagesShop = new List<MessageShop>();
+    private string selectorClass;
+    private string avatar;
+    private string nick;
+    private string messageInput;
+    private bool IsShopMsg;
+    protected override async Task OnInitializedAsync()
+    {
+        if (htp.HttpContext.User.Claims.Any())
+        {
+            CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+            hubConnection = new HubConnectionBuilder()
+         .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+         {
+             if (htp.HttpContext.Request.Cookies.Count > 0)
+             {
+                 opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
+             }
+         }).Build();
+
+            hubConnection.On<int>("UpdateShop", (shopId) =>
+            {
+                ClearWin();
+                UpdateCompanionShop(shopId);
+                StateHasChanged();
+            });
+
+            hubConnection.On<MessageShop>("ReceiveMessageShop", (messageShop) =>
+            {
+                UpdateMessageBox();
+            });
+            await hubConnection.StartAsync();
+        }
+    }
+
+    private void ClearWin()
+    {
+        MessagesShop.Clear();
+        CompanionShop = null;
+    }
+    private void UpdateCompanionShop(int shopId)
+    {
+        CompanionShop = SqlShop.GetShopById(shopId);
+        MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(CurrentUser.Id, shopId).ToList();
+        MessagesShop = MessagesShop.OrderBy(t => t.DateMessage).ToList();
+    }
+
+    private void UpdateMessageBox()
+    {
+        MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(CurrentUser.Id, CompanionShop.Id).ToList();
+        MessagesShop = MessagesShop.OrderBy(t => t.DateMessage).ToList();
+        StateHasChanged();
+    }
+
+    private async Task Send()
+    {
+
+
+        MessageShop messageShop = new MessageShop()
+        {
+            BodyMessage = messageInput,
+            DateMessage = DateTime.Now,
+            IsShopMessage = false,
+            UserId = CurrentUser.Id,
+            ShopId = CompanionShop.Id,
+
+        };
+
+        SqlMessageShop.AddMessage(messageShop);
+        await hubConnection.SendAsync("SendShopMessage", messageShop);
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}

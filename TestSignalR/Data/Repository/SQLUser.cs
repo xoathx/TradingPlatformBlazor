@@ -59,6 +59,16 @@ namespace TradingPlatformBlazor.Data.Repository
             return _context.Users.Where(u => u.Id == id).SingleOrDefault();
         }
 
+        public User GetUserByNickname(string nickname)
+        {
+            return _context.Users.FirstOrDefault(u => u.NickName == nickname);
+        }
+
+        public bool IsAvatarReserved(string name)
+        {
+            return _context.Users.Contains(_context.Users.FirstOrDefault(item => item.PathAvatar == name));
+        }
+
         public void ManyBack(int userId, double amount)
         {
             User user = _context.Users.FirstOrDefault(u => u.Id == userId);

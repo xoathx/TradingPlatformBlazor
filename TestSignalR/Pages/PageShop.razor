@@ -5,6 +5,10 @@
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
 @inject IHttpContextAccessor htp
 
+
+<AuthorizeView Roles="@role">
+    <button @onclick="OpenDialog">Настройки</button>
+</AuthorizeView>
 <AuthorizeView>
     <NotAuthorized>
         Вы не авторизованы в системе
@@ -14,6 +18,7 @@
         {@message }
     else
     {
+
         <h3>@NameShop</h3>
         <img class="profile-avatar" src="/img/avatars/@CurrentShop.PathAvatarShop" />
 
@@ -50,30 +55,44 @@
 
         </div>
 
-        if(CurrentUser.IdShop != CurrentShop.Id)
-                    {
-                        <ChatShop ToShopId="CurrentShop.Id"></ChatShop>
-                    }
+        if (CurrentUser.IdShop != CurrentShop.Id)
+        {
+            <ChatShop ToShopId="CurrentShop.Id"></ChatShop>
+        }
     }
+
+
+        @if (DialogOpen)
+        {
+            <ShopSettings CurrentShop="CurrentShop" OnClose="OnDialogClose"></ShopSettings>
+        }
+
+
     </Authorized>
 </AuthorizeView>
+
 @code {
     [Parameter]
     public string NameShop { get; set; }
     private string message;
     private Shop CurrentShop;
     private User CurrentUser;
+    private string role;
     IEnumerable<ShopLot> shopLots = new List<ShopLot>();
+
+    public bool DialogOpen { get; set; }
+
     protected override void OnInitialized()
     {
         CurrentShop = SqlShop.GetShopByShortUrl(NameShop);
+        role = SqlUser.GetUserById(CurrentShop.CreatedId).NickName;
         if (CurrentShop == null)
         {
             message = "Страница не найдена";
         }
         else
         {
-            if(htp.HttpContext.User.Claims.Count() > 0)
+            if (htp.HttpContext.User.Claims.Count() > 0)
             {
                 CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
             }
@@ -96,4 +115,14 @@
             return str;
         }
     }
+
+    private void OnDialogClose()
+    {
+        DialogOpen = false;
+    }
+    private void OpenDialog()
+    {
+        DialogOpen = true;
+    }
+
 }

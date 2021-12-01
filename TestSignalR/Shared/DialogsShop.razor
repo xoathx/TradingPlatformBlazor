@@ -1,0 +1,100 @@
+﻿@inject NavigationManager nav
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IMessageShop SqlMessageShop
+@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
+@inject IHttpContextAccessor htp
+@implements IAsyncDisposable
+
+<AuthorizeView>
+    <div class="col-12 col-lg-5 col-xl-3 border-right">
+
+        <div class="px-4 d-none d-md-block">
+            <div class="d-flex align-items-center">
+            </div>
+        </div>
+        @foreach (var item in GroupDialogs)
+        {
+            var _shop = Get(item.Key);
+            <a @onclick="(() => Change(_shop.Id))" class="list-group-item list-group-item-action border-0">
+                <div class="badge bg-success float-right"></div>
+                <div class="d-flex align-items-start">
+                    <img src="/img/avatars/@_shop.PathAvatarShop" class="rounded-circle mr-1" alt="@_shop.NameShop" width="40" height="40">
+                    <div class="flex-grow-1 ml-3">
+                        @_shop.NameShop
+                        <div class="small">
+
+                            <span class="fas fa-circle chat-online"></span>@MiniMessage(item.Last().BodyMessage)
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+        }
+        <hr class="d-block d-lg-none mt-1 mb-0">
+    </div>
+</AuthorizeView>
+
+@code {
+    private HubConnection hubConnection;
+    private User CurrentUser;
+    private IEnumerable<MessageShop> dialogs = new List<MessageShop>();
+    private IEnumerable<IGrouping<int, MessageShop>> GroupDialogs;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (htp.HttpContext.User.Claims.Count() > 2)
+        {
+            CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+            dialogs = SqlMessageShop.GetMessagesByUserId(CurrentUser.Id).ToList().OrderBy(t => t.DateMessage).Reverse();
+            GroupDialogs = dialogs.GroupBy(g => g.ShopId).ToList();
+
+            hubConnection = new HubConnectionBuilder()
+          .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+          {
+              if (htp.HttpContext.Request.Cookies.Count > 0)
+              {
+                  opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
+              }
+          }).Build();
+            hubConnection.On<MessageShop>("ReceiveMessageShop", (messageShop) =>
+            {
+                UpdateWindow();
+            });
+            await hubConnection.StartAsync();
+        }
+    }
+
+    Shop Get(int id)
+    {
+        return SqlShop.GetShopById(id);
+    }
+
+    private async Task Change(int shopId)
+    {
+        await hubConnection.SendAsync("UpdateCompanionShopId", shopId);
+    }
+    string MiniMessage(string str)
+    {
+        if (str.Length > 10)
+        {
+            return new string(str.Substring(0, 10) + "...");
+        }
+        return str;
+    }
+    private void UpdateWindow()
+    {
+        dialogs = SqlMessageShop.GetMessagesByUserId(CurrentUser.Id).ToList().OrderBy(t => t.DateMessage).Reverse();
+        GroupDialogs = dialogs.GroupBy(g => g.ShopId).ToList();
+        StateHasChanged();
+    }
+
+  
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}
