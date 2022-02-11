@@ -338,6 +338,10 @@ namespace TradingPlatformBlazor.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("dateRegistration");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("email");
+
                     b.Property<int>("IdShop")
                         .HasColumnType("int")
                         .HasColumnName("id_shop");

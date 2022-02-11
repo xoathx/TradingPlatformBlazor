@@ -187,6 +187,27 @@ using System.IO;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 26 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using System.Net.Mail;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 27 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.AspNetCore.WebUtilities;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 28 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.Extensions.Primitives;
+
+#line default
+#line hidden
+#nullable disable
     public partial class ShopSettings : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -195,7 +216,7 @@ using System.IO;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 52 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ShopSettings.razor"
+#line 53 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ShopSettings.razor"
        
     [Parameter]
     public Shop CurrentShop { get; set; }
@@ -204,7 +225,7 @@ using System.IO;
 
     private List<IBrowserFile> loadedFiles = new();
     private long maxFileSize = 1024 * 1024 * 200;
-    private int maxAllowedFiles = 1;
+    //private int maxAllowedFiles = 1;
     private bool isLoading;
     private IReadOnlyList<IBrowserFile> browserFile;
     FileInfo file;
@@ -230,11 +251,11 @@ using System.IO;
     {
         if (isLoading)
         {
-            var path = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", filename + file.Extension);
+            var path = Path.Combine(webHost.ContentRootPath, webHost.WebRootPath, "img", "avatars", filename + file.Extension);
             await using FileStream fs = new FileStream(path, FileMode.Create);
             await browserFile[0].OpenReadStream(maxFileSize).CopyToAsync(fs);
 
-            var delPath = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", CurrentShop.PathAvatarShop);
+            var delPath = Path.Combine(webHost.ContentRootPath, webHost.WebRootPath, "img", "avatars", CurrentShop.PathAvatarShop);
             File.Delete(delPath);
             CurrentShop.PathAvatarShop = filename + file.Extension;
             SqlShop.UpdateShop(CurrentShop);
@@ -244,7 +265,7 @@ using System.IO;
     }
 
 
-    private async Task LoadingFile(InputFileChangeEventArgs e)
+    private void LoadingFile(InputFileChangeEventArgs e)
     {
         isLoading = true;
         loadedFiles.Clear();
@@ -291,7 +312,7 @@ using System.IO;
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHostingEnvironment host { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IWebHostEnvironment webHost { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }

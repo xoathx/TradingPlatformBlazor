@@ -1,0 +1,36 @@
+﻿@page "/admin"
+@inject TradingPlatformBlazor.Data.Services.IEmailingService emailing
+    <AuthorizeView Roles="Administrator">
+        <h3>PageAdminPanel</h3>
+        <a href="/add_category" class="btn btn-group">Добавить категорию</a>
+        
+        <button @onclick="OpenDialog">Поиск пользователя</button>
+        
+
+        @if (DialogOpen)
+        { 
+            <FindUser OnClose="OnDialogClose"></FindUser>
+        }
+    </AuthorizeView>
+
+<button @onclick="Test">test</button>
+
+
+
+@code {
+    public bool DialogOpen { get; set; }
+    private void OnDialogClose()
+    {
+        DialogOpen = false;
+    }
+    private void OpenDialog()
+    {
+        DialogOpen = true;
+    }
+
+    private void Test()
+    {
+        MailMessage mailMessage = new MailMessage();
+        emailing.Send(mailMessage);
+    }
+}

@@ -185,6 +185,20 @@ using System.IO;
 #line hidden
 #nullable disable
 #nullable restore
+#line 26 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.AspNetCore.WebUtilities;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 27 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.Extensions.Primitives;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 10 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageOffer.razor"
            [Authorize]
 

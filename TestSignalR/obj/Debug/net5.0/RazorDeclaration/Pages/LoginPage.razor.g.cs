@@ -187,6 +187,27 @@ using System.IO;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 26 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using System.Net.Mail;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 27 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.AspNetCore.WebUtilities;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 28 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.Extensions.Primitives;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/signin")]
     public partial class LoginPage : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -196,26 +217,33 @@ using System.IO;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 18 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\LoginPage.razor"
-           
-        [Parameter]
-        public string Message { get; set; }
-    
+#line 21 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\LoginPage.razor"
+       
 
+    public string Message { get; set; } = null;
 
-        protected override void OnInitialized()
+    protected override void OnInitialized()
+    {
+        var uri = nav.ToAbsoluteUri(nav.Uri);
+        if(QueryHelpers.ParseQuery(uri.Query).TryGetValue("message", out var message))
         {
-
+            if (message == "error")
+            {
+                Message = "Логин или пароль введены некорректно";
+            }
+            else { Message = "Unhandled Exception"; }
         }
+    }
 
-        void Test()
-        {
 
-        }
+
+
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor http { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
     }
 }
 #pragma warning restore 1591

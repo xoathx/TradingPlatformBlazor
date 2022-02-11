@@ -1,7 +1,7 @@
 ﻿@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
 @inject TradingPlatformBlazor.Data.Repository.IShop SqlShop 
 @inject IHttpContextAccessor htp
-@inject IHostingEnvironment host
+@inject IWebHostEnvironment webHost
 
 <div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
     <div class="modal-dialog">
@@ -11,6 +11,7 @@
                 <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
             </div>
             <div class="modal-body">
+                <div class="text-danger">@message</div>
                 <InputFile OnChange="@LoadingFile" accept=".png, .jpg, .jpeg"></InputFile>
                 <div class="members-shop">
 
@@ -57,7 +58,7 @@
 
     private List<IBrowserFile> loadedFiles = new();
     private long maxFileSize = 1024 * 1024 * 200;
-    private int maxAllowedFiles = 1;
+    //private int maxAllowedFiles = 1;
     private bool isLoading;
     private IReadOnlyList<IBrowserFile> browserFile;
     FileInfo file;
@@ -83,11 +84,11 @@
     {
         if (isLoading)
         {
-            var path = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", filename + file.Extension);
+            var path = Path.Combine(webHost.ContentRootPath, webHost.WebRootPath, "img", "avatars", filename + file.Extension);
             await using FileStream fs = new FileStream(path, FileMode.Create);
             await browserFile[0].OpenReadStream(maxFileSize).CopyToAsync(fs);
 
-            var delPath = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", CurrentShop.PathAvatarShop);
+            var delPath = Path.Combine(webHost.ContentRootPath, webHost.WebRootPath, "img", "avatars", CurrentShop.PathAvatarShop);
             File.Delete(delPath);
             CurrentShop.PathAvatarShop = filename + file.Extension;
             SqlShop.UpdateShop(CurrentShop);
@@ -97,7 +98,7 @@
     }
 
 
-    private async Task LoadingFile(InputFileChangeEventArgs e)
+    private void LoadingFile(InputFileChangeEventArgs e)
     {
         isLoading = true;
         loadedFiles.Clear();

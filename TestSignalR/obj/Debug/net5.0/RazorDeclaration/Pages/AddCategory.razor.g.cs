@@ -188,6 +188,27 @@ using System.IO;
 #line hidden
 #nullable disable
 #nullable restore
+#line 26 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using System.Net.Mail;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 27 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.AspNetCore.WebUtilities;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 28 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.Extensions.Primitives;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 3 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AddCategory.razor"
            [Authorize(Roles = nameof(UserRole.Administrator))]
 

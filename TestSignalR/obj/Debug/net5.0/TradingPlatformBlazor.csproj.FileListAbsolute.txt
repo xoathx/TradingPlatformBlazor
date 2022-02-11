@@ -288,3 +288,7 @@ C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\R
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\ShopSettings.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\ShopSettings.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Shared\ShopSettings.razor.rz.scp.css
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\PageAdminPanel.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\PageAdminPanel.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\FindUser.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\FindUser.razor.g.cs

@@ -13,7 +13,7 @@
             <Authorized>
                 <div class="top-row px-4">
                     <AuthorizeView Context="any" Roles="Administrator">
-                        <a href="/add_category">Админ-панель</a>
+                        <a href="/admin">Админ-панель</a>
                     </AuthorizeView>
 
                     @if (user.IdShop != 0)
@@ -72,6 +72,10 @@
 
         await hubConnection.StartAsync();
 
+        if(htp.HttpContext.User.Claims.Count() > 3)
+        {
+            await hubConnection.SendAsync("AddToMemebersSite", user);
+        }
     }
 
 

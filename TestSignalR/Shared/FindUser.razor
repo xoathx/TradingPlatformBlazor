@@ -1,0 +1,63 @@
+﻿@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser;
+
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Поиск пользователя</h4>
+            <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+        </div>
+            
+        <div class="container">
+            <div class="text-danger">@message</div> 
+            <div class="row"></div>
+            <label for="nickname_finduser">Введите никнейм:</label>
+            <input type="text" id="nickname_finduser" @bind="Nickname" />
+            <button @onclick="@Find">Найти</button>
+            @if (FoundUser != null)
+            {
+                <div><img class="avatar" src="/img/avatars/@FoundUser.PathAvatar" /></div>
+                <div><a href="/user/@FoundUser.Id">@FoundUser.NickName</a></div>
+                <div>@FoundUser.DateRegistration.ToString("D")</div>
+                <div>@FoundUser.Role</div>
+                <button class="btn btn-danger">Забанить</button>
+
+            }
+
+        </div>
+        <div class="modal-footer">
+
+            <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>
+
+        </div>
+        </div>
+    </div>
+    </div>
+
+    @code {
+        [Parameter]
+        public EventCallback<bool> OnClose { get; set; }
+        User FoundUser;
+        private string Nickname;
+        private string message;
+        protected override void OnInitialized()
+        {
+            FoundUser = null;
+        }
+        private Task ModalCancel()
+        {
+            return OnClose.InvokeAsync(false);
+        }
+        private void Find()
+        {
+            
+                FoundUser = SqlUser.GetUserByNickname(Nickname);
+                if(FoundUser == null)
+                {
+                    message = "Пользователь не найден";
+                }
+
+            
+        }
+    }

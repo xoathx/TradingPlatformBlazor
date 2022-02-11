@@ -1,5 +1,5 @@
 ﻿@inject NavigationManager Navigation
-@inject TradingPlatformBlazor.Data.Repository.IUser user;
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser;
 @page "/signup"
 <AuthorizeView>
     <Authorized>
@@ -9,15 +9,15 @@
         <h3>Registration</h3>
         <p>@message</p>
         <label for="input-login">Desired Login:</label>
-        <input type="text" id="input-login" class="form-control" placeholder="Login" @bind="login" />
+        <input type="text" id="input-login" class="form-control col-4" placeholder="Login" @bind="login" />
         <label for="input-nick">Desired Nickname:</label>
-        <input type="text" id="input-nick" class="form-control" placeholder="Nickname" @bind="nick" />
+        <input type="text" id="input-nick" class="form-control col-4" placeholder="Nickname" @bind="nick" />
         <label for="input-pass">Desired Password:</label>
-        <input type="password" id="input-pass" class="form-control" placeholder="Password" @bind="pass" />
+        <input type="password" id="input-pass" class="form-control col-4" placeholder="Password" @bind="pass" />
         <label for="input-apass">Password again:</label>
-        <input type="password" id="input-apass" class="form-control" placeholder="Password again" @bind="apass" />
+        <input type="password" id="input-apass" class="form-control col-4" placeholder="Password again" @bind="apass" />
         <label for="input-email">Your e-mail:</label>
-        <input type="email" id="input-email" class="form-control" placeholder="E-mail" @bind="email" />
+        <input type="email" id="input-email" class="form-control col-4" placeholder="E-mail" @bind="email" />
         <button class="btn btn-primary" @onclick="Registr">Registrtation</button>
     </NotAuthorized>
 </AuthorizeView>
@@ -34,7 +34,7 @@
         if(Regex.IsMatch(login, pattern) || Regex.IsMatch(pass, pattern))
         { message = "Логин и пароль не должны содержать кириллицу!"; }
         else {
-            if (user.FindUserByLogin(login) != null)
+            if (SqlUser.FindUserByLogin(login) != null)
             {
                 message = "Данный логин уже есть.";
             }
@@ -54,10 +54,11 @@
                 NickName = nick,
                 DateRegistration = DateTime.UtcNow,
                 PathAvatar = "default-avatar.png",
-                Role = UserRole.User
+                Role = UserRole.User,
+                Email = email
 
             };
-            user.CreateUser(newUser);
+            SqlUser.CreateUser(newUser);
             Navigation.NavigateTo("/login", true);
         }
     }

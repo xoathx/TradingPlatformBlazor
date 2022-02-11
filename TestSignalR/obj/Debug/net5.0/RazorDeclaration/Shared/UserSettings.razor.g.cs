@@ -187,6 +187,27 @@ using System.IO;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 26 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using System.Net.Mail;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 27 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.AspNetCore.WebUtilities;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 28 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.Extensions.Primitives;
+
+#line default
+#line hidden
+#nullable disable
     public partial class UserSettings : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -206,7 +227,7 @@ using System.IO;
     private string filename;
     private List<IBrowserFile> loadedFiles = new();
     private long maxFileSize = 1024 * 1024 * 200;
-    private int maxAllowedFiles = 1;
+    //private int maxAllowedFiles = 1;
     private bool isLoading;
     private IReadOnlyList<IBrowserFile> browserFile;
     FileInfo file;
@@ -219,11 +240,11 @@ using System.IO;
     {
         if (isLoading)
         {
-            var path = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", filename + file.Extension);
+            var path = Path.Combine(/*host.ContentRootPath*/webHost.ContentRootPath, /*host.WebRootPath*/webHost.WebRootPath, "img", "avatars", filename + file.Extension);
             await using FileStream fs = new FileStream(path, FileMode.Create);
             await browserFile[0].OpenReadStream(maxFileSize).CopyToAsync(fs);
 
-            var delPath = Path.Combine(host.ContentRootPath, host.WebRootPath, "img", "avatars", CurrentUser.PathAvatar);
+            var delPath = Path.Combine(/*host.ContentRootPath*/webHost.ContentRootPath, /*host.WebRootPath*/webHost.WebRootPath, "img", "avatars", CurrentUser.PathAvatar);
             File.Delete(delPath);
             CurrentUser.PathAvatar = filename + file.Extension;
             SqlUser.UpdateUser(CurrentUser);
@@ -244,21 +265,21 @@ using System.IO;
         if (!SqlShop.IsAvatarReserved(result) && !SqlUser.IsAvatarReserved(result)) { return result; } else { return GetRandomName(); }
     }
 
-    private async Task LoadFile(InputFileChangeEventArgs e)
+    private void LoadFile(InputFileChangeEventArgs e)
     {
         isLoading = true;
         loadedFiles.Clear();
 
         filename = GetRandomName();
 
-        browserFile = e.GetMultipleFiles(1);
+        browserFile =  e.GetMultipleFiles(1);
         file = new FileInfo(browserFile[0].Name);
     }
 
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHostingEnvironment host { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IWebHostEnvironment webHost { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }
     }

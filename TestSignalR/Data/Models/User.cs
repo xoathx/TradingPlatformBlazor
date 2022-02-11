@@ -29,13 +29,17 @@ namespace TradingPlatformBlazor.Data.Models
         public double Balance { get; set; }
         [Column("id_shop")]
         public int IdShop { get; set; }
+        [Column("email")]
+        public string Email { get; set; }
+        
     }
 
     public enum UserRole
     {
         User,
         Administrator,
-        Test
+        Test,
+        Banned
     }
 
     public enum UserLevel

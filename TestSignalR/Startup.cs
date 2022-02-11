@@ -44,6 +44,8 @@ namespace TradingPlatformBlazor
             services.AddServerSideBlazor();
             services.AddHttpClient();
 
+            services.AddTransient<IEmailingService, Emailing>();
+
             services.AddScoped<ICategory, SQLCategory>();
             services.AddScoped<ILot, SQLLot>();
             services.AddScoped<IUser, SQLUser>();

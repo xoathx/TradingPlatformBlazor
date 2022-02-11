@@ -13,6 +13,7 @@ namespace TradingPlatformBlazor.Data.Repository
         public SQLLot(DBContext context)
         {
             _context = context;
+            
         }
 
         public IEnumerable<Lot> AllLots()

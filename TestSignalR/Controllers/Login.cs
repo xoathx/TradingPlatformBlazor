@@ -29,7 +29,7 @@ namespace TradingPlatformBlazor.Data
         }
         public async Task<ActionResult> LoginMethod([FromForm] string userName, [FromForm] string passWord)
         {
-            
+           
             var currentUser = _context.FindUserByLogin(userName);
             if (currentUser != null)
             {
@@ -50,8 +50,8 @@ namespace TradingPlatformBlazor.Data
                     ClaimsPrincipal cp = new(identity);
                     await HttpContext.SignInAsync(cp);
 
-                    if(currentUser.IdShop != 0)
-                    { 
+                    if (currentUser.IdShop != 0)
+                    {
                         hubConnection = new HubConnectionBuilder()
                         .WithUrl($"https://localhost:44362/hub").Build();
                         await hubConnection.StartAsync();
@@ -61,20 +61,17 @@ namespace TradingPlatformBlazor.Data
 
                     return Redirect("/");
                 }
+                else
+                {
+                    
+                    return Redirect("/signin?message=error");
+                }
             }
             else
             {
-                Console.WriteLine("Log / pass is not corrected");
-                Message = "Логин или пароль введены неправильно!";
-                
-                return Redirect("/signin");
+                return Redirect("/signin?message=error");
+
             }
-            var user = HttpContext.User;
-            if (user.Claims.Any())
-            {
-                await HttpContext.SignOutAsync();
-            }
-            return Redirect("/");
         }
 
         [Microsoft.AspNetCore.Mvc.Route("/logout")]
@@ -83,5 +80,6 @@ namespace TradingPlatformBlazor.Data
             await HttpContext.SignOutAsync();
             return Redirect("/");
         }
+
     }
 }

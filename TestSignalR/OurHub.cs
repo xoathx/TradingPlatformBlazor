@@ -13,21 +13,34 @@ namespace TradingPlatformBlazor
     public class OurHub : Hub
     {
         private readonly IShop _context;
-        public OurHub(IShop context)
+        private readonly IUser _userContext;
+        private readonly List<User> UsersOnSite;
+        public OurHub(IShop context, IUser userContext)
         {
             _context = context;
+            _userContext = userContext;
+            UsersOnSite = new List<User>();
         }
         
         public override Task OnConnectedAsync()
         {
+            if(Context.User.Claims.Any())
+            {
+                UsersOnSite.Add(_userContext.GetUserByNickname(Context.User.Claims.Where(s => s.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value));
+            }
             return base.OnConnectedAsync();
-        } 
+        }
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            return base.OnDisconnectedAsync(exception);
+        }
         public async Task SendSpecific(Message message)
         {
             var id = Context.User.Claims.Where(s => s.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
             await Clients.Users(message.ToUserId.ToString(), message.FromUserId.ToString()).SendAsync("ReceiveMessage", message);
            
         }
+        
         public async Task UpdateCompanionId(int id)
         {
             var ident = Context.User.Claims.Where(s => s.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
@@ -58,6 +71,11 @@ namespace TradingPlatformBlazor
             var group = _context.GetShopById(messageShop.ShopId).ShortNameShop;
             await Clients.Group(group).SendAsync("ReceiveMessageShop", messageShop);
             await Clients.User(messageShop.UserId.ToString()).SendAsync("ReceiveMessageShop", messageShop);
+        }
+
+        public async Task AddToMemebersSite(User user)
+        {
+            UsersOnSite.Add(user);
         }
     }
 }

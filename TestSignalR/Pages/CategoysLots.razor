@@ -1,5 +1,6 @@
 ﻿@inject TradingPlatformBlazor.Data.Repository.ILot lot;
 @inject TradingPlatformBlazor.Data.Repository.ICategory category;
+@inject TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot
 
 
 @page "/lots/{id:int}"
@@ -10,70 +11,102 @@
         <button @onclick="OpenDialog">Добавить лот</button>
     </Authorized>
 </AuthorizeView>
-<div class="content-categorylots">
-    <div class="container">
-        <div class="row">
-            <div class="col border-right name-lot-categorylots">Название лота</div>
-            <div class="col-6 border-right desc-lot-categorylots">Описание лота</div>
-            <div class="col price-lot-categorylots">Цена</div>
-        </div>
-
-        @foreach (var lot in allLots)
-        {
-
-        <a class="a-lot-categorylots" href="/lot/@lot.Id">
-                <div class="row border body-lot-categorylots">
-                    <div class="col border-right  name-lot-categorylots">@lot.NameLot</div>
-                    <div class="col-6 border-right desc-lot-categorylots">@MiniString(lot.DescLot)</div>
-                    <div class="col price-lot-categorylots">@lot.Price</div>
+<div class="row">
+    <div class="col">
+        
+        <div class="content-categorylots">
+            <div class="container">
+                <div class="row">
+                    <div class="col border-right name-lot-categorylots">Название лота</div>
+                    <div class="col-6 border-right desc-lot-categorylots">Описание лота</div>
+                    <div class="col price-lot-categorylots">Цена</div>
                 </div>
-         </a>
 
-    }
+                @foreach (var lot in allLots)
+                {
+
+                    <a class="a-lot-categorylots" href="/lot/@lot.Id">
+                        <div class="row border body-lot-categorylots">
+                            <div class="col border-right  name-lot-categorylots">@lot.NameLot</div>
+                            <div class="col-6 border-right desc-lot-categorylots">@MiniString(lot.DescLot)</div>
+                            <div class="col price-lot-categorylots">@lot.Price</div>
+                        </div>
+                    </a>
+
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="content-categorylots">
+            <div class="container">
+                <div class="row">
+                    <div class="col border-right name-lot-categorylots">Название лота</div>
+                    <div class="col-6 border-right desc-lot-categorylots">Описание лота</div>
+                    <div class="col price-lot-categorylots">Цена</div>
+                </div>
+
+                @foreach (var lot in allShopLots)
+                {
+
+                    <a class="a-lot-categorylots" href="/shoplot/@lot.Id">
+                        <div class="row border body-lot-categorylots">
+                            <div class="col border-right  name-lot-categorylots">@lot.NameLot</div>
+                            <div class="col-6 border-right desc-lot-categorylots">@MiniString(lot.DescLot)</div>
+                            <div class="col price-lot-categorylots">@lot.Price</div>
+                        </div>
+                    </a>
+
+                }
+            </div>
+        </div>
+    </div>
 </div>
-</div>
-@if (DialogOpen)
-{
-    <AddLots Title="@nameCategory" OnClose="OnDialogClose" CategoryId="@Id" />
-
-}
-@code {
-    [Parameter]
-    public int Id { get; set; }
-
-    private string nameCategory;
-    IEnumerable<Lot> allLots = new List<Lot>();
-    public bool DialogOpen { get; set; }
-
-
-    protected override void OnInitialized()
+    @if (DialogOpen)
     {
-        nameCategory = category.AllCategories().First(c => c.Id == Id).NameCategory;
-        allLots = lot.LotsByID(Id);
-    }
-
-    private void OnDialogClose()
-    {
-
-        DialogOpen = false;
-
+        <AddLots Title="@nameCategory" OnClose="OnDialogClose" CategoryId="@Id" />
 
     }
-    private void OpenDialog()
-    {
-        DialogOpen = true;
-    }
+    @code {
+        [Parameter]
+        public int Id { get; set; }
 
-    string MiniString(string str)
-    {
-        if (string.IsNullOrWhiteSpace(str)) { return str; }
-        else
+        private string nameCategory;
+        IEnumerable<Lot> allLots = new List<Lot>();
+        public bool DialogOpen { get; set; }
+
+        IEnumerable<ShopLot> allShopLots = new List<ShopLot>();
+
+        protected override void OnInitialized()
         {
-            if (str.Length > 50)
+            nameCategory = category.AllCategories().First(c => c.Id == Id).NameCategory;
+            allLots = lot.LotsByID(Id).ToList();
+
+            allShopLots = SqlShopLot.ShopLotsByCategoryId(Id).ToList();
+        }
+
+        private void OnDialogClose()
+        {
+
+            DialogOpen = false;
+
+
+        }
+        private void OpenDialog()
+        {
+            DialogOpen = true;
+        }
+
+        string MiniString(string str)
+        {
+            if (string.IsNullOrWhiteSpace(str)) { return str; }
+            else
             {
-                return new string(str.Substring(0, 50) + "...");
+                if (str.Length > 50)
+                {
+                    return new string(str.Substring(0, 50) + "...");
+                }
+                return str;
             }
-            return str;
         }
     }
-}

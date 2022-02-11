@@ -187,6 +187,27 @@ using System.IO;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 26 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using System.Net.Mail;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 27 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.AspNetCore.WebUtilities;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 28 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\_Imports.razor"
+using Microsoft.Extensions.Primitives;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/signup")]
     public partial class Registration : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -210,7 +231,7 @@ using System.IO;
         if(Regex.IsMatch(login, pattern) || Regex.IsMatch(pass, pattern))
         { message = "Логин и пароль не должны содержать кириллицу!"; }
         else {
-            if (user.FindUserByLogin(login) != null)
+            if (SqlUser.FindUserByLogin(login) != null)
             {
                 message = "Данный логин уже есть.";
             }
@@ -230,10 +251,11 @@ using System.IO;
                 NickName = nick,
                 DateRegistration = DateTime.UtcNow,
                 PathAvatar = "default-avatar.png",
-                Role = UserRole.User
+                Role = UserRole.User,
+                Email = email
 
             };
-            user.CreateUser(newUser);
+            SqlUser.CreateUser(newUser);
             Navigation.NavigateTo("/login", true);
         }
     }
@@ -241,7 +263,7 @@ using System.IO;
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser user { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager Navigation { get; set; }
     }
 }

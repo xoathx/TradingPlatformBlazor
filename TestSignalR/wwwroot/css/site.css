@@ -663,6 +663,7 @@ textarea {
 
 .content-categorylots {
     max-width: 700px;
+    margin:auto;
 }
 .body-lot-categorylots{
     min-height: 50px;
