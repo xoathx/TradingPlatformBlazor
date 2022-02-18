@@ -69,6 +69,11 @@ namespace TradingPlatformBlazor
             var ident = Context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             await Clients.User(ident).SendAsync("UpdateShop", shopId);
         }
+        public async Task UpdateCompanionForShop(int userId)
+        {
+            var ident = Context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            await Clients.User(ident).SendAsync("UpdateCompanionIdForShop", userId);
+        }
         public async Task UpdateOffer(UpdateOffer updateOffer)
         {
             var ident = Context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
@@ -87,8 +92,7 @@ namespace TradingPlatformBlazor
         public async Task SendShopMessage(MessageShop messageShop)
         {
             var group = _context.GetShopById(messageShop.ShopId).ShortNameShop;
-            await Clients.Group(group).SendAsync("ReceiveMessageShop", messageShop);
-            await Clients.User(messageShop.UserId.ToString()).SendAsync("ReceiveMessageShop", messageShop);
+            await Clients.Users(messageShop.UserId.ToString(), Context.UserIdentifier).SendAsync("ReceiveMessageShop", messageShop);
         }
     }
 }

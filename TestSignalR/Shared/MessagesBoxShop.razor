@@ -1,6 +1,7 @@
 ﻿@inject TradingPlatformBlazor.Data.Repository.IMessageShop SqlMessageShop
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
-@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop; 
+@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
+@inject TradingPlatformBlazor.Data.Services.IUserStatus UserStatus
 @inject IHttpContextAccessor htp
 @inject NavigationManager nav
 @implements IAsyncDisposable
@@ -8,7 +9,7 @@
 <AuthorizeView>
     <NotAuthorized>Авторизуйтесь!</NotAuthorized>
     <Authorized>
-        @if (CompanionShop == null)
+        @if (CompanionShop == null && CompanionUser == null)
         {
 
 
@@ -16,58 +17,119 @@
         }
         else
         {
-            <div class="py-2 px-4 border-bottom d-none d-lg-block">
-                <div class="d-flex align-items-center py-1">
-                    <div class="position-relative">
-                        <img src="/img//avatars/@CompanionShop.PathAvatarShop" class="rounded-circle mr-1" alt="@CompanionShop.NameShop" width="40" height="40">
-                    </div>
-                    <div class="flex-grow-1 pl-3">
-                        <strong>@CompanionShop.NameShop</strong>
-                        <div class="text-muted small"><em>Online</em></div>
-                    </div>
-                    <div>
-
-                        <button class="btn btn-light border btn-lg px-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal feather-lg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="position-relative">
-                <div class="chat-messages p-4">
-
-                    @foreach (var item in MessagesShop)
-                    {
-                        if (!item.IsShopMessage)
-                        {
-                            selectorClass = "chat-message-right pb-4";
-                        }
-                        else
-                        {
-                            selectorClass = "chat-message-left pb-4";
-                        }
-                        <div class="@selectorClass">
-                            <div>
-                                @if(item.IsShopMessage) { avatar = CompanionShop.PathAvatarShop; nick = CompanionShop.NameShop; } else { avatar = CurrentUser.PathAvatar; nick = CurrentUser.NickName; }
-                                <img src="/img/avatars/@avatar" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40" />
-                                <div class="text-muted small text-nowrap mt-2">@item.DateMessage.ToString("t")</div>
-                            </div>
-                            <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                                <div class="font-weight-bold mb-1">@nick</div>
-                                @item.BodyMessage
-                            </div>
+            if (CompanionUser == null)
+            {
+                <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                    <div class="d-flex align-items-center py-1">
+                        <div class="position-relative">
+                            <img src="/img//avatars/@CompanionShop.PathAvatarShop" class="rounded-circle mr-1" alt="@CompanionShop.NameShop" width="40" height="40">
                         </div>
-                    }
+                        <div class="flex-grow-1 pl-3">
+                            <strong>@CompanionShop.NameShop</strong>
+                            <div class="text-muted small"></div>
+                        </div>
+                        <div>
 
-
-                    <div class="flex-grow-0 py-3 px-4 border-top">
-                        <div class="input-group">
-                            <input type="text" @bind="messageInput" class="form-control" placeholder="Type your message">
-                            <button class="btn btn-primary" @onclick="Send">Send</button>
+                            <button class="btn btn-light border btn-lg px-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal feather-lg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
                         </div>
                     </div>
+                </div><div class="position-relative">
+                    <div class="chat-messages p-4">
 
+
+
+                        @foreach (var item in MessagesShop)
+                        {
+                            if (!item.IsShopMessage)
+                            {
+                                selectorClass = "chat-message-right pb-4";
+                            }
+                            else
+                            {
+                                selectorClass = "chat-message-left pb-4";
+                            }
+                            <div class="@selectorClass">
+                                <div>
+                                    @if (item.IsShopMessage) { avatar = CompanionShop.PathAvatarShop; nick = CompanionShop.NameShop; } else { avatar = CurrentUser.PathAvatar; nick = CurrentUser.NickName; }
+                                    <img src="/img/avatars/@avatar" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40" />
+                                    <div class="text-muted small text-nowrap mt-2">@item.DateMessage.ToString("t")</div>
+                                </div>
+                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                    <div class="font-weight-bold mb-1">@nick</div>
+                                    @item.BodyMessage
+                                </div>
+                            </div>
+                        }
+
+
+                        <div class="flex-grow-0 py-3 px-4 border-top">
+                            <div class="input-group">
+                                <input type="text" @bind="messageInput" class="form-control" placeholder="Type your message">
+                                <button class="btn btn-primary" @onclick="Send">Send</button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                    <div class="d-flex align-items-center py-1">
+                        <div class="position-relative">
+                            <img src="/img//avatars/@CompanionUser.PathAvatar" class="rounded-circle mr-1" alt="@CompanionUser.NickName" width="40" height="40">
+                        </div>
+                        <div class="flex-grow-1 pl-3">
+                            <strong>@CompanionUser.NickName</strong>
+                            <div class="text-muted small">@if (UserStatus.GetStatus(CompanionUser.Id))
+                            {<em class="text-success">Online</em>}
+                            else
+                            {<em>Offline</em>}</div>
+                        </div>
+                        <div>
+
+                            <button class="btn btn-light border btn-lg px-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal feather-lg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+                        </div>
+                    </div>
+                </div><div class="position-relative">
+                          <div class="chat-messages p-4">
+
+
+                              @foreach (var item in MessagesShop)
+                              {
+                                  if (item.IsShopMessage)
+                                  {
+                                      selectorClass = "chat-message-right pb-4";
+                                  }
+                                  else
+                                  {
+                                      selectorClass = "chat-message-left pb-4";
+                                  }
+                                  <div class="@selectorClass">
+                                      <div>
+                                          @if (!item.IsShopMessage) { avatar = CompanionUser.PathAvatar; nick = CompanionUser.NickName; } else { avatar = CurrentShop.PathAvatarShop; nick = CurrentShop.NameShop; }
+                                          <img src="/img/avatars/@avatar" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40" />
+                                          <div class="text-muted small text-nowrap mt-2">@item.DateMessage.ToString("t")</div>
+                                      </div>
+                                      <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                          <div class="font-weight-bold mb-1">@nick</div>
+                                          @item.BodyMessage
+                                      </div>
+                                  </div>
+                              }
+
+
+                              <div class="flex-grow-0 py-3 px-4 border-top">
+                                  <div class="input-group">
+                                      <input type="text" @bind="messageInput" class="form-control" placeholder="Type your message">
+                                      <button class="btn btn-primary" @onclick="SendForShop">Send</button>
+                                  </div>
+                              </div>
+
+                          </div>
+                </div>
+            }
+
         }
     </Authorized>
 </AuthorizeView>
@@ -76,6 +138,8 @@
     private HubConnection hubConnection;
     private User CurrentUser;
     private Shop CompanionShop;
+    private User CompanionUser;
+    private Shop CurrentShop;
     private List<MessageShop> MessagesShop = new List<MessageShop>();
     private string selectorClass;
     private string avatar;
@@ -87,6 +151,10 @@
         if (htp.HttpContext.User.Claims.Any())
         {
             CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+            if(CurrentUser.IdShop != 0)
+            {
+                CurrentShop = SqlShop.GetShopById(CurrentUser.IdShop);
+            }
             hubConnection = new HubConnectionBuilder()
          .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
          {
@@ -103,9 +171,18 @@
                 StateHasChanged();
             });
 
+            hubConnection.On<int>("UpdateCompanionIdForShop", (userId) =>
+            {
+                ClearWin();
+                UpdateCompanionIdForShop(userId);
+                StateHasChanged();
+
+            });
+
             hubConnection.On<MessageShop>("ReceiveMessageShop", (messageShop) =>
             {
                 UpdateMessageBox();
+
             });
             await hubConnection.StartAsync();
         }
@@ -122,10 +199,19 @@
         MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(CurrentUser.Id, shopId).ToList();
         MessagesShop = MessagesShop.OrderBy(t => t.DateMessage).ToList();
     }
-
+    private void UpdateCompanionIdForShop(int userId)
+    {
+        CompanionUser = SqlUser.GetUserById(userId);
+        MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(userId, CurrentUser.IdShop).ToList();
+        MessagesShop = MessagesShop.OrderBy(t => t.DateMessage).ToList();
+    }
     private void UpdateMessageBox()
     {
-        MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(CurrentUser.Id, CompanionShop.Id).ToList();
+        if (CompanionShop != null)
+        {
+            MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(CurrentUser.Id, CompanionShop.Id).ToList();
+        }
+        else { MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(CompanionUser.Id, CurrentShop.Id).ToList(); }
         MessagesShop = MessagesShop.OrderBy(t => t.DateMessage).ToList();
         StateHasChanged();
     }
@@ -146,6 +232,24 @@
 
         SqlMessageShop.AddMessage(messageShop);
         await hubConnection.SendAsync("SendShopMessage", messageShop);
+        messageInput = string.Empty;
+        StateHasChanged();
+    }
+
+    private async Task SendForShop()
+    {
+        MessageShop messageShop = new MessageShop()
+        {
+            BodyMessage = messageInput,
+            DateMessage = DateTime.Now,
+            IsShopMessage = true,
+            UserId = CompanionUser.Id,
+            ShopId = CurrentShop.Id,
+            ShopMemberId = CurrentUser.Id
+        };
+        SqlMessageShop.AddMessage(messageShop);
+        await hubConnection.SendAsync("SendShopMessage", messageShop);
+        messageInput = string.Empty;
         StateHasChanged();
     }
 

@@ -216,7 +216,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 37 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\DialogsShop.razor"
+#line 62 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\DialogsShop.razor"
        
     private HubConnection hubConnection;
     private User CurrentUser;
@@ -231,7 +231,11 @@ using Microsoft.Extensions.Primitives;
             CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
             dialogs = SqlMessageShop.GetMessagesByUserId(CurrentUser.Id).ToList().OrderBy(t => t.DateMessage).Reverse();
             GroupDialogs = dialogs.GroupBy(g => g.ShopId).ToList();
-
+            if(CurrentUser.IdShop != 0)
+            {
+                dialogs = SqlMessageShop.GetMessagesByShopId(CurrentUser.IdShop).ToList().OrderBy(t => t.DateMessage).Reverse();
+                GroupDialogs = dialogs.GroupBy(g => g.UserId).ToList();
+            }
             hubConnection = new HubConnectionBuilder()
           .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
           {
@@ -253,6 +257,11 @@ using Microsoft.Extensions.Primitives;
         return SqlShop.GetShopById(id);
     }
 
+    private async Task ChangeForShop(int userId)
+    {
+        await hubConnection.SendAsync("UpdateCompanionForShop", userId);
+    }
+
     private async Task Change(int shopId)
     {
         await hubConnection.SendAsync("UpdateCompanionShopId", shopId);
@@ -272,7 +281,7 @@ using Microsoft.Extensions.Primitives;
         StateHasChanged();
     }
 
-  
+
     public async ValueTask DisposeAsync()
     {
         if (hubConnection is not null)

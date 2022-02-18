@@ -216,11 +216,13 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 75 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MessagesBoxShop.razor"
+#line 137 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MessagesBoxShop.razor"
        
     private HubConnection hubConnection;
     private User CurrentUser;
     private Shop CompanionShop;
+    private User CompanionUser;
+    private Shop CurrentShop;
     private List<MessageShop> MessagesShop = new List<MessageShop>();
     private string selectorClass;
     private string avatar;
@@ -232,6 +234,10 @@ using Microsoft.Extensions.Primitives;
         if (htp.HttpContext.User.Claims.Any())
         {
             CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+            if(CurrentUser.IdShop != 0)
+            {
+                CurrentShop = SqlShop.GetShopById(CurrentUser.IdShop);
+            }
             hubConnection = new HubConnectionBuilder()
          .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
          {
@@ -248,9 +254,18 @@ using Microsoft.Extensions.Primitives;
                 StateHasChanged();
             });
 
+            hubConnection.On<int>("UpdateCompanionIdForShop", (userId) =>
+            {
+                ClearWin();
+                UpdateCompanionIdForShop(userId);
+                StateHasChanged();
+
+            });
+
             hubConnection.On<MessageShop>("ReceiveMessageShop", (messageShop) =>
             {
                 UpdateMessageBox();
+
             });
             await hubConnection.StartAsync();
         }
@@ -267,10 +282,19 @@ using Microsoft.Extensions.Primitives;
         MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(CurrentUser.Id, shopId).ToList();
         MessagesShop = MessagesShop.OrderBy(t => t.DateMessage).ToList();
     }
-
+    private void UpdateCompanionIdForShop(int userId)
+    {
+        CompanionUser = SqlUser.GetUserById(userId);
+        MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(userId, CurrentUser.IdShop).ToList();
+        MessagesShop = MessagesShop.OrderBy(t => t.DateMessage).ToList();
+    }
     private void UpdateMessageBox()
     {
-        MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(CurrentUser.Id, CompanionShop.Id).ToList();
+        if (CompanionShop != null)
+        {
+            MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(CurrentUser.Id, CompanionShop.Id).ToList();
+        }
+        else { MessagesShop = SqlMessageShop.GetMessagesByUserIdAndShopId(CompanionUser.Id, CurrentShop.Id).ToList(); }
         MessagesShop = MessagesShop.OrderBy(t => t.DateMessage).ToList();
         StateHasChanged();
     }
@@ -291,6 +315,24 @@ using Microsoft.Extensions.Primitives;
 
         SqlMessageShop.AddMessage(messageShop);
         await hubConnection.SendAsync("SendShopMessage", messageShop);
+        messageInput = string.Empty;
+        StateHasChanged();
+    }
+
+    private async Task SendForShop()
+    {
+        MessageShop messageShop = new MessageShop()
+        {
+            BodyMessage = messageInput,
+            DateMessage = DateTime.Now,
+            IsShopMessage = true,
+            UserId = CompanionUser.Id,
+            ShopId = CurrentShop.Id,
+            ShopMemberId = CurrentUser.Id
+        };
+        SqlMessageShop.AddMessage(messageShop);
+        await hubConnection.SendAsync("SendShopMessage", messageShop);
+        messageInput = string.Empty;
         StateHasChanged();
     }
 
@@ -307,6 +349,7 @@ using Microsoft.Extensions.Primitives;
 #nullable disable
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Services.IUserStatus UserStatus { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IMessageShop SqlMessageShop { get; set; }
