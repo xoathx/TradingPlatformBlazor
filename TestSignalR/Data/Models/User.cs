@@ -10,8 +10,6 @@ namespace TradingPlatformBlazor.Data.Models
     {
         [Column("id")]
         public int Id { get; set; }
-        [Column("login")]
-        public string Login { get; set; }
         [Column("passcrypt")]
         public string PassCrypt { get; set; }
         [Column("nickname")]

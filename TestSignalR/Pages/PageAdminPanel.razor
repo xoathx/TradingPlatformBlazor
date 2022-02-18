@@ -1,5 +1,6 @@
 ﻿@page "/admin"
 @inject TradingPlatformBlazor.Data.Services.IEmailingService emailing
+@inject TradingPlatformBlazor.Data.Services.IUserStatus userStatus
     <AuthorizeView Roles="Administrator">
         <h3>PageAdminPanel</h3>
         <a href="/add_category" class="btn btn-group">Добавить категорию</a>
@@ -18,7 +19,15 @@
 
 
 @code {
+    private List<User> onlineUsers;
+
+
     public bool DialogOpen { get; set; }
+
+    protected override void OnInitialized()
+    {
+        onlineUsers = new List<User>();
+    }
     private void OnDialogClose()
     {
         DialogOpen = false;
@@ -30,7 +39,6 @@
 
     private void Test()
     {
-        MailMessage mailMessage = new MailMessage();
-        emailing.Send(mailMessage);
+        onlineUsers = userStatus.GetOnlineUsers();
     }
 }

@@ -206,7 +206,6 @@ C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\R
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\PagePurchases.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\PageSales.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\ProfileUser.razor.g.cs
-C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\Registration.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\AddComment.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\AddLots.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\Chat.razor.g.cs
@@ -236,7 +235,6 @@ C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\R
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\PagePurchases.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\PageSales.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\ProfileUser.razor.g.cs
-C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\Registration.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\AddComment.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\AddLots.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\Chat.razor.g.cs
@@ -292,3 +290,7 @@ C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\R
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\PageAdminPanel.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Shared\FindUser.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Shared\FindUser.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\RegistrationPage.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\RegistrationPage.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\AccessPage.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\AccessPage.razor.g.cs

@@ -19,6 +19,39 @@ namespace TradingPlatformBlazor.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("TradingPlatformBlazor.Data.Models.AccessToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("email");
+
+                    b.Property<bool>("IsActivated")
+                        .HasColumnType("bit")
+                        .HasColumnName("isActivated");
+
+                    b.Property<string>("Nick")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("nick");
+
+                    b.Property<string>("Passcrypt")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("passcrypt");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("token");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccessTokens");
+                });
+
             modelBuilder.Entity("TradingPlatformBlazor.Data.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -349,10 +382,6 @@ namespace TradingPlatformBlazor.Migrations
                     b.Property<int>("LevelUser")
                         .HasColumnType("int")
                         .HasColumnName("level_user");
-
-                    b.Property<string>("Login")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("login");
 
                     b.Property<string>("NickName")
                         .HasColumnType("nvarchar(max)")

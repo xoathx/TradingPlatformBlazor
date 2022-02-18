@@ -217,9 +217,17 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 20 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageAdminPanel.razor"
+#line 21 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageAdminPanel.razor"
        
+    private List<User> onlineUsers;
+
+
     public bool DialogOpen { get; set; }
+
+    protected override void OnInitialized()
+    {
+        onlineUsers = new List<User>();
+    }
     private void OnDialogClose()
     {
         DialogOpen = false;
@@ -231,13 +239,13 @@ using Microsoft.Extensions.Primitives;
 
     private void Test()
     {
-        MailMessage mailMessage = new MailMessage();
-        emailing.Send(mailMessage);
+        onlineUsers = userStatus.GetOnlineUsers();
     }
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Services.IUserStatus userStatus { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Services.IEmailingService emailing { get; set; }
     }
 }

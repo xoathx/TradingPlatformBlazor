@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using TradingPlatformBlazor.Data.Repository;
 
@@ -30,10 +32,10 @@ namespace TradingPlatformBlazor.Data
         public async Task<ActionResult> LoginMethod([FromForm] string userName, [FromForm] string passWord)
         {
            
-            var currentUser = _context.FindUserByLogin(userName);
+            var currentUser = _context.GetUserByNickname(userName);
             if (currentUser != null)
             {
-                if (currentUser.PassCrypt == passWord)
+                if (currentUser.PassCrypt == CryptPwd(passWord))
                 {
                     IEnumerable<Claim> claims = new List<Claim>
                     {
@@ -52,8 +54,9 @@ namespace TradingPlatformBlazor.Data
 
                     if (currentUser.IdShop != 0)
                     {
+                        string hub = Request.Scheme + "://" + Request.Host + "/hub";
                         hubConnection = new HubConnectionBuilder()
-                        .WithUrl($"https://localhost:44362/hub").Build();
+                        .WithUrl(hub).Build();
                         await hubConnection.StartAsync();
                         await hubConnection.SendAsync("CreateGroup", currentUser.Id, _scontext.GetShopById(currentUser.IdShop).ShortNameShop);
                         await hubConnection.StopAsync();
@@ -80,6 +83,20 @@ namespace TradingPlatformBlazor.Data
             await HttpContext.SignOutAsync();
             return Redirect("/");
         }
+        public static string CryptPwd(string Pwd)
+        {
+            StringBuilder Sb = new();
 
+            using (SHA256 hash = SHA256Managed.Create())
+            {
+                Encoding enc = Encoding.UTF8;
+                Byte[] result = hash.ComputeHash(enc.GetBytes(Pwd));
+
+                foreach (Byte b in result)
+                    Sb.Append(b.ToString("x2"));
+            }
+
+            return Sb.ToString();
+        }
     }
 }

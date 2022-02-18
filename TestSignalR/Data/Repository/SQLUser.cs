@@ -39,10 +39,7 @@ namespace TradingPlatformBlazor.Data.Repository
             }
         }
 
-        public User FindUserByLogin(string login)
-        {
-            return _context.Users.Where(i => i.Login == login).FirstOrDefault();
-        }
+       
 
         public IEnumerable<User> GetShopMembersByShopId(int shopId)
         {
@@ -52,6 +49,11 @@ namespace TradingPlatformBlazor.Data.Repository
         public double GetUserBalanceById(int userId)
         {
             return _context.Users.FirstOrDefault(u => u.Id == userId).Balance;
+        }
+
+        public User GetUserBuEmail(string email)
+        {
+            return _context.Users.Where(e => e.Email == email).FirstOrDefault();
         }
 
         public User GetUserById(int id)

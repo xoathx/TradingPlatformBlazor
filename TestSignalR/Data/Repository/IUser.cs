@@ -10,9 +10,9 @@ namespace TradingPlatformBlazor.Data.Repository
     {
         IEnumerable<User> AllUsers();
         IEnumerable<User> GetShopMembersByShopId(int shopId);
-        User FindUserByLogin(string login);
         User GetUserById(int id);
         User GetUserByNickname(string nickname);
+        User GetUserBuEmail(string email);
         double GetUserBalanceById(int userId);
         bool IsAvatarReserved(string name);
         void CreateUser(User newUser);

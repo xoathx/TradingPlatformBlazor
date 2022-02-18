@@ -1,5 +1,6 @@
 ﻿@inject TradingPlatformBlazor.Data.Repository.IMessage SqlMessage
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Services.IUserStatus UserStatus
 @inject IHttpContextAccessor htp
 @inject NavigationManager nav
 @implements IAsyncDisposable
@@ -22,7 +23,7 @@
                     </div>
                     <div class="flex-grow-1 pl-3">
                         <strong>@currentUser.NickName</strong>
-                        <div class="text-muted small"><em>Online</em></div>
+                        <div class="text-muted small">@if(UserStatus.GetStatus(currentUser.Id)) {<em class="text-success">Online</em>} else {<em>Offline</em> }</div>
                     </div>
                     <div>
 

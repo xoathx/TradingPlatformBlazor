@@ -216,7 +216,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 72 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MessegerBox.razor"
+#line 73 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MessegerBox.razor"
        
     //[Parameter]
     public int IdСompanion { get; set; }
@@ -307,6 +307,7 @@ using Microsoft.Extensions.Primitives;
 #nullable disable
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Services.IUserStatus UserStatus { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IMessage SqlMessage { get; set; }
     }

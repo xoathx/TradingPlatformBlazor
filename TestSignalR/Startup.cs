@@ -20,7 +20,7 @@ namespace TradingPlatformBlazor
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration;           
         }
 
         public IConfiguration Configuration { get; }
@@ -44,7 +44,8 @@ namespace TradingPlatformBlazor
             services.AddServerSideBlazor();
             services.AddHttpClient();
 
-            services.AddTransient<IEmailingService, Emailing>();
+            services.AddSingleton<IEmailingService, Emailing>();
+            services.AddSingleton<IUserStatus, UserOnlineStatusRegistry>();
 
             services.AddScoped<ICategory, SQLCategory>();
             services.AddScoped<ILot, SQLLot>();
@@ -55,7 +56,10 @@ namespace TradingPlatformBlazor
             services.AddScoped<IShop, SQLShop>();
             services.AddScoped<IShopLot, SQLShopLot>();
             services.AddScoped<IMessageShop, SQLMessageShop>();
-            //services.AddScoped<ChatHubService>();
+            services.AddScoped<IAccessToken, SQLAccessToken>();
+
+
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

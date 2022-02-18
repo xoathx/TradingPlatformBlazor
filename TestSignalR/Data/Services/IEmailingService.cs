@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace TradingPlatformBlazor.Data.Services
 {
-    interface IEmailingService
+    public interface IEmailingService
     {
-        void Send(MailMessage message);
+        Task Send(MailMessage message);
         Task SendHtmlMessage();
+        Task SendToken(MailAddress toMail, string Token);
     }
 }

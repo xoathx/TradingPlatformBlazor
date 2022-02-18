@@ -7,6 +7,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TradingPlatformBlazor.Data.Models;
 using TradingPlatformBlazor.Data.Repository;
+using Microsoft.Extensions.Logging;
+using TradingPlatformBlazor.Data.Services;
 
 namespace TradingPlatformBlazor
 {
@@ -14,24 +16,40 @@ namespace TradingPlatformBlazor
     {
         private readonly IShop _context;
         private readonly IUser _userContext;
-        private readonly List<User> UsersOnSite;
-        public OurHub(IShop context, IUser userContext)
+        private readonly IUserStatus _userStatus;
+        private readonly ILogger<OurHub> _logger;
+        private User CurrentUser;
+        public OurHub(IShop context, IUser userContext, IUserStatus userStatus, ILogger<OurHub> logger)
         {
             _context = context;
             _userContext = userContext;
-            UsersOnSite = new List<User>();
+            _logger = logger;
+            _userStatus = userStatus;
         }
         
         public override Task OnConnectedAsync()
         {
+            
             if(Context.User.Claims.Any())
             {
-                UsersOnSite.Add(_userContext.GetUserByNickname(Context.User.Claims.Where(s => s.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value));
+                CurrentUser = _userContext.GetUserById(int.Parse(Context.UserIdentifier));
+                _userStatus.SetOnline(CurrentUser);
+                _logger.LogWarning("{0} connect", Context.User.Claims.Where(s => s.Type == ClaimTypes.Name).FirstOrDefault().Value);
             }
+           
+
+
             return base.OnConnectedAsync();
         }
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            if (Context.User.Claims.Any())
+            {
+                CurrentUser = _userContext.GetUserById(int.Parse(Context.UserIdentifier));
+                _userStatus.SetOffline(CurrentUser);
+                _logger.LogWarning("{0} disconnect", Context.User.Claims.Where(s => s.Type == ClaimTypes.Name).FirstOrDefault().Value);
+                return base.OnDisconnectedAsync(exception);
+            }
             return base.OnDisconnectedAsync(exception);
         }
         public async Task SendSpecific(Message message)
@@ -71,11 +89,6 @@ namespace TradingPlatformBlazor
             var group = _context.GetShopById(messageShop.ShopId).ShortNameShop;
             await Clients.Group(group).SendAsync("ReceiveMessageShop", messageShop);
             await Clients.User(messageShop.UserId.ToString()).SendAsync("ReceiveMessageShop", messageShop);
-        }
-
-        public async Task AddToMemebersSite(User user)
-        {
-            UsersOnSite.Add(user);
         }
     }
 }

@@ -1,0 +1,46 @@
+﻿@page "/access/{Token}"
+@inject TradingPlatformBlazor.Data.Repository.IAccessToken SqlToken
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+<h1 class="text-danger text-center">@Error</h1>
+<h1 class="text-success text-center">@Done</h1>
+@code {
+    [Parameter]
+    public string Token { get; set; }
+    public string Done { get; set; } = null;
+    public string Error { get; set; } = null;
+
+    AccessToken CurrentAccessToken;
+
+    protected override void OnInitialized()
+    {
+        CurrentAccessToken = SqlToken.FindToken(Token);
+        if(CurrentAccessToken == null)
+        {
+            Error = "Данный токен не существует.";
+        }
+        else
+        {
+            if (CurrentAccessToken.IsActivated)
+            {
+                Error = "Аккаунт уже активирован.";
+            }
+            else
+            {
+                User newUser = new User()
+                {
+                    PassCrypt = CurrentAccessToken.Passcrypt,
+                    NickName = CurrentAccessToken.Nick,
+                    Email = CurrentAccessToken.Email,
+                    PathAvatar = "default.png",
+                    DateRegistration = DateTime.Now,
+                    Role = UserRole.User,
+                    LevelUser = UserLevel.First
+                };
+                SqlUser.CreateUser(newUser);
+                CurrentAccessToken.IsActivated = true;
+                SqlToken.UpdateToken(CurrentAccessToken);
+                Done = "Аккаунт активирован!";
+            }
+        }
+    }
+}
