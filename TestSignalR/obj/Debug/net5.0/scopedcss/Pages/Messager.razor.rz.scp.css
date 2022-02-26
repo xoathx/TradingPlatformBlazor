@@ -1,0 +1,26 @@
+body[b-sq7nxjr1ul] {
+}
+.change-chat[b-sq7nxjr1ul] {
+    border: 2px solid #7898f6;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    height: 40px;
+    width: 278px;
+}
+    .change-chat a[b-sq7nxjr1ul] {
+        text-decoration: none;
+        color: #7898f6;
+        font-size: 24px;
+        text-align: center;
+
+    }
+.shop-link a[b-sq7nxjr1ul], .user-link a[b-sq7nxjr1ul]{
+    margin-left:35px;
+    text-align:center;
+}
+.shop-link[b-sq7nxjr1ul] {
+    border-left: 1px solid #7898f6;
+}
+.chats[b-sq7nxjr1ul]{
+    
+}

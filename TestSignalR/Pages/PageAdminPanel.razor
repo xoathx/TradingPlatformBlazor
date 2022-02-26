@@ -1,20 +1,26 @@
 ﻿@page "/admin"
 @inject TradingPlatformBlazor.Data.Services.IEmailingService emailing
 @inject TradingPlatformBlazor.Data.Services.IUserStatus userStatus
-    <AuthorizeView Roles="Administrator">
-        <h3>PageAdminPanel</h3>
-        <a href="/add_category" class="btn btn-group">Добавить категорию</a>
-        
-        <button @onclick="OpenDialog">Поиск пользователя</button>
-        
+@inject IHttpContextAccessor htp
+@inject IJSRuntime JSRuntime
+@attribute [Authorize]
 
-        @if (DialogOpen)
-        { 
-            <FindUser OnClose="OnDialogClose"></FindUser>
-        }
-    </AuthorizeView>
+@if(valueClaim != "Administrator") { <ErrorComponent ErrorCode="404"></ErrorComponent>}
+<AuthorizeView Roles="Administrator">
+    <h3>PageAdminPanel</h3>
+    <a href="/add_category" class="btn btn-group">Добавить категорию</a>
 
-<button @onclick="Test">test</button>
+    <button @onclick="OpenDialog">Поиск пользователя</button>
+
+
+    @if (DialogOpen)
+    {
+        <FindUser OnClose="OnDialogClose"></FindUser>
+    }
+    <button @onclick="Test">test</button>
+</AuthorizeView>
+
+
 
 
 
@@ -24,10 +30,16 @@
 
     public bool DialogOpen { get; set; }
 
-    protected override void OnInitialized()
+    private string valueClaim;
+
+    protected override async Task OnInitializedAsync()
     {
+        valueClaim = htp.HttpContext.User.Claims.FirstOrDefault(s => s.Type == ClaimTypes.Role).Value;
         onlineUsers = new List<User>();
+        await JSRuntime.InvokeVoidAsync("setTitle", "Admin panel");
     }
+
+
     private void OnDialogClose()
     {
         DialogOpen = false;

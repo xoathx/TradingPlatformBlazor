@@ -1,26 +1,43 @@
-﻿@inject TradingPlatformBlazor.Data.Repository.ICategory category;
+﻿@inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager nav
+@inject IJSRuntime JSRuntime
 @page "/"
-<h3>MainPage</h3>
-<div>
-    @foreach (var i in group)
-    {
-    <div>
-        <div class="text-info">
-            @i.Key
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            @foreach (var i in group)
+            {
+                <div>
+                    <div class="font-monospace font-weight-boldert h4 text-key">
+                        @i.Key
+
+                    </div>
+                    <div class="category-block">
+
+                        @foreach (var j in i)
+                        {
+                            <div class="text-info">
+                                <a href="/lots/@j.Id">@j.NameCategory</a>
+                            </div>
+                        }
+                    </div>
+                    <hr id="category-line" align="left" color="#d6d5d5" size="1" width="100%" />
+                </div>
+            }
+        </div>
+        <div class="col-6">
+
+
 
         </div>
-        @foreach (var j in i)
-        {
-            <div class="text-dark">
-                <a href="/lots/@j.Id">@j.NameCategory</a>
-            </div>
-        }
-        <hr id="category-line" align="left" color="#4B6CDD" size="1" width="70%" />
     </div>
-    }
 </div>
+
 
 @code {
     IEnumerable<Category> categories = new List<Category>();
@@ -30,16 +47,20 @@
 
 
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
 
-        #region move DB
-        categories = category.AllCategories();
+
+        categories = SqlCategory.AllCategories();
         sorted = from c in categories orderby c.NameCategory select c;
 
         group = sorted.GroupBy(items => items.NameCategory[0]);
-        #endregion
 
+
+        group = group.Distinct();
+        await JSRuntime.InvokeVoidAsync("setTitle", "Main");
     }
+
+
 
 }

@@ -1,0 +1,176 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = TradingPlatformBlazor
+build_property.RootNamespace = TradingPlatformBlazor
+build_property.ProjectDir = C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/AccessPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjZXNzUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/AddCategory.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRkQ2F0ZWdvcnkucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/CategoysLots.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0ZWdveXNMb3RzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/LoginPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW5QYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/Messager.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVzc2FnZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/MessegerShop.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVzc2VnZXJTaG9wLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/PageAdminPanel.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFnZUFkbWluUGFuZWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/PageCreateShop.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFnZUNyZWF0ZVNob3AucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/PageLot.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFnZUxvdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/PageOffer.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFnZU9mZmVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/PagePurchases.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFnZVB1cmNoYXNlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/PageSales.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFnZVNhbGVzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/PageShop.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFnZVNob3AucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/PageShopLot.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFnZVNob3BMb3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/RegistrationPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cmF0aW9uUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/AddComment.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFkZENvbW1lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/AddLots.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFkZExvdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/Chat.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENoYXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/ChatShop.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENoYXRTaG9wLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/Dialogs.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXERpYWxvZ3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/DialogsShop.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXERpYWxvZ3NTaG9wLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/ErrorComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEVycm9yQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/FindUser.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZpbmRVc2VyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/MessagesBoxShop.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1lc3NhZ2VzQm94U2hvcC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/MessegerBox.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1lc3NlZ2VyQm94LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/SurveyPrompt.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/UpdateLot.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFVwZGF0ZUxvdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/UpdateShopLot.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFVwZGF0ZVNob3BMb3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/UserSettings.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFVzZXJTZXR0aW5ncy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/MainPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFpblBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-ywmoonnn9r
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/ProfileUser.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZmlsZVVzZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-jno4ptqhca
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-gn6jsgos5w
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Shared/ShopSettings.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFNob3BTZXR0aW5ncy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-j4gtno1bjv
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/uothy/source/repos/TradingPlatformBlazor/TestSignalR/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 

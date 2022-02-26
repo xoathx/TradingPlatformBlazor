@@ -217,15 +217,16 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 25 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\RegistrationPage.razor"
+#line 26 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\RegistrationPage.razor"
        
 
 
 
     public string Message { get; set; } = null;
     public string Done { get; set; }
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await JSRuntime.InvokeVoidAsync("setTitle", "Месседжер");
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("e", out var error))
         {
@@ -258,11 +259,12 @@ using Microsoft.Extensions.Primitives;
         }
 
     }
- 
+
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager Navigation { get; set; }
     }

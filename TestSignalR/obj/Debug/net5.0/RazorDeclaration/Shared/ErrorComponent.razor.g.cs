@@ -216,14 +216,41 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 3 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ErrorComponent.razor"
+#line 5 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ErrorComponent.razor"
        
     [Parameter]
     public int ErrorCode { get; set; }
 
+    public string Info { get; set; } = string.Empty;
+    public string SelectorClass { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        switch (ErrorCode)
+        {
+            case 404:
+                Info = "Not found";
+                SelectorClass = "oi oi-magnifying-glass";
+                await JSRuntime.InvokeVoidAsync("setTitle", "404 - Not found");
+                break;
+            case 401:
+                Info = "Unauthorized";
+                SelectorClass = "oi oi-ban";
+                await JSRuntime.InvokeVoidAsync("setTitle", "401 - Unauthorized");
+                break;
+            default:
+                ErrorCode = 000;
+                Info = "Unhandled Exception";
+                SelectorClass = "oi oi-cog";
+                await JSRuntime.InvokeVoidAsync("setTitle", "000 - Unhandled Exception");
+                break;
+        }
+    }
+
+
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
     }
 }
 #pragma warning restore 1591

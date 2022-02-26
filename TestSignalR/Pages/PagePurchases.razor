@@ -1,13 +1,18 @@
 ﻿@page "/purchases"
 @inject TradingPlatformBlazor.Data.Repository.IOffer SqlOffer
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
-@inject IHttpContextAccessor htp;
+@inject IHttpContextAccessor htp
+@inject IJSRuntime JSRuntime
 @attribute [Authorize]
 
     <AuthorizeView>
-        <h3>PagePurchases</h3>
-        <div class="sales-content">
-            <div class="container">
+        <NotAuthorized>
+           <ErrorComponent ErrorCode="401"></ErrorComponent>
+        </NotAuthorized>
+        <Authorized>
+            <h3>Раздел покупок</h3>
+
+            <div class="container sales-content">
                 <div class="row">
                     <div class="col">Дата</div>
                     <div class="col">Номер заказа</div>
@@ -35,20 +40,21 @@
                     </a>
                 }
             </div>
-        </div>
+        </Authorized>
     </AuthorizeView>
     @code {
         private IEnumerable<Offer> Offers;
         private int CurrentUserId;
         private string State;
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             if (htp.HttpContext.User.Claims.Count() > 0)
             {
                 CurrentUserId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
                 Offers = SqlOffer.GetOffersByCustonerId(CurrentUserId).ToList();
             }
+            await JSRuntime.InvokeVoidAsync("setTitle", "Покупки");
         }
 
         string StateCurOffer(StateOffer state)

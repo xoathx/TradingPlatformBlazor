@@ -1,17 +1,34 @@
 ﻿@page "/messagershop"
+@inject IJSRuntime JSRuntime
+@attribute [Authorize]
 
-
-    <div class="container p-0">
-        <div class="card">
-            <div class="row g-0">
-                <DialogsShop></DialogsShop>
-                <div class="col-12 col-lg-7 col-xl-9">
-                   <MessagesBoxShop></MessagesBoxShop>
+<AuthorizeView>
+    <NotAuthorized>
+        <ErrorComponent ErrorCode="401"></ErrorComponent>
+    </NotAuthorized>
+    <Authorized>
+        <div class="container p-0">
+            <div class="card">
+                <div class="change-chat">
+                    <div class="row chats">
+                        <div class="col d-inline user-link"><a href="/messager">User</a></div>
+                        <div class="col d-inline shop-link"><a href="/messagershop">Shop</a></div>
+                    </div>
+                </div>
+                <div class="row g-0">
+                    <DialogsShop></DialogsShop>
+                    <div class="col-12 col-lg-7 col-xl-9">
+                        <MessagesBoxShop></MessagesBoxShop>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    @code {
-
+    </Authorized>
+</AuthorizeView>
+@code {       
+    protected override async Task OnInitializedAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("setTitle", "Shop Месседжер");
     }
+ 
+}

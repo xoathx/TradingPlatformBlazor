@@ -4,18 +4,27 @@
 @inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory
 @inject TradingPlatformBlazor.Data.Repository.IComment SqlComment
 @inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
 
 
 @if (user == null)
 {
-    <p>@message</p>
+    <ErrorComponent ErrorCode="404"></ErrorComponent>
 }
 else
 {
-    <h3>@user.NickName</h3>
-    <img class="profile-avatar" src="/img/avatars/@user.PathAvatar" />
+    <h3 class="profile-nickname">@user.NickName</h3>
+    <img class="profile-avatar d-inline" src="/img/avatars/@user.PathAvatar" />
     <AuthorizeView Roles="@user.NickName">
-        <button class="btn btn-info" @onclick="OpenSettings">Настройки</button>
+        @*<button class="material-icons" @onclick="OpenSettings">publish</button>*@
+        <div class="input-avatar d-inline">
+            <div class="input-file-block">
+                <label for="file-upload" class="custom-file-upload">
+                    <i class="oi oi-data-transfer-upload"></i>Upload
+                </label>
+            </div>
+            <InputFile class="file-select" type="file" id="file-upload" accept=".png,.jpg,.jpeg" placeholder="Обзор" />
+        </div>
     </AuthorizeView>
 
     <div class="user-lots">
@@ -37,18 +46,18 @@ else
             @foreach (var item in LotsOfVendor)
             {
                 <a class="a-lot-user" href="/lot/@item.Id">
-                        <div class="row border lot-body">
+                    <div class="row border lot-body">
 
-                            <div class="col-6 col-sm-3 name-category-user border-right">
-                                @CategoryName(item.CategoryId)
-                            </div>
-                            <div class="col name-lot-user ">
-                                @item.NameLot
-                            </div>
-                            <div class="col desc-lot-user border-left">
-                                @MiniString(item.DescLot)
-                            </div>
+                        <div class="col-6 col-sm-3 name-category-user border-right">
+                            @CategoryName(item.CategoryId)
                         </div>
+                        <div class="col name-lot-user ">
+                            @item.NameLot
+                        </div>
+                        <div class="col desc-lot-user border-left">
+                            @MiniString(item.DescLot)
+                        </div>
+                    </div>
                 </a>
             }
 
@@ -62,72 +71,72 @@ else
         <div class="container">
             @foreach (var item in CommentsAbUser)
             {
-            <a class="a-comment-user" href="/offer/@item.OfferId">
-                <div class="row border comment-body">
+                <a class="a-comment-user" href="/offer/@item.OfferId">
+                    <div class="row border comment-body">
 
-                    <a class="a-comment-user" href="/user/@item.FromUserId" target="_top">
-                        <div class="col nickname-comment-user ">
-                            <img class="avatar d-inline avatar-comment-user" src="/img/avatars/@SqlUser.GetUserById(item.FromUserId).PathAvatar" />
-                            @SqlUser.GetUserById(item.FromUserId).NickName
+                        <a class="a-comment-user" href="/user/@item.FromUserId" target="_top">
+                            <div class="col nickname-comment-user ">
+                                <img class="avatar d-inline avatar-comment-user" src="/img/avatars/@SqlUser.GetUserById(item.FromUserId).PathAvatar" />
+                                @SqlUser.GetUserById(item.FromUserId).NickName
+                            </div>
+                        </a>
+                        <div class="col-6 col-sm-3 bodytext-comment-user">
+                            <p>@item.BodyComment</p>
                         </div>
-                    </a>
-                    <div class="col-6 col-sm-3 bodytext-comment-user">
-                        <p>@item.BodyComment</p>
-                    </div>
-                    <div class="col">
-                        <div class="rating-mini rating-comment-user">
-                            @for (int i = 1; i <= 5; i++)
-                            {
-                                if (i <= item.ValueRating)
+                        <div class="col">
+                            <div class="rating-mini rating-comment-user">
+                                @for (int i = 1; i <= 5; i++)
                                 {
-                                    selector = "active";
-                                    <span class="@selector"></span>
+                                    if (i <= item.ValueRating)
+                                    {
+                                        selector = "active";
+                                        <span class="@selector"></span>
+                                    }
+                                    else
+                                    {
+                                        <span></span>
+                                    }
                                 }
-                                else
-                                {
-                                    <span></span>
-                                }
-                            }
 
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
-             }
-            </div>
-    </div>
-            @if (DialogOpen)
-            {
-                <UserSettings CurrentUser="user" OnClose="OnDialogClose"></UserSettings>
+                </a>
             }
+        </div>
+    </div>
+    @if (DialogOpen)
+    {
+        <UserSettings CurrentUser="user" OnClose="OnDialogClose"></UserSettings>
+    }
 
-        }
+}
 @code {
     [Parameter]
     public int Id { get; set; }
     User user;
     IEnumerable<Lot> LotsOfVendor;
     IEnumerable<Comment> CommentsAbUser;
-    string message;
+
     public int testRate = 3;
     string selector;
     public bool DialogOpen { get; set; }
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
 
-        if (SqlUser.GetUserById(Id) == null)
-        {
 
-            message = "Страница не найдена.";
-        }
-        else
+        if(SqlUser.GetUserById(Id) != null)
         {
             user = SqlUser.GetUserById(Id);
             LotsOfVendor = SqlLot.AllLotsOfVendor(Id).ToList();
             CommentsAbUser = SqlComment.GetCommentsByToUserId(Id).ToList();
+            await JSRuntime.InvokeVoidAsync("setTitle", "Пользователь " + user.NickName);
         }
 
     }
+
+
+
     string CategoryName(int categoryID)
     {
         return SqlCategory.GetNameCategory(categoryID);
@@ -147,7 +156,9 @@ else
 
     string MiniString(string str)
     {
-        if (string.IsNullOrWhiteSpace(str)) { return str; } else {
+        if (string.IsNullOrWhiteSpace(str)) { return str; }
+        else
+        {
             if (str.Length > 50)
             {
                 return new string(str.Substring(0, 50) + "...");

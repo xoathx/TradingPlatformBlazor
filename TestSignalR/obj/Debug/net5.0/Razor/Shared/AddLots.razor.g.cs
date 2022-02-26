@@ -224,15 +224,13 @@ using Microsoft.Extensions.Primitives;
             __builder.AddAttribute(11, "class", "modal-header");
             __builder.OpenElement(12, "h4");
             __builder.AddAttribute(13, "class", "modal-title");
-            __builder.AddContent(14, 
 #nullable restore
 #line 13 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\AddLots.razor"
-                                         Title
+__builder.AddContent(14, Title);
 
 #line default
 #line hidden
 #nullable disable
-            );
             __builder.CloseElement();
             __builder.AddMarkupContent(15, "\r\n                ");
             __builder.OpenElement(16, "button");
@@ -255,15 +253,13 @@ using Microsoft.Extensions.Primitives;
             __builder.AddAttribute(23, "class", "modal-body");
             __builder.OpenElement(24, "div");
             __builder.AddAttribute(25, "class", "text-danger");
-            __builder.AddContent(26, 
 #nullable restore
 #line 17 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\AddLots.razor"
-                                          message
+__builder.AddContent(26, message);
 
 #line default
 #line hidden
 #nullable disable
-            );
             __builder.CloseElement();
 #nullable restore
 #line 18 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\AddLots.razor"
@@ -274,7 +270,7 @@ using Microsoft.Extensions.Primitives;
 #line hidden
 #nullable disable
             __builder.OpenComponent<Microsoft.AspNetCore.Components.Forms.EditForm>(27);
-            __builder.AddAttribute(28, "Model", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<System.Object>(
+            __builder.AddAttribute(28, "Model", global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<System.Object>(
 #nullable restore
 #line 20 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\AddLots.razor"
                               choiseVendor
@@ -292,7 +288,7 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
-                , 33, Microsoft.AspNetCore.Components.EventCallback.Factory.Create(this, Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.CreateInferredEventCallback(this, __value => SelectedVendor = __value, SelectedVendor)), 34, () => SelectedVendor, 35, (__builder3) => {
+                , 33, Microsoft.AspNetCore.Components.EventCallback.Factory.Create(this, global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.CreateInferredEventCallback(this, __value => SelectedVendor = __value, SelectedVendor)), 34, () => SelectedVendor, 35, (__builder3) => {
                     __Blazor.TradingPlatformBlazor.Shared.AddLots.TypeInference.CreateInputRadio_1(__builder3, 36, 37, 
 #nullable restore
 #line 22 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\AddLots.razor"

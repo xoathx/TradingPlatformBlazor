@@ -1,15 +1,17 @@
 ﻿@page "/lot/{id:int}"
 
-@inject TradingPlatformBlazor.Data.Repository.ILot SqlLot;
+@inject TradingPlatformBlazor.Data.Repository.ILot SqlLot
 @inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
-@inject TradingPlatformBlazor.Data.Repository.IOffer SqlOffer 
+@inject TradingPlatformBlazor.Data.Repository.IOffer SqlOffer
 @inject NavigationManager Navigation
 @inject IHttpContextAccessor htp
+@inject IJSRuntime JSRuntime
 
-@if (currentLot == null || htp.HttpContext.User.Claims.Count() < 2)
+@if(currentLot == null) {<ErrorComponent ErrorCode="404"></ErrorComponent> }
+@if (htp.HttpContext.User.Claims.Count() < 1)
 {
-    <p>@message</p>
+<ErrorComponent ErrorCode="401"></ErrorComponent>
 }
 else
 {
@@ -46,7 +48,7 @@ else
             </div>
         </div>
     </div>
-    
+
 
     @if (DialogOpen)
     {
@@ -70,18 +72,14 @@ else
     private double CurrentBalanceCustomer;
     private int currentUserId;
     private bool Succes;
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
 
         currentLot = SqlLot.GetLotByID(id);
-        if (currentLot == null || htp.HttpContext.User.Claims.Count() < 2)
-        {
-            message = "Авторизуйтесь.";
-        }
-        else
+        if(currentLot != null && htp.HttpContext.User.Claims.Count() > 1)
         {
             rolesButton = htp.HttpContext.User.Identity.Name;
-            if(rolesButton == currentLot.VendorsNick)
+            if (rolesButton == currentLot.VendorsNick)
             {
                 rolesButton = "0";
             }
@@ -89,7 +87,10 @@ else
             categoryName = SqlCategory.GetNameCategory(currentLot.CategoryId);
             vendorId = currentLot.VendorId;
             Succes = int.TryParse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value, out currentUserId);
+            await JSRuntime.InvokeVoidAsync("setTitle", "Лот " + currentLot.NameLot);
         }
+
+
 
     }
 
@@ -112,7 +113,8 @@ else
         {
             message = "Недостаточно средств!";
         }
-        else {
+        else
+        {
             SqlUser.ReduceBalance(currentUserId, currentLot.Price);
             string identityName = RandomIdentityName();
             Offer offer = new Offer()
@@ -146,7 +148,7 @@ else
         {
             result += ABC[random.Next(0, ABC.Length)];
         }
-        if(SqlOffer.GetOfferByIdentityName(result) != null)
+        if (SqlOffer.GetOfferByIdentityName(result) != null)
         {
             return RandomIdentityName();
         }

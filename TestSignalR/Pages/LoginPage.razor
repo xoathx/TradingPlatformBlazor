@@ -1,7 +1,7 @@
 ﻿@page "/signin"
 @inject NavigationManager nav
 @inject IHttpContextAccessor http
-
+@inject IJSRuntime JSRuntime
 
 <h3>Login</h3>
 <AuthorizeView>
@@ -22,10 +22,11 @@
 
     public string Message { get; set; } = null;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+
         var uri = nav.ToAbsoluteUri(nav.Uri);
-        if(QueryHelpers.ParseQuery(uri.Query).TryGetValue("message", out var message))
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("message", out var message))
         {
             if (message == "error")
             {
@@ -33,7 +34,9 @@
             }
             else { Message = "Unhandled Exception"; }
         }
+        await JSRuntime.InvokeVoidAsync("setTitle", "Авторизация");
     }
+
 
 
 

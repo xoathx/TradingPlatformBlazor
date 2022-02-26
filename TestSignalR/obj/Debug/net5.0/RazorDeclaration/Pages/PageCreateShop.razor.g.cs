@@ -217,7 +217,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 43 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageCreateShop.razor"
+#line 46 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageCreateShop.razor"
        
     private string FilePath { get; set; }
     private string NameShop { get; set; }
@@ -247,7 +247,11 @@ using Microsoft.Extensions.Primitives;
         {
             CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
         }
+
+        await JSRuntime.InvokeVoidAsync("setTitle", "Создание магазина");
     }
+
+
     private async Task CreateShop()
     {
 
@@ -289,6 +293,7 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }

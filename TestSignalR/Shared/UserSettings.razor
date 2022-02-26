@@ -9,7 +9,13 @@
                 <h4 class="modal-title">@CurrentUser.NickName</h4>
                 <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
             </div>
-            <InputFile class="file-select" OnChange="@LoadFile" type="file" accept=".png,.jpg,.jpeg" placeholder="Обзор" />
+            
+                <label for="file-upload" class="custom-file-upload">
+                    <i class="fa fa-cloud-upload material-icons">publish</i>
+                </label>
+                <InputFile class="file-select" OnChange="@LoadFile" type="file" id="file-upload" accept=".png,.jpg,.jpeg" placeholder="Обзор" />
+            
+
             <div class="modal-footer">
 
                 <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>

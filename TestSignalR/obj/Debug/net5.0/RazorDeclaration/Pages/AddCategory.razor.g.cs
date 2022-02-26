@@ -209,7 +209,7 @@ using Microsoft.Extensions.Primitives;
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AddCategory.razor"
+#line 4 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AddCategory.razor"
            [Authorize(Roles = nameof(UserRole.Administrator))]
 
 #line default
@@ -224,7 +224,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 36 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AddCategory.razor"
+#line 37 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AddCategory.razor"
        
 
 
@@ -238,7 +238,7 @@ using Microsoft.Extensions.Primitives;
     protected override void OnInitialized()
     {
 
-        categories = category.AllCategories();
+        categories = SqlCategory.AllCategories();
         sorted = from c in categories orderby c.NameCategory select c;
 
         group = sorted.GroupBy(items => items.NameCategory[0]);
@@ -249,7 +249,7 @@ using Microsoft.Extensions.Primitives;
         if (!string.IsNullOrEmpty(nameCategory) && !string.IsNullOrEmpty(descCategory))
         {
 
-            category.AddCategory(nameCategory, descCategory);
+            SqlCategory.AddCategory(nameCategory, descCategory);
             nameCategory = string.Empty;
             descCategory = string.Empty;
 
@@ -258,13 +258,14 @@ using Microsoft.Extensions.Primitives;
 
     private void DeleteCategory(int id)
     {
-        category.DeleteCategory(id);
+        SqlCategory.DeleteCategory(id);
     }
 
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory category { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory SqlCategory { get; set; }
     }
 }
 #pragma warning restore 1591

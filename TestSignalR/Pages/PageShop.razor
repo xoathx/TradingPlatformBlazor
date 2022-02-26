@@ -4,24 +4,32 @@
 @inject TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
 @inject IHttpContextAccessor htp
+@inject IJSRuntime JSRuntime
 
 
-<AuthorizeView Roles="@role">
-    <button @onclick="OpenDialog">Настройки</button>
-</AuthorizeView>
+
 <AuthorizeView>
     <NotAuthorized>
-        Вы не авторизованы в системе
+        <ErrorComponent ErrorCode="401"></ErrorComponent>
     </NotAuthorized>
     <Authorized>
         @if (CurrentShop == null)
-        {@message }
+        { <ErrorComponent ErrorCode="404"></ErrorComponent> }
     else
     {
 
-        <h3>@NameShop</h3>
-        <img class="profile-avatar" src="/img/avatars/@CurrentShop.PathAvatarShop" />
-
+        <h1>@NameShop</h1>
+        <img class="profile-avatar d-inline" src="/img/avatars/@CurrentShop.PathAvatarShop" />
+        <AuthorizeView Roles="@role">
+            <ChildContent Context="Any">
+                <div class="d-inline">
+                    <label class="settings" for="set-button">
+                        <span class="oi oi-terminal"></span>
+                    </label>
+                    <button class="set-button" id="set-button" @onclick="OpenDialog"></button>
+                </div>
+            </ChildContent>
+        </AuthorizeView>
         <div class="container">
             <div class="row">
                 <div class="col-6 col-sm-3 name-category-user border-right">
@@ -74,7 +82,6 @@
 @code {
     [Parameter]
     public string NameShop { get; set; }
-    private string message;
     private Shop CurrentShop;
     private User CurrentUser;
     private string role;
@@ -82,23 +89,24 @@
 
     public bool DialogOpen { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         CurrentShop = SqlShop.GetShopByShortUrl(NameShop);
-        role = SqlUser.GetUserById(CurrentShop.CreatedId).NickName;
-        if (CurrentShop == null)
-        {
-            message = "Страница не найдена";
-        }
-        else
+
+        if (CurrentShop != null)
         {
             if (htp.HttpContext.User.Claims.Count() > 0)
             {
                 CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
             }
+            role = SqlUser.GetUserById(CurrentShop.CreatedId).NickName;
             shopLots = SqlShopLot.GetShopLotsByShopId(CurrentShop.Id).ToList();
+            await JSRuntime.InvokeVoidAsync("setTitle", "Магазин " + CurrentShop.NameShop);
         }
     }
+
+
+
     string CategoryName(int categoryId)
     {
         return SqlCategory.GetNameCategory(categoryId);

@@ -216,7 +216,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 28 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\UpdateLot.razor"
+#line 30 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\UpdateLot.razor"
        
 
     [Parameter]
@@ -250,14 +250,22 @@ using Microsoft.Extensions.Primitives;
         UpdatingLot.NameLot = newNameLot;
         UpdatingLot.Price = newPrice;
         UpdatingLot.DescLot = DescLot;
-        lot.UpdateLot(UpdatingLot);
+        SqlLot.UpdateLot(UpdatingLot);
+        return OnClose.InvokeAsync(true);
+    }
+
+    private Task DeleteLot()
+    {
+        SqlLot.DeleteLot(UpdatingLot);
+        nav.NavigateTo("/lots/"+UpdatingLot.CategoryId);
         return OnClose.InvokeAsync(true);
     }
 
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ILot lot { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ILot SqlLot { get; set; }
     }
 }
 #pragma warning restore 1591

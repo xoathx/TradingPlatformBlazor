@@ -1,19 +1,24 @@
-﻿@inject TradingPlatformBlazor.Data.Repository.ILot lot;
-@inject TradingPlatformBlazor.Data.Repository.ICategory category;
+﻿@inject TradingPlatformBlazor.Data.Repository.ILot SqlLot
+@inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory
 @inject TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot
-
+@inject IJSRuntime JSRuntime
 
 @page "/lots/{id:int}"
 
-<h1 class="display-1">@nameCategory</h1>
+<h1 class="name-category">@nameCategory</h1>
 <AuthorizeView>
     <Authorized>
-        <button @onclick="OpenDialog">Добавить лот</button>
+        <div class="block-addlot">
+            <label class="addlot" for="button-addlot">
+                <span class="oi oi-plus"></span>
+            </label>
+            <button id="button-addlot" @onclick="OpenDialog">Добавить лот</button>
+        </div>
     </Authorized>
 </AuthorizeView>
 <div class="row">
     <div class="col">
-        
+
         <div class="content-categorylots">
             <div class="container">
                 <div class="row">
@@ -62,51 +67,55 @@
         </div>
     </div>
 </div>
-    @if (DialogOpen)
+@if (DialogOpen)
+{
+    <AddLots Title="@nameCategory" OnClose="OnDialogClose" CategoryId="@Id" />
+
+}
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private string nameCategory;
+    IEnumerable<Lot> allLots = new List<Lot>();
+    public bool DialogOpen { get; set; }
+
+    IEnumerable<ShopLot> allShopLots = new List<ShopLot>();
+
+    protected override async Task OnInitializedAsync()
     {
-        <AddLots Title="@nameCategory" OnClose="OnDialogClose" CategoryId="@Id" />
+        nameCategory = SqlCategory.AllCategories().First(c => c.Id == Id).NameCategory;
+        allLots = SqlLot.LotsByID(Id).ToList();
+
+        allShopLots = SqlShopLot.ShopLotsByCategoryId(Id).ToList();
+        await JSRuntime.InvokeVoidAsync("setTitle", nameCategory);
+    }
+
+
+    private void OnDialogClose()
+    {
+        allLots = SqlLot.LotsByID(Id).ToList();
+
+        allShopLots = SqlShopLot.ShopLotsByCategoryId(Id).ToList();
+        DialogOpen = false;
+
 
     }
-    @code {
-        [Parameter]
-        public int Id { get; set; }
+    private void OpenDialog()
+    {
+        DialogOpen = true;
+    }
 
-        private string nameCategory;
-        IEnumerable<Lot> allLots = new List<Lot>();
-        public bool DialogOpen { get; set; }
-
-        IEnumerable<ShopLot> allShopLots = new List<ShopLot>();
-
-        protected override void OnInitialized()
+    string MiniString(string str)
+    {
+        if (string.IsNullOrWhiteSpace(str)) { return str; }
+        else
         {
-            nameCategory = category.AllCategories().First(c => c.Id == Id).NameCategory;
-            allLots = lot.LotsByID(Id).ToList();
-
-            allShopLots = SqlShopLot.ShopLotsByCategoryId(Id).ToList();
-        }
-
-        private void OnDialogClose()
-        {
-
-            DialogOpen = false;
-
-
-        }
-        private void OpenDialog()
-        {
-            DialogOpen = true;
-        }
-
-        string MiniString(string str)
-        {
-            if (string.IsNullOrWhiteSpace(str)) { return str; }
-            else
+            if (str.Length > 50)
             {
-                if (str.Length > 50)
-                {
-                    return new string(str.Substring(0, 50) + "...");
-                }
-                return str;
+                return new string(str.Substring(0, 50) + "...");
             }
+            return str;
         }
     }
+}

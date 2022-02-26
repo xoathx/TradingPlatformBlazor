@@ -216,7 +216,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 23 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\UserSettings.razor"
+#line 29 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\UserSettings.razor"
        
     [Parameter]
     public User CurrentUser { get; set; }

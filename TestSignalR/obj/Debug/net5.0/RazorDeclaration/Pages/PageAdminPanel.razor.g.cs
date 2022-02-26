@@ -208,6 +208,13 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 6 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageAdminPanel.razor"
+           [Authorize]
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/admin")]
     public partial class PageAdminPanel : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -217,17 +224,23 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 21 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageAdminPanel.razor"
+#line 27 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageAdminPanel.razor"
        
     private List<User> onlineUsers;
 
 
     public bool DialogOpen { get; set; }
 
-    protected override void OnInitialized()
+    private string valueClaim;
+
+    protected override async Task OnInitializedAsync()
     {
+        valueClaim = htp.HttpContext.User.Claims.FirstOrDefault(s => s.Type == ClaimTypes.Role).Value;
         onlineUsers = new List<User>();
+        await JSRuntime.InvokeVoidAsync("setTitle", "Admin panel");
     }
+
+
     private void OnDialogClose()
     {
         DialogOpen = false;
@@ -245,6 +258,8 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Services.IUserStatus userStatus { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Services.IEmailingService emailing { get; set; }
     }

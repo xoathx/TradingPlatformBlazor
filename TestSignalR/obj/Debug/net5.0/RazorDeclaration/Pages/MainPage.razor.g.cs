@@ -217,7 +217,7 @@ using Microsoft.AspNetCore.SignalR.Client;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 25 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\MainPage.razor"
+#line 42 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\MainPage.razor"
        
     IEnumerable<Category> categories = new List<Category>();
     IEnumerable<Category> sorted = new List<Category>();
@@ -226,24 +226,29 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
 
-        #region move DB
-        categories = category.AllCategories();
+
+        categories = SqlCategory.AllCategories();
         sorted = from c in categories orderby c.NameCategory select c;
 
         group = sorted.GroupBy(items => items.NameCategory[0]);
-        #endregion
 
+
+        group = group.Distinct();
+        await JSRuntime.InvokeVoidAsync("setTitle", "Main");
     }
+
+
 
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory category { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory SqlCategory { get; set; }
     }
 }
 #pragma warning restore 1591

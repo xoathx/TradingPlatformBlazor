@@ -7,10 +7,16 @@
 @inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
 @inject IHttpContextAccessor htp
 @implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
 @attribute [Authorize]
+
+@if (!htp.HttpContext.User.Claims.Any()) 
+{
+    <ErrorComponent ErrorCode="401"></ErrorComponent>
+}
 <AuthorizeView Context="any" Roles="@globalRoles">
     @if (currentOffer == null)
-    {@message }
+    {<ErrorComponent ErrorCode="404"></ErrorComponent> }
 else
 {
     <div class="container">
@@ -57,18 +63,20 @@ else
                         }
                         @if (currentOffer.StateOffer == StateOffer.Completed)
                         {
-                            if(currentOffer.IsCommented == true) { } else { 
-                            <button class="btn btn-light" @onclick="OnDialogOpen">Оставить отзыв</button>}
+                            if (currentOffer.IsCommented == true) { }
+                            else
+                            {
+                                <button class="btn btn-light" @onclick="OnDialogOpen">Оставить отзыв</button>}
                         }
                     </AuthorizeView>
-                    @if(VendorShop != null) 
-                    { 
-                    <AuthorizeView Roles="@GetGlobalRoles(MembersShop)">
-                        @if (currentOffer.StateOffer != StateOffer.Completed && currentOffer.IsManyBack == false)
-                        {
-                            <button class="btn btn-light" @onclick="ManyBack">Вернуть деньги</button>
-                        }
-                    </AuthorizeView>
+                    @if (VendorShop != null)
+                    {
+                        <AuthorizeView Roles="@GetGlobalRoles(MembersShop)">
+                            @if (currentOffer.StateOffer != StateOffer.Completed && currentOffer.IsManyBack == false)
+                            {
+                                <button class="btn btn-light" @onclick="ManyBack">Вернуть деньги</button>
+                            }
+                        </AuthorizeView>
                     }
                 </div>
                 <div class="comment-offer">
@@ -109,20 +117,21 @@ else
             </div>
             <div class="col">
                 <div class="offerChat">
-                    @if(currentOffer.ShopLotId == 0 && currentOffer.VendorShopId == 0)
-                    { 
-                    <AuthorizeView Roles="@Customer.NickName">
-                        <Chat ToUserId="currentOffer.VendorId"></Chat>
-                    </AuthorizeView>
-                    <AuthorizeView Roles="@Vendor.NickName">
-                        <Chat ToUserId="currentOffer.CustomerId"></Chat>
-                    </AuthorizeView>
+                    @if (currentOffer.ShopLotId == 0 && currentOffer.VendorShopId == 0)
+                    {
+                        <AuthorizeView Roles="@Customer.NickName">
+                            <Chat ToUserId="currentOffer.VendorId"></Chat>
+                        </AuthorizeView>
+                        <AuthorizeView Roles="@Vendor.NickName">
+                            <Chat ToUserId="currentOffer.CustomerId"></Chat>
+                        </AuthorizeView>
                     }
                 </div>
             </div>
         </div>
     </div>
-    @if(OpenDialog) { <AddComment CurrentOffer="currentOffer" OnClose="OnDialogClose"></AddComment> }
+    @if (OpenDialog)
+    {<AddComment CurrentOffer="currentOffer" OnClose="OnDialogClose"></AddComment>}
 }
 </AuthorizeView>
 
@@ -131,7 +140,7 @@ else
     public int IdOffer { get; set; }
     HubConnection hubConnection;
     private Offer currentOffer;
-    string message;
+
     private string messageState = "В процессе...";
     private string selectorState = "inprocessOffer";
     private string currentUserName;
@@ -148,19 +157,18 @@ else
     protected override async Task OnInitializedAsync()
     {
         currentOffer = SqlOffer.GetOfferById(IdOffer);
-        if (currentOffer == null)
+        if (currentOffer != null)
         {
-            message = "Страница не найдена.";
-        }
-        else
-        {
-            if(currentOffer.ShopLotId == 0 && currentOffer.VendorShopId == 0)
+            if (currentOffer.ShopLotId == 0 && currentOffer.VendorShopId == 0)
             {
                 Customer = SqlUser.GetUserById(currentOffer.CustomerId);
                 Vendor = SqlUser.GetUserById(currentOffer.VendorId);
                 Comment = SqlComment.GetCommentByOfferId(currentOffer.Id);
                 currentUserName = htp.HttpContext.User.Identity.Name;
-                customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                if (htp.HttpContext.User.Claims.Any())
+                {
+                    customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                }
                 globalRoles = SqlUser.GetUserById(currentOffer.CustomerId).NickName + ", " + SqlUser.GetUserById(currentOffer.VendorId).NickName;
             }
             else
@@ -173,6 +181,7 @@ else
                 MembersShop = SqlUser.GetShopMembersByShopId(VendorShop.Id);
                 globalRoles = GetGlobalRoles(MembersShop) + Customer.NickName;
             }
+            await JSRuntime.InvokeVoidAsync("setTitle", "Заказ " + currentOffer.IdentifierName);
         }
         hubConnection = new HubConnectionBuilder()
   .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
@@ -197,6 +206,7 @@ else
         });
         await hubConnection.StartAsync();
     }
+
 
     void CompletedOffer()
     {
@@ -282,10 +292,10 @@ else
     private string GetGlobalRoles(IEnumerable<User> members)
     {
         string result = string.Empty;
-        foreach(var item in members)
-            {
-                result += item.NickName + ",";
-            }
+        foreach (var item in members)
+        {
+            result += item.NickName + ",";
+        }
         return result;
 
     }

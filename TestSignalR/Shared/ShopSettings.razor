@@ -12,30 +12,40 @@
             </div>
             <div class="modal-body">
                 <div class="text-danger">@message</div>
-                <InputFile OnChange="@LoadingFile" accept=".png, .jpg, .jpeg"></InputFile>
+                <div class="d-inline">
+                    <label for="file-upload" class="custom-file-upload">
+                        <i class="oi oi-data-transfer-upload"></i>Upload
+                    </label>
+                    <InputFile OnChange="@LoadingFile" id="file-upload" accept=".png, .jpg, .jpeg"></InputFile>
+                </div>
+                <div class="d-inline">Обновить фотографию</div>
                 <div class="members-shop">
 
                     @foreach (var member in MembersShop)
                     {
-                        <div class="member">
+                    
+                    <div class="member">
+                        <a class="url-member" href="/user/@member.Id">
                             <div class="avatar avatar-member"><img class="avatar" src="img/avatars/@member.PathAvatar" /></div>
                             <p class="d-inline nickname-member">@member.NickName</p>
+                        </a>
                             @if (member.Id == CurrentShop.CreatedId)
                             {
-                                <span class="fst-italic fw-lighter">Владелец</span>
+                                <span class="fst-italic fw-lighter role-member">Владелец</span>
 
                             }
                             else
                             {
-                                <button @onclick="(() => DeleteMember(member))">Delete</button>
+                                <button class="btn btn-danger delete-member" @onclick="(() => DeleteMember(member))">Delete</button>
                             }
 
-                        </div>
+                    </div>
+                    
                     }
                     @if (MembersShop.Count() < 3)
                     {
-                        <input type="text" @bind="NickNewMember" placeholder="Введите ник" />
-                        <button class="btn btn-primary" @onclick="AddMember">Добавить участника</button>
+                        <input type="text" class="d-inline" @bind="NickNewMember" placeholder="Введите ник" />
+                        <button class="btn btn-primary d-inline" @onclick="AddMember">Добавить</button>
                     }
                 </div>
             </div>
@@ -72,7 +82,7 @@
     protected override void OnInitialized()
     {
         isLoading = false;
-        MembersShop = SqlUser.GetShopMembersByShopId(CurrentShop.Id).ToList();
+        MembersShop = SqlUser.GetShopMembersByShopId(CurrentShop.Id).Reverse().ToList();
         CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
     }
 
@@ -132,6 +142,7 @@
         {
             newUser.IdShop = CurrentShop.Id;
             SqlUser.UpdateUser(newUser);
+            MembersShop = SqlUser.GetShopMembersByShopId(CurrentShop.Id).Reverse().ToList();
             StateHasChanged();
         }
     }
@@ -140,5 +151,7 @@
     {
         deletedUser.IdShop = 0;
         SqlUser.UpdateUser(deletedUser);
+        MembersShop = SqlUser.GetShopMembersByShopId(CurrentShop.Id).Reverse().ToList();
+        StateHasChanged();
     }
 }

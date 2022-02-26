@@ -217,7 +217,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 59 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageLot.razor"
+#line 61 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageLot.razor"
        
 
     [Parameter]
@@ -232,18 +232,14 @@ using Microsoft.Extensions.Primitives;
     private double CurrentBalanceCustomer;
     private int currentUserId;
     private bool Succes;
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
 
         currentLot = SqlLot.GetLotByID(id);
-        if (currentLot == null || htp.HttpContext.User.Claims.Count() < 2)
-        {
-            message = "Авторизуйтесь.";
-        }
-        else
+        if(currentLot != null && htp.HttpContext.User.Claims.Count() > 1)
         {
             rolesButton = htp.HttpContext.User.Identity.Name;
-            if(rolesButton == currentLot.VendorsNick)
+            if (rolesButton == currentLot.VendorsNick)
             {
                 rolesButton = "0";
             }
@@ -251,7 +247,10 @@ using Microsoft.Extensions.Primitives;
             categoryName = SqlCategory.GetNameCategory(currentLot.CategoryId);
             vendorId = currentLot.VendorId;
             Succes = int.TryParse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value, out currentUserId);
+            await JSRuntime.InvokeVoidAsync("setTitle", "Лот " + currentLot.NameLot);
         }
+
+
 
     }
 
@@ -274,7 +273,8 @@ using Microsoft.Extensions.Primitives;
         {
             message = "Недостаточно средств!";
         }
-        else {
+        else
+        {
             SqlUser.ReduceBalance(currentUserId, currentLot.Price);
             string identityName = RandomIdentityName();
             Offer offer = new Offer()
@@ -308,7 +308,7 @@ using Microsoft.Extensions.Primitives;
         {
             result += ABC[random.Next(0, ABC.Length)];
         }
-        if(SqlOffer.GetOfferByIdentityName(result) != null)
+        if (SqlOffer.GetOfferByIdentityName(result) != null)
         {
             return RandomIdentityName();
         }
@@ -322,6 +322,7 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager Navigation { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IOffer SqlOffer { get; set; }

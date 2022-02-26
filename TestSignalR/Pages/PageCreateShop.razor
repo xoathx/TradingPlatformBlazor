@@ -3,23 +3,24 @@
 @inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
 @inject IHttpContextAccessor htp
 @inject NavigationManager nav
+@inject IJSRuntime JSRuntime
 
 
 @message
 <AuthorizeView>
     <Authorized>
-        
-        @if(CurrentUser.LevelUser == UserLevel.Third && CurrentUser.IdShop == 0)
-        {
-        <h2>Ты получили Третий уровень нашего проекта!</h2>
-        <p>Теперь ты можешь создать свой магазин и приглашать сюда своих коллег 2-го уровня!</p>
-        <div class="inputs-creatshop">
-            <div class="container">
-                <div class="row">
 
-                    <label for="nameShop">Название магазина:</label>
-                    <input id="nameShop" class="form-control" type="text" maxlength="20" @bind="NameShop" />
-                    <label for="inlineFormInputGroup">Короткая ссылка:</label>
+        @if (CurrentUser.LevelUser == UserLevel.Third && CurrentUser.IdShop == 0)
+        {
+            <h2>Ты получили Третий уровень нашего проекта!</h2>
+            <p>Теперь ты можешь создать свой магазин и приглашать сюда своих коллег 2-го уровня!</p>
+            <div class="inputs-creatshop">
+                <div class="container">
+                    <div class="row">
+
+                        <label for="nameShop">Название магазина:</label>
+                        <input id="nameShop" class="form-control" type="text" maxlength="20" @bind="NameShop" />
+                        <label for="inlineFormInputGroup">Короткая ссылка:</label>
                         <label class="sr-only" for="inlineFormInputGroup">URL</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
@@ -28,13 +29,15 @@
                             <input type="text" class="form-control" id="inlineFormInputGroup" @bind="ShortUrl" placeholder="URL">
                         </div>
 
-                    <label for="descShop">Напишите пару слов о будущем магазине:</label>
-                    <textarea id="descShop" class="form-control" @bind="DescShop" rows="5"></textarea>
-                    <input type="button" class="btn btn-primary" @onclick="CreateShop" value="Создать магазин" />
+                        <label for="descShop">Напишите пару слов о будущем магазине:</label>
+                        <textarea id="descShop" class="form-control" @bind="DescShop" rows="5"></textarea>
+                        <input type="button" class="btn btn-primary" @onclick="CreateShop" value="Создать магазин" />
+                    </div>
                 </div>
             </div>
-        </div>
-        } else { <h1>У вас недостаточно прав :(</h1> }
+        }
+        else
+        { <h1>У вас недостаточно прав :(</h1>}
     </Authorized>
     <NotAuthorized>
         Авторизуйтесь!
@@ -69,7 +72,11 @@
         {
             CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
         }
+
+        await JSRuntime.InvokeVoidAsync("setTitle", "Создание магазина");
     }
+
+
     private async Task CreateShop()
     {
 

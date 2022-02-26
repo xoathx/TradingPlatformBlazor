@@ -209,7 +209,7 @@ using Microsoft.Extensions.Primitives;
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageOffer.razor"
+#line 11 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageOffer.razor"
            [Authorize]
 
 #line default
@@ -224,13 +224,13 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 129 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageOffer.razor"
+#line 138 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageOffer.razor"
        
     [Parameter]
     public int IdOffer { get; set; }
     HubConnection hubConnection;
     private Offer currentOffer;
-    string message;
+
     private string messageState = "В процессе...";
     private string selectorState = "inprocessOffer";
     private string currentUserName;
@@ -247,19 +247,18 @@ using Microsoft.Extensions.Primitives;
     protected override async Task OnInitializedAsync()
     {
         currentOffer = SqlOffer.GetOfferById(IdOffer);
-        if (currentOffer == null)
+        if (currentOffer != null)
         {
-            message = "Страница не найдена.";
-        }
-        else
-        {
-            if(currentOffer.ShopLotId == 0 && currentOffer.VendorShopId == 0)
+            if (currentOffer.ShopLotId == 0 && currentOffer.VendorShopId == 0)
             {
                 Customer = SqlUser.GetUserById(currentOffer.CustomerId);
                 Vendor = SqlUser.GetUserById(currentOffer.VendorId);
                 Comment = SqlComment.GetCommentByOfferId(currentOffer.Id);
                 currentUserName = htp.HttpContext.User.Identity.Name;
-                customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                if (htp.HttpContext.User.Claims.Any())
+                {
+                    customerId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                }
                 globalRoles = SqlUser.GetUserById(currentOffer.CustomerId).NickName + ", " + SqlUser.GetUserById(currentOffer.VendorId).NickName;
             }
             else
@@ -272,6 +271,7 @@ using Microsoft.Extensions.Primitives;
                 MembersShop = SqlUser.GetShopMembersByShopId(VendorShop.Id);
                 globalRoles = GetGlobalRoles(MembersShop) + Customer.NickName;
             }
+            await JSRuntime.InvokeVoidAsync("setTitle", "Заказ " + currentOffer.IdentifierName);
         }
         hubConnection = new HubConnectionBuilder()
   .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
@@ -296,6 +296,7 @@ using Microsoft.Extensions.Primitives;
         });
         await hubConnection.StartAsync();
     }
+
 
     void CompletedOffer()
     {
@@ -381,10 +382,10 @@ using Microsoft.Extensions.Primitives;
     private string GetGlobalRoles(IEnumerable<User> members)
     {
         string result = string.Empty;
-        foreach(var item in members)
-            {
-                result += item.NickName + ",";
-            }
+        foreach (var item in members)
+        {
+            result += item.NickName + ",";
+        }
         return result;
 
     }
@@ -392,6 +393,7 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IComment SqlComment { get; set; }

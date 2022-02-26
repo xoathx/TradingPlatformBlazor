@@ -243,15 +243,13 @@ using Microsoft.Extensions.Primitives;
             __builder.AddAttribute(20, "class", "container");
             __builder.OpenElement(21, "div");
             __builder.AddAttribute(22, "class", "text-danger");
-            __builder.AddContent(23, 
 #nullable restore
 #line 13 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\FindUser.razor"
-                                      message
+__builder.AddContent(23, message);
 
 #line default
 #line hidden
 #nullable disable
-            );
             __builder.CloseElement();
             __builder.AddMarkupContent(24, " \r\n            <div class=\"row\"></div>\r\n            ");
             __builder.AddMarkupContent(25, "<label for=\"nickname_finduser\">Введите никнейм:</label>\r\n            ");
@@ -317,40 +315,34 @@ using Microsoft.Extensions.Primitives;
 #line hidden
 #nullable disable
             ));
-            __builder.AddContent(43, 
 #nullable restore
 #line 21 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\FindUser.razor"
-                                                    FoundUser.NickName
+__builder.AddContent(43, FoundUser.NickName);
 
 #line default
 #line hidden
 #nullable disable
-            );
             __builder.CloseElement();
             __builder.CloseElement();
             __builder.AddMarkupContent(44, "\r\n                ");
             __builder.OpenElement(45, "div");
-            __builder.AddContent(46, 
 #nullable restore
 #line 22 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\FindUser.razor"
-                      FoundUser.DateRegistration.ToString("D")
+__builder.AddContent(46, FoundUser.DateRegistration.ToString("D"));
 
 #line default
 #line hidden
 #nullable disable
-            );
             __builder.CloseElement();
             __builder.AddMarkupContent(47, "\r\n                ");
             __builder.OpenElement(48, "div");
-            __builder.AddContent(49, 
 #nullable restore
 #line 23 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\FindUser.razor"
-                      FoundUser.Role
+__builder.AddContent(49, FoundUser.Role);
 
 #line default
 #line hidden
 #nullable disable
-            );
             __builder.CloseElement();
             __builder.AddMarkupContent(50, "\r\n                ");
             __builder.AddMarkupContent(51, "<button class=\"btn btn-danger\">Забанить</button>");

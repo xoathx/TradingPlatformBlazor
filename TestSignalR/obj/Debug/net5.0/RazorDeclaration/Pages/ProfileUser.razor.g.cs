@@ -217,33 +217,33 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 105 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\ProfileUser.razor"
+#line 114 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\ProfileUser.razor"
        
     [Parameter]
     public int Id { get; set; }
     User user;
     IEnumerable<Lot> LotsOfVendor;
     IEnumerable<Comment> CommentsAbUser;
-    string message;
+
     public int testRate = 3;
     string selector;
     public bool DialogOpen { get; set; }
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
 
-        if (SqlUser.GetUserById(Id) == null)
-        {
 
-            message = "Страница не найдена.";
-        }
-        else
+        if(SqlUser.GetUserById(Id) != null)
         {
             user = SqlUser.GetUserById(Id);
             LotsOfVendor = SqlLot.AllLotsOfVendor(Id).ToList();
             CommentsAbUser = SqlComment.GetCommentsByToUserId(Id).ToList();
+            await JSRuntime.InvokeVoidAsync("setTitle", "Пользователь " + user.NickName);
         }
 
     }
+
+
+
     string CategoryName(int categoryID)
     {
         return SqlCategory.GetNameCategory(categoryID);
@@ -263,7 +263,9 @@ using Microsoft.Extensions.Primitives;
 
     string MiniString(string str)
     {
-        if (string.IsNullOrWhiteSpace(str)) { return str; } else {
+        if (string.IsNullOrWhiteSpace(str)) { return str; }
+        else
+        {
             if (str.Length > 50)
             {
                 return new string(str.Substring(0, 50) + "...");
@@ -275,6 +277,7 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager Navigation { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IComment SqlComment { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory SqlCategory { get; set; }

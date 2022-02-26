@@ -215,15 +215,13 @@ using Microsoft.Extensions.Primitives;
             __builder.OpenComponent<Microsoft.AspNetCore.Components.Authorization.AuthorizeView>(1);
             __builder.AddAttribute(2, "Authorized", (Microsoft.AspNetCore.Components.RenderFragment<Microsoft.AspNetCore.Components.Authorization.AuthenticationState>)((context) => (__builder2) => {
                 __builder2.AddMarkupContent(3, "\r\n        Welcome to your new app, mister ");
-                __builder2.AddContent(4, 
 #nullable restore
 #line 6 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\Index.razor"
-                                         context.User.Identity.Name
+__builder2.AddContent(4, context.User.Identity.Name);
 
 #line default
 #line hidden
 #nullable disable
-                );
             }
             ));
             __builder.CloseComponent();

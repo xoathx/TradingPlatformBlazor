@@ -217,7 +217,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 6 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AccessPage.razor"
+#line 7 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AccessPage.razor"
        
     [Parameter]
     public string Token { get; set; }
@@ -226,8 +226,9 @@ using Microsoft.Extensions.Primitives;
 
     AccessToken CurrentAccessToken;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+
         CurrentAccessToken = SqlToken.FindToken(Token);
         if(CurrentAccessToken == null)
         {
@@ -257,11 +258,17 @@ using Microsoft.Extensions.Primitives;
                 Done = "Аккаунт активирован!";
             }
         }
+        await JSRuntime.InvokeVoidAsync("setTitle", "Получение доступа");
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
     }
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IAccessToken SqlToken { get; set; }
     }

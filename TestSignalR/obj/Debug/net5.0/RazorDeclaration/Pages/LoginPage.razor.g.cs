@@ -222,10 +222,11 @@ using Microsoft.Extensions.Primitives;
 
     public string Message { get; set; } = null;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+
         var uri = nav.ToAbsoluteUri(nav.Uri);
-        if(QueryHelpers.ParseQuery(uri.Query).TryGetValue("message", out var message))
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("message", out var message))
         {
             if (message == "error")
             {
@@ -233,7 +234,9 @@ using Microsoft.Extensions.Primitives;
             }
             else { Message = "Unhandled Exception"; }
         }
+        await JSRuntime.InvokeVoidAsync("setTitle", "Авторизация");
     }
+
 
 
 
@@ -242,6 +245,7 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor http { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
     }

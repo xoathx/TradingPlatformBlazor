@@ -216,7 +216,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 53 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ShopSettings.razor"
+#line 63 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ShopSettings.razor"
        
     [Parameter]
     public Shop CurrentShop { get; set; }
@@ -239,7 +239,7 @@ using Microsoft.Extensions.Primitives;
     protected override void OnInitialized()
     {
         isLoading = false;
-        MembersShop = SqlUser.GetShopMembersByShopId(CurrentShop.Id).ToList();
+        MembersShop = SqlUser.GetShopMembersByShopId(CurrentShop.Id).Reverse().ToList();
         CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
     }
 
@@ -299,6 +299,7 @@ using Microsoft.Extensions.Primitives;
         {
             newUser.IdShop = CurrentShop.Id;
             SqlUser.UpdateUser(newUser);
+            MembersShop = SqlUser.GetShopMembersByShopId(CurrentShop.Id).Reverse().ToList();
             StateHasChanged();
         }
     }
@@ -307,6 +308,8 @@ using Microsoft.Extensions.Primitives;
     {
         deletedUser.IdShop = 0;
         SqlUser.UpdateUser(deletedUser);
+        MembersShop = SqlUser.GetShopMembersByShopId(CurrentShop.Id).Reverse().ToList();
+        StateHasChanged();
     }
 
 #line default

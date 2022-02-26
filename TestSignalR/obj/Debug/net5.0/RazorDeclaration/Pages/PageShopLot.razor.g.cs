@@ -217,7 +217,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 55 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageShopLot.razor"
+#line 57 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageShopLot.razor"
        
     [Parameter]
     public int Id { get; set; }
@@ -230,27 +230,21 @@ using Microsoft.Extensions.Primitives;
     private User CurrentUser;
     private string IdentityName;
     IEnumerable<User> MembersShop = new List<User>();
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         CurrentShopLot = SqlShopLot.GetShopLotById(Id);
-        if(htp.HttpContext.User.Claims.Count() < 2)
-        {
-            message = "Авторизуйтесь";
-        }
-        if (CurrentShopLot == null)
-        {
-            message = "Страница не найдена";
-        }
-        else
+
+        if (CurrentShopLot != null)
         {
             CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
             MembersShop = SqlUser.GetShopMembersByShopId(CurrentShopLot.ShopId).ToList();
             rolesButton = GetRolesButton(MembersShop);
             roles = GetRoles(MembersShop);
             categoryName = SqlCategory.GetNameCategory(CurrentShopLot.CategoryId);
-
+            await JSRuntime.InvokeVoidAsync("setTitle", "Лот " + CurrentShopLot.NameLot);
         }
     }
+
     private void OnDialogClose()
     {
         DialogOpen = false;
@@ -263,7 +257,7 @@ using Microsoft.Extensions.Primitives;
     private string GetRoles(IEnumerable<User> members)
     {
         string roles = string.Empty;
-        foreach(var item in members)
+        foreach (var item in members)
         {
             roles += item.NickName + ", ";
         }
@@ -284,7 +278,7 @@ using Microsoft.Extensions.Primitives;
     }
     private void BuyLot()
     {
-        if(CurrentUser.Balance < CurrentShopLot.Price)
+        if (CurrentUser.Balance < CurrentShopLot.Price)
         {
             message = "Недостаточно средств";
         }
@@ -300,7 +294,7 @@ using Microsoft.Extensions.Primitives;
                 LotsName = CurrentShopLot.NameLot,
                 LotsDesc = CurrentShopLot.DescLot,
                 LotsPrice = CurrentShopLot.Price,
-                VendorShopId= CurrentShopLot.ShopId,
+                VendorShopId = CurrentShopLot.ShopId,
                 CustomerId = CurrentUser.Id,
                 IsOpenned = true,
                 IsManyBack = false,
@@ -341,6 +335,7 @@ using Microsoft.Extensions.Primitives;
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory SqlCategory { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
     }
 }
 #pragma warning restore 1591

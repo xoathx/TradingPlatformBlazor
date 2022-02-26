@@ -1,8 +1,9 @@
-﻿@inject TradingPlatformBlazor.Data.Repository.ICategory category;
+﻿@inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory
+@inject IJSRuntime JSRuntime
 @page "/add_category"
 @attribute [Authorize(Roles = nameof(UserRole.Administrator))]
 <AuthorizeView Roles="User">
-    <p>Страница не найдена.</p>
+    <ErrorComponent ErrorCode="404"></ErrorComponent>
 </AuthorizeView>
 <AuthorizeView Roles="Administrator">
     <h3>AddCategory</h3>
@@ -46,7 +47,7 @@
     protected override void OnInitialized()
     {
 
-        categories = category.AllCategories();
+        categories = SqlCategory.AllCategories();
         sorted = from c in categories orderby c.NameCategory select c;
 
         group = sorted.GroupBy(items => items.NameCategory[0]);
@@ -57,7 +58,7 @@
         if (!string.IsNullOrEmpty(nameCategory) && !string.IsNullOrEmpty(descCategory))
         {
 
-            category.AddCategory(nameCategory, descCategory);
+            SqlCategory.AddCategory(nameCategory, descCategory);
             nameCategory = string.Empty;
             descCategory = string.Empty;
 
@@ -66,6 +67,6 @@
 
     private void DeleteCategory(int id)
     {
-        category.DeleteCategory(id);
+        SqlCategory.DeleteCategory(id);
     }
 }

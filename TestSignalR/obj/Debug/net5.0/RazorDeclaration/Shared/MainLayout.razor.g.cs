@@ -216,18 +216,17 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 45 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MainLayout.razor"
+#line 55 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MainLayout.razor"
       
         [Inject] IHttpContextAccessor htp { get; set; }
         HubConnection hubConnection;
-        string message;
+
         User user;
     protected override async Task OnInitializedAsync()
     {
         if (htp.HttpContext.User.Claims.Any())
         {
             user = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
-            message = "Cooбщения";
             hubConnection = new HubConnectionBuilder()
       .WithUrl(Navigation.ToAbsoluteUri("/hub"), opt =>
       {

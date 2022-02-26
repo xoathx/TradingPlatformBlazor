@@ -217,57 +217,61 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 70 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\CategoysLots.razor"
-           
-        [Parameter]
-        public int Id { get; set; }
+#line 75 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\CategoysLots.razor"
+       
+    [Parameter]
+    public int Id { get; set; }
 
-        private string nameCategory;
-        IEnumerable<Lot> allLots = new List<Lot>();
-        public bool DialogOpen { get; set; }
+    private string nameCategory;
+    IEnumerable<Lot> allLots = new List<Lot>();
+    public bool DialogOpen { get; set; }
 
-        IEnumerable<ShopLot> allShopLots = new List<ShopLot>();
+    IEnumerable<ShopLot> allShopLots = new List<ShopLot>();
 
-        protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
+    {
+        nameCategory = SqlCategory.AllCategories().First(c => c.Id == Id).NameCategory;
+        allLots = SqlLot.LotsByID(Id).ToList();
+
+        allShopLots = SqlShopLot.ShopLotsByCategoryId(Id).ToList();
+        await JSRuntime.InvokeVoidAsync("setTitle", nameCategory);
+    }
+
+
+    private void OnDialogClose()
+    {
+        allLots = SqlLot.LotsByID(Id).ToList();
+
+        allShopLots = SqlShopLot.ShopLotsByCategoryId(Id).ToList();
+        DialogOpen = false;
+
+
+    }
+    private void OpenDialog()
+    {
+        DialogOpen = true;
+    }
+
+    string MiniString(string str)
+    {
+        if (string.IsNullOrWhiteSpace(str)) { return str; }
+        else
         {
-            nameCategory = category.AllCategories().First(c => c.Id == Id).NameCategory;
-            allLots = lot.LotsByID(Id).ToList();
-
-            allShopLots = SqlShopLot.ShopLotsByCategoryId(Id).ToList();
-        }
-
-        private void OnDialogClose()
-        {
-
-            DialogOpen = false;
-
-
-        }
-        private void OpenDialog()
-        {
-            DialogOpen = true;
-        }
-
-        string MiniString(string str)
-        {
-            if (string.IsNullOrWhiteSpace(str)) { return str; }
-            else
+            if (str.Length > 50)
             {
-                if (str.Length > 50)
-                {
-                    return new string(str.Substring(0, 50) + "...");
-                }
-                return str;
+                return new string(str.Substring(0, 50) + "...");
             }
+            return str;
         }
-    
+    }
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot { get; set; }
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory category { get; set; }
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ILot lot { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory SqlCategory { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ILot SqlLot { get; set; }
     }
 }
 #pragma warning restore 1591

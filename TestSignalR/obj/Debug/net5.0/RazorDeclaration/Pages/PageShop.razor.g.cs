@@ -217,11 +217,10 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 74 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageShop.razor"
+#line 82 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageShop.razor"
        
     [Parameter]
     public string NameShop { get; set; }
-    private string message;
     private Shop CurrentShop;
     private User CurrentUser;
     private string role;
@@ -229,23 +228,24 @@ using Microsoft.Extensions.Primitives;
 
     public bool DialogOpen { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         CurrentShop = SqlShop.GetShopByShortUrl(NameShop);
-        role = SqlUser.GetUserById(CurrentShop.CreatedId).NickName;
-        if (CurrentShop == null)
-        {
-            message = "Страница не найдена";
-        }
-        else
+
+        if (CurrentShop != null)
         {
             if (htp.HttpContext.User.Claims.Count() > 0)
             {
                 CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
             }
+            role = SqlUser.GetUserById(CurrentShop.CreatedId).NickName;
             shopLots = SqlShopLot.GetShopLotsByShopId(CurrentShop.Id).ToList();
+            await JSRuntime.InvokeVoidAsync("setTitle", "Магазин " + CurrentShop.NameShop);
         }
     }
+
+
+
     string CategoryName(int categoryId)
     {
         return SqlCategory.GetNameCategory(categoryId);
@@ -276,6 +276,7 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot { get; set; }

@@ -216,7 +216,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 28 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\UpdateShopLot.razor"
+#line 29 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\UpdateShopLot.razor"
        
     [Parameter]
     public ShopLot CurrentShopLot { get; set; }
@@ -252,9 +252,17 @@ using Microsoft.Extensions.Primitives;
         return OnClose.InvokeAsync(true);
     }
 
+    private Task DeleteLot()
+    {
+        SqlShopLot.DeleteLot(CurrentShopLot);
+        nav.NavigateTo("/lots/" + CurrentShopLot.CategoryId);
+        return OnClose.InvokeAsync(true);
+    }
+
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot { get; set; }
     }
 }

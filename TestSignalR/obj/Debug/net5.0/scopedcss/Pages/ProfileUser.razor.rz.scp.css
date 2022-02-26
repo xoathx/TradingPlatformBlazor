@@ -1,0 +1,123 @@
+body[b-jno4ptqhca] {
+}
+.profile-nickname[b-jno4ptqhca] {
+}
+
+.user-lots[b-jno4ptqhca] {
+    margin-top: 30px;
+    max-width: 700px;
+}
+
+.profile-avatar[b-jno4ptqhca] {
+    width: 150px;
+    height: 150px;
+    border-radius: 100px;
+    margin: 15px;
+}
+
+.name-category-user[b-jno4ptqhca] {
+    height: 50px;
+    padding-top: 10px;
+}
+
+.name-lot-user[b-jno4ptqhca] {
+    height: 50px;
+    padding-top: 10px;
+}
+
+.desc-lot-user[b-jno4ptqhca] {
+    min-height: 50px;
+    height: auto;
+    padding-top: 10px;
+    word-break: break-all;
+}
+
+.gds-user[b-jno4ptqhca] {
+    margin-left: 14px;
+}
+
+.rating-mini[b-jno4ptqhca] {
+    display: inline-block;
+    font-size: 0;
+}
+
+    .rating-mini span[b-jno4ptqhca] {
+        padding: 0;
+        font-size: 20px;
+        line-height: 1;
+        color: lightgrey;
+    }
+
+    .rating-mini > span[b-jno4ptqhca]:before {
+        content: '★';
+    }
+
+    .rating-mini > span.active[b-jno4ptqhca] {
+        color: gold;
+    }
+
+.comments-user[b-jno4ptqhca] {
+    max-width: 700px;
+    margin-top: 30px;
+}
+
+.nickname-comment-user[b-jno4ptqhca] {
+    height: 50px;
+    padding-top: 10px;
+}
+
+.bodytext-comment-user[b-jno4ptqhca] {
+    height: 50px;
+    padding-top: 10px;
+    word-break: break-all;
+    min-height: 50px;
+    height: auto;
+}
+
+.rating-comment-user[b-jno4ptqhca] {
+    height: 50px;
+    padding-top: 15px;
+    padding-left: 80px;
+}
+
+.h-comments-user[b-jno4ptqhca] {
+    margin-left: 14px;
+}
+
+.comment-body[b-jno4ptqhca] {
+    min-height: 50px;
+    height: auto;
+    margin-top: 0;
+    text-align: center;
+}
+
+    .comment-body:hover[b-jno4ptqhca] {
+        background-color: #ECECEC;
+    }
+
+.avatar-comment-user[b-jno4ptqhca] {
+    margin-bottom: 5px;
+}
+
+.a-comment-user[b-jno4ptqhca] {
+    color: black;
+    text-decoration: none;
+}
+
+    .a-comment-user:hover[b-jno4ptqhca] {
+        color: black;
+        text-decoration: none;
+    }
+
+.a-lot-user[b-jno4ptqhca] {
+    color: black;
+    text-decoration: none;
+}
+
+    .a-lot-user:hover[b-jno4ptqhca] {
+        color: black;
+        text-decoration: none;
+    }
+
+.lot-body:hover[b-jno4ptqhca] {
+    background-color: #ECECEC;

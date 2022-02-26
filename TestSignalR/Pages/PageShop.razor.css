@@ -1,0 +1,26 @@
+﻿body {
+}
+h1 {
+    color: #d6d5d5;
+}
+.set-button{
+    display:none;
+}
+.settings {
+    margin: auto;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+    border: 5px solid #7898f6;
+    border-radius: 50px;
+}
+
+    .settings span {
+        text-align: center;
+        color: #7898f6;
+        font-size: 30px;
+        display: block;
+        margin-top: 32%;
+        margin-left: auto;
+        margin-right: auto;
+    }

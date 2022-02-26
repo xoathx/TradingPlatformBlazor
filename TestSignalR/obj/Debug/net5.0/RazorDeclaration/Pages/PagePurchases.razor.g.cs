@@ -209,7 +209,7 @@ using Microsoft.Extensions.Primitives;
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PagePurchases.razor"
+#line 6 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PagePurchases.razor"
            [Authorize]
 
 #line default
@@ -224,19 +224,20 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 40 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PagePurchases.razor"
+#line 45 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PagePurchases.razor"
            
         private IEnumerable<Offer> Offers;
         private int CurrentUserId;
         private string State;
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             if (htp.HttpContext.User.Claims.Count() > 0)
             {
                 CurrentUserId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
                 Offers = SqlOffer.GetOffersByCustonerId(CurrentUserId).ToList();
             }
+            await JSRuntime.InvokeVoidAsync("setTitle", "Покупки");
         }
 
         string StateCurOffer(StateOffer state)
@@ -266,6 +267,7 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IOffer SqlOffer { get; set; }

@@ -208,6 +208,13 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 3 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\MessegerShop.razor"
+           [Authorize]
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/messagershop")]
     public partial class MessegerShop : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -216,6 +223,19 @@ using Microsoft.Extensions.Primitives;
         {
         }
         #pragma warning restore 1998
+#nullable restore
+#line 28 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\MessegerShop.razor"
+              
+    protected override async Task OnInitializedAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("setTitle", "Shop Месседжер");
+    }
+ 
+
+#line default
+#line hidden
+#nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
     }
 }
 #pragma warning restore 1591

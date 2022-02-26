@@ -1,0 +1,123 @@
+﻿body {
+}
+.profile-nickname {
+}
+
+.user-lots {
+    margin-top: 30px;
+    max-width: 700px;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 100px;
+    margin: 15px;
+}
+
+.name-category-user {
+    height: 50px;
+    padding-top: 10px;
+}
+
+.name-lot-user {
+    height: 50px;
+    padding-top: 10px;
+}
+
+.desc-lot-user {
+    min-height: 50px;
+    height: auto;
+    padding-top: 10px;
+    word-break: break-all;
+}
+
+.gds-user {
+    margin-left: 14px;
+}
+
+.rating-mini {
+    display: inline-block;
+    font-size: 0;
+}
+
+    .rating-mini span {
+        padding: 0;
+        font-size: 20px;
+        line-height: 1;
+        color: lightgrey;
+    }
+
+    .rating-mini > span:before {
+        content: '★';
+    }
+
+    .rating-mini > span.active {
+        color: gold;
+    }
+
+.comments-user {
+    max-width: 700px;
+    margin-top: 30px;
+}
+
+.nickname-comment-user {
+    height: 50px;
+    padding-top: 10px;
+}
+
+.bodytext-comment-user {
+    height: 50px;
+    padding-top: 10px;
+    word-break: break-all;
+    min-height: 50px;
+    height: auto;
+}
+
+.rating-comment-user {
+    height: 50px;
+    padding-top: 15px;
+    padding-left: 80px;
+}
+
+.h-comments-user {
+    margin-left: 14px;
+}
+
+.comment-body {
+    min-height: 50px;
+    height: auto;
+    margin-top: 0;
+    text-align: center;
+}
+
+    .comment-body:hover {
+        background-color: #ECECEC;
+    }
+
+.avatar-comment-user {
+    margin-bottom: 5px;
+}
+
+.a-comment-user {
+    color: black;
+    text-decoration: none;
+}
+
+    .a-comment-user:hover {
+        color: black;
+        text-decoration: none;
+    }
+
+.a-lot-user {
+    color: black;
+    text-decoration: none;
+}
+
+    .a-lot-user:hover {
+        color: black;
+        text-decoration: none;
+    }
+
+.lot-body:hover {
+    background-color: #ECECEC;

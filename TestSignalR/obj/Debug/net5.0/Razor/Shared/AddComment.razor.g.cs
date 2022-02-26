@@ -247,15 +247,13 @@ using Microsoft.Extensions.Primitives;
             __builder.OpenElement(24, "div");
             __builder.AddAttribute(25, "class", "offersComment");
             __builder.OpenElement(26, "div");
-            __builder.AddContent(27, 
 #nullable restore
 #line 24 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\AddComment.razor"
-                         message
+__builder.AddContent(27, message);
 
 #line default
 #line hidden
 #nullable disable
-            );
             __builder.CloseElement();
             __builder.AddMarkupContent(28, "\r\n                        ");
             __builder.OpenElement(29, "div");

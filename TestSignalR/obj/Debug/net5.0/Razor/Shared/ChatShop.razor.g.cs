@@ -256,15 +256,13 @@ using Microsoft.AspNetCore.SignalR.Client;
             __builder.OpenElement(18, "h4");
             __builder.AddAttribute(19, "class", "card-title");
             __builder.OpenElement(20, "strong");
-            __builder.AddContent(21, 
 #nullable restore
 #line 15 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ChatShop.razor"
-                                                                                                                                                                                                currentShop.NameShop
+__builder.AddContent(21, currentShop.NameShop);
 
 #line default
 #line hidden
 #nullable disable
-            );
             __builder.CloseElement();
             __builder.CloseElement();
             __builder.CloseElement();
@@ -300,15 +298,13 @@ using Microsoft.AspNetCore.SignalR.Client;
             __builder.OpenElement(29, "div");
             __builder.AddAttribute(30, "class", "media-body");
             __builder.OpenElement(31, "p");
-            __builder.AddContent(32, 
 #nullable restore
 #line 27 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ChatShop.razor"
-                                    item.BodyMessage
+__builder.AddContent(32, item.BodyMessage);
 
 #line default
 #line hidden
 #nullable disable
-            );
             __builder.CloseElement();
             __builder.AddMarkupContent(33, "\r\n                                ");
             __builder.OpenElement(34, "p");
@@ -323,15 +319,13 @@ using Microsoft.AspNetCore.SignalR.Client;
 #line hidden
 #nullable disable
             );
-            __builder.AddContent(38, 
 #nullable restore
 #line 28 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ChatShop.razor"
-                                                                                         item.DateMessage.ToString("t")
+__builder.AddContent(38, item.DateMessage.ToString("t"));
 
 #line default
 #line hidden
 #nullable disable
-            );
             __builder.CloseElement();
             __builder.CloseElement();
             __builder.CloseElement();
