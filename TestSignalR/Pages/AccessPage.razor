@@ -4,9 +4,10 @@
 @inject IJSRuntime JSRuntime
 <h1 class="text-danger text-center">@Error</h1>
 <h1 class="text-success text-center">@Done</h1>
+
 @code {
-    [Parameter]
-    public string Token { get; set; }
+        [Parameter]
+        public string Token { get; set; }
     public string Done { get; set; } = null;
     public string Error { get; set; } = null;
 
@@ -16,7 +17,7 @@
     {
 
         CurrentAccessToken = SqlToken.FindToken(Token);
-        if(CurrentAccessToken == null)
+        if (CurrentAccessToken == null)
         {
             Error = "Данный токен не существует.";
         }
@@ -46,8 +47,5 @@
         }
         await JSRuntime.InvokeVoidAsync("setTitle", "Получение доступа");
     }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
 
-    }
 }

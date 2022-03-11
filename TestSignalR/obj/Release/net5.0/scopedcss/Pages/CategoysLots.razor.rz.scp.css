@@ -1,0 +1,25 @@
+body[b-izu0hnn6a8] {
+}
+button[b-izu0hnn6a8]{
+    display: none;
+}
+.addlot[b-izu0hnn6a8] {
+    margin: auto;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+    border: 5px solid #7898f6;
+    border-radius: 50px;
+}
+    .addlot span[b-izu0hnn6a8] {
+        text-align: center;
+        color: ;
+        font-size: 30px;
+        display: block;
+        margin-top: 32%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+.name-category[b-izu0hnn6a8] {
+    color: #d6d5d5;
+}

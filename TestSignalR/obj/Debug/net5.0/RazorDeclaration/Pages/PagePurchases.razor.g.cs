@@ -224,7 +224,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 45 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PagePurchases.razor"
+#line 54 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PagePurchases.razor"
            
         private IEnumerable<Offer> Offers;
         private int CurrentUserId;

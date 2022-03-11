@@ -240,6 +240,7 @@ using Microsoft.Extensions.Primitives;
                   opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
               }
           }).Build();
+            //hubConnection = new HubConnectionBuilder().WithUrl(nav.ToAbsoluteUri("/hub")).Build();
             hubConnection.On<Message>("ReceiveMessage", (message) =>
             {
                 UpdateWindow();

@@ -106,8 +106,16 @@ table {
     background-color: #ACFD80;
     border-radius: 10px;
 }
-/* /chat */
 
+.link-chat-companion {
+    color: #7898f6;
+    text-decoration:none;
+}
+    .link-chat-companion:hover {
+        color: #7898f6;
+        text-decoration: none;
+    }
+/* /chat */
 .card-bordered {
     border: 1px solid #ebebeb
 }
@@ -140,6 +148,7 @@ table {
     -webkit-box-align: center;
     align-items: center;
     padding: 15px 20px;
+    max-width:300px;
     background-color: transparent;
     border-bottom: 1px solid rgba(77, 82, 89, 0.07)
 }
@@ -157,9 +166,13 @@ h4.card-title {
     margin-right: 0
 }
 
+.chat-header-custom{
+    width:350px;
+}
+
 .card-header > * {
     margin-left: 8px;
-    margin-right: 8px
+    margin-right: 8px;
 }
 
 .btn-secondary {
@@ -783,9 +796,8 @@ input[type="file"]{
     text-align: start;
     color: #fff;
     cursor: pointer;
-    /*display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;*/
+    width:auto;
+
 }
 .custom-file-upload i{
     text-align: justify;
@@ -802,7 +814,9 @@ input[type="file"]{
 /* Layout*/
 body {
 }
-
+.opasity-bg-main{
+    opacity: 0.8;
+}
 .page {
     position: relative;
     display: flex;
@@ -904,12 +918,21 @@ body {
 a {
     color: #7898f6;
 }
-
+.balance-user {
+    margin-left: 15px;
+    height: auto;
+    width: auto;
+    background: #d6d5d5;
+    color: #7898f6;
+    border: 1px solid #d6d5d5;
+    padding:2px;
+    border-radius: 10px;
+}
+.finance-layout{
+    margin-bottom:3px;
+}
 /* Layout*/
-
-
 /* ErrorComponent */
-
 .code-info {
     margin-left: 5%;
     color: #7898f6;

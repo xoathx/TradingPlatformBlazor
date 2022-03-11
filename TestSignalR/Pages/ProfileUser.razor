@@ -18,12 +18,11 @@ else
     <AuthorizeView Roles="@user.NickName">
         @*<button class="material-icons" @onclick="OpenSettings">publish</button>*@
         <div class="input-avatar d-inline">
-            <div class="input-file-block">
-                <label for="file-upload" class="custom-file-upload">
+                <label for="file-upload" class="input-file-block">
                     <i class="oi oi-data-transfer-upload"></i>Upload
                 </label>
-            </div>
-            <InputFile class="file-select" type="file" id="file-upload" accept=".png,.jpg,.jpeg" placeholder="Обзор" />
+            
+            <button id="file-upload" class="set-button" @onclick="@OpenSettings"></button>
         </div>
     </AuthorizeView>
 

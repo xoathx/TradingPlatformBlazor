@@ -217,10 +217,10 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 7 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AccessPage.razor"
+#line 8 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AccessPage.razor"
        
-    [Parameter]
-    public string Token { get; set; }
+        [Parameter]
+        public string Token { get; set; }
     public string Done { get; set; } = null;
     public string Error { get; set; } = null;
 
@@ -230,7 +230,7 @@ using Microsoft.Extensions.Primitives;
     {
 
         CurrentAccessToken = SqlToken.FindToken(Token);
-        if(CurrentAccessToken == null)
+        if (CurrentAccessToken == null)
         {
             Error = "Данный токен не существует.";
         }
@@ -260,10 +260,7 @@ using Microsoft.Extensions.Primitives;
         }
         await JSRuntime.InvokeVoidAsync("setTitle", "Получение доступа");
     }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
 
-    }
 
 #line default
 #line hidden

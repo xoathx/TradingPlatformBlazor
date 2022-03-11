@@ -14,60 +14,68 @@
     </NotAuthorized>
     <Authorized>
         @if (CurrentShop == null)
-        { <ErrorComponent ErrorCode="404"></ErrorComponent> }
-    else
-    {
+        {<ErrorComponent ErrorCode="404"></ErrorComponent> }
+        else
+        {
 
-        <h1>@NameShop</h1>
-        <img class="profile-avatar d-inline" src="/img/avatars/@CurrentShop.PathAvatarShop" />
-        <AuthorizeView Roles="@role">
-            <ChildContent Context="Any">
-                <div class="d-inline">
-                    <label class="settings" for="set-button">
-                        <span class="oi oi-terminal"></span>
-                    </label>
-                    <button class="set-button" id="set-button" @onclick="OpenDialog"></button>
-                </div>
-            </ChildContent>
-        </AuthorizeView>
-        <div class="container">
-            <div class="row">
-                <div class="col-6 col-sm-3 name-category-user border-right">
-                    Категория
-                </div>
-                <div class="col name-lot-user">
-                    Название лота
-                </div>
-                <div class="col desc-lot-user border-left">
-                    Описание
+           
+            <img class="profile-avatar-shop d-inline" src="/img/avatars/@CurrentShop.PathAvatarShop" />
+            <h1 class="d-inline">@NameShop</h1>
+            <AuthorizeView Roles="@role">
+                <ChildContent Context="Any">
+                    <div class="d-inline">
+                        <label class="settings" for="set-button">
+                            <span class="oi oi-terminal"></span>
+                        </label>
+                        <button class="set-button" id="set-button" @onclick="OpenDialog"></button>
+                    </div>
+                </ChildContent>
+            </AuthorizeView>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="row border">
+                            <div class="col name-category-user border-right">
+                                Категория
+                            </div>
+                            <div class="col name-lot-user">
+                                Название лота
+                            </div>
+                            <div class="col desc-lot-user border-left">
+                                Описание
+                            </div>
+                        </div>
+
+                        @foreach (var item in shopLots)
+                        {
+                            <a class="a-lot-user" href="/shoplot/@item.Id">
+                                <div class="row border lot-body">
+
+                                    <div class="col name-category-user border-right">
+                                        @CategoryName(item.CategoryId)
+                                    </div>
+                                    <div class="col name-lot-user ">
+                                        @item.NameLot
+                                    </div>
+                                    <div class="col desc-lot-user border-left">
+                                        @MiniString(item.DescLot)
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    </div>
+
+
+
+                    <div class="col">
+                        @if (CurrentUser.IdShop != CurrentShop.Id)
+                        {
+                            <ChatShop ToShopId="CurrentShop.Id"></ChatShop>
+                        }
+                    </div>
                 </div>
             </div>
-            @foreach (var item in shopLots)
-            {
-                <a class="a-lot-user" href="/shoplot/@item.Id">
-                    <div class="row border lot-body">
-
-                        <div class="col-6 col-sm-3 name-category-user border-right">
-                            @CategoryName(item.CategoryId)
-                        </div>
-                        <div class="col name-lot-user ">
-                            @item.NameLot
-                        </div>
-                        <div class="col desc-lot-user border-left">
-                            @MiniString(item.DescLot)
-                        </div>
-                    </div>
-                </a>
-            }
-
-
-        </div>
-
-        if (CurrentUser.IdShop != CurrentShop.Id)
-        {
-            <ChatShop ToShopId="CurrentShop.Id"></ChatShop>
         }
-    }
 
 
         @if (DialogOpen)

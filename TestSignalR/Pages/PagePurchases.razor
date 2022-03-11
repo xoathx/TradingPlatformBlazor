@@ -11,7 +11,8 @@
         </NotAuthorized>
         <Authorized>
             <h3>Раздел покупок</h3>
-
+            @if (Offers.Any())
+            {
             <div class="container sales-content">
                 <div class="row">
                     <div class="col">Дата</div>
@@ -39,8 +40,16 @@
                         </div>
                     </a>
                 }
+
+
+
             </div>
-        </Authorized>
+            }
+            else
+                {
+                    <p class="info-0-off">Здесь будут ваши покупки</p>
+                }
+      </Authorized>
     </AuthorizeView>
     @code {
         private IEnumerable<Offer> Offers;

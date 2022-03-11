@@ -216,9 +216,9 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 73 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MessegerBox.razor"
+#line 79 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MessegerBox.razor"
        
-    //[Parameter]
+        //[Parameter]
     public int IdСompanion { get; set; }
     private List<Message> messages = new List<Message>();
     private HubConnection hubConnection;
@@ -231,14 +231,15 @@ using Microsoft.Extensions.Primitives;
     protected override async Task OnInitializedAsync()
     {
 
+        myId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
         hubConnection = new HubConnectionBuilder()
-       .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
-       {
-           if (htp.HttpContext.Request.Cookies.Count > 0)
-           {
-               opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
-           }
-       }).Build();
+.WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+{
+    if (htp.HttpContext.Request.Cookies.Count > 0)
+    {
+        opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
+    }
+}).Build();
 
         hubConnection.On<int>("Update", (id) =>
         {
@@ -259,6 +260,14 @@ using Microsoft.Extensions.Primitives;
         });
 
         await hubConnection.StartAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (currentUser != null) 
+        {
+            await JSRuntime.InvokeVoidAsync("scrollDown", "messeger-content"); 
+        }
     }
 
     async Task Send()
@@ -288,7 +297,7 @@ using Microsoft.Extensions.Primitives;
     {
         IdСompanion = id;
         currentUser = SqlUser.GetUserById(IdСompanion);
-        myId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
         var fromMessages = SqlMessage.GetMessagesByIdFromAndIdTo(myId, IdСompanion).ToList();
         var toMessages = SqlMessage.GetMessagesByIdFromAndIdTo(IdСompanion, myId).ToList();
         messages.AddRange(fromMessages);
@@ -305,6 +314,7 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Services.IUserStatus UserStatus { get; set; }

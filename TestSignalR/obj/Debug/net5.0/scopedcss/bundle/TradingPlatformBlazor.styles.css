@@ -103,12 +103,24 @@ body[b-419ogtr201] {
     margin-left:0;
     margin-top: 2%;
 }
+.info-0-off[b-419ogtr201] {
+    font-size: 24px;
+    color: #d6d5d5;
+    margin-left:5%;
+    margin-top:15px;
+}
 /* _content/TradingPlatformBlazor/Pages/PageSales.razor.rz.scp.css */
 body[b-yxxy7xp3mm] {
 }
 .sales-content[b-yxxy7xp3mm] {
     margin-left: 0;
     margin-top: 2%;
+}
+.info-0-sales[b-yxxy7xp3mm] {
+    font-size: 24px;
+    color: #d6d5d5;
+    margin-left: 5%;
+    margin-top: 15px;
 }
 /* _content/TradingPlatformBlazor/Pages/PageShop.razor.rz.scp.css */
 body[b-0i4a7kztm1] {
@@ -137,6 +149,14 @@ h1[b-0i4a7kztm1] {
         margin-left: auto;
         margin-right: auto;
     }
+
+.profile-avatar-shop[b-0i4a7kztm1] {
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    margin: 15px;
+}
+
 /* _content/TradingPlatformBlazor/Pages/ProfileUser.razor.rz.scp.css */
 body[b-jno4ptqhca] {
 }
@@ -261,6 +281,20 @@ body[b-jno4ptqhca] {
 
 .lot-body:hover[b-jno4ptqhca] {
     background-color: #ECECEC;
+}
+.set-button[b-jno4ptqhca]{
+    display:none;
+}
+.input-file-block[b-jno4ptqhca] {
+    border: 1px solid #7898f6;
+    padding: 3px;
+    width: auto;
+    height: auto;
+    color: white;
+    background: #7898f6;
+    cursor:pointer;
+    border-radius:5px;
+}
 /* _content/TradingPlatformBlazor/Shared/NavMenu.razor.rz.scp.css */
 .navbar-toggler[b-we45fpdhti] {
     background-color: rgba(255, 255, 255, 0.1);

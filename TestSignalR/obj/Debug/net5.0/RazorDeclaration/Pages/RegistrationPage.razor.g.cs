@@ -226,7 +226,7 @@ using Microsoft.Extensions.Primitives;
     public string Done { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        await JSRuntime.InvokeVoidAsync("setTitle", "Месседжер");
+        await JSRuntime.InvokeVoidAsync("setTitle", "Регистрация");
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("e", out var error))
         {

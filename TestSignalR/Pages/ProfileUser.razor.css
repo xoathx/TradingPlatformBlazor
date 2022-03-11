@@ -121,3 +121,17 @@
 
 .lot-body:hover {
     background-color: #ECECEC;
+}
+.set-button{
+    display:none;
+}
+.input-file-block {
+    border: 1px solid #7898f6;
+    padding: 3px;
+    width: auto;
+    height: auto;
+    color: white;
+    background: #7898f6;
+    cursor:pointer;
+    border-radius:5px;
+}

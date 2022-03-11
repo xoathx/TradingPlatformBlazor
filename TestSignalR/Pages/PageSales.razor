@@ -9,35 +9,44 @@
         <NotAuthorized><ErrorComponent ErrorCode="401"></ErrorComponent></NotAuthorized>
         <Authorized>
             <h3>Раздел продаж</h3>
-
-            <div class="container sales-content">
-                <div class="row">
-                    <div class="col">Дата</div>
-                    <div class="col">Номер заказа</div>
-                    <div class="col-2">Описание</div>
-                    <div class="col">Покупатель</div>
-                    <div class="col">Статус</div>
-                    <div class="col">Сумма</div>
-                </div>
-                @foreach (var item in Offers)
-                {
-                    <a class="a-pagesales" href="/offer/@item.Id">
-                        <div class="row border content-body-sales">
-                            <div class="col border-right"><p>@item.DateClosing.ToString("D")</p></div>
-                            <div class="col border-right"><p>#@item.IdentifierName</p></div>
-                            <div class="col-2 border-right desc-offer-sales"><p>@item.LotsDesc</p></div>
-                            <div class="col border-right d-inline">
-                                <a class="a-pagesales" href="/user/@item.CustomerId">
-                                    <img class="avatar avatar-customer-pagesales" src="img/avatars/@SqlUser.GetUserById(item.CustomerId).PathAvatar" />
-                                    <div class="nickname-customer-pagesales">@SqlUser.GetUserById(item.CustomerId).NickName</div>
-                                </a>
+            @if(Offers.Any())
+            {
+                <div class="container sales-content">
+                    <div class="row">
+                        <div class="col">Дата</div>
+                        <div class="col">Номер заказа</div>
+                        <div class="col-2">Описание</div>
+                        <div class="col">Покупатель</div>
+                        <div class="col">Статус</div>
+                        <div class="col">Сумма</div>
+                    </div>
+                    @foreach (var item in Offers)
+                    {
+                        <a class="a-pagesales" href="/offer/@item.Id">
+                            <div class="row border content-body-sales">
+                                <div class="col border-right"><p>@item.DateClosing.ToString("D")</p></div>
+                                <div class="col border-right"><p>#@item.IdentifierName</p></div>
+                                <div class="col-2 border-right desc-offer-sales"><p>@item.LotsDesc</p></div>
+                                <div class="col border-right d-inline">
+                                    <a class="a-pagesales" href="/user/@item.CustomerId">
+                                        <img class="avatar avatar-customer-pagesales" src="img/avatars/@SqlUser.GetUserById(item.CustomerId).PathAvatar" />
+                                        <div class="nickname-customer-pagesales">@SqlUser.GetUserById(item.CustomerId).NickName</div>
+                                    </a>
+                                </div>
+                                <div class="col border-right"><p>@StateCurOffer(item.StateOffer)</p></div>
+                                <div class="col"><p>@item.LotsPrice</p></div>
                             </div>
-                            <div class="col border-right"><p>@StateCurOffer(item.StateOffer)</p></div>
-                            <div class="col"><p>@item.LotsPrice</p></div>
-                        </div>
-                    </a>
-                }
-            </div>
+                        </a>
+                    }
+
+
+
+                </div>
+            }
+            else
+            {
+                <p class="info-0-sales">Здесь будут ваши продажи</p>
+            }
         </Authorized>
     </AuthorizeView>
     @code {

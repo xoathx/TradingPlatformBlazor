@@ -216,7 +216,7 @@ using Microsoft.AspNetCore.SignalR.Client;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 49 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\Chat.razor"
+#line 50 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\Chat.razor"
        
     [Parameter]
     public int ToUserId { get; set; }
@@ -225,15 +225,17 @@ using Microsoft.AspNetCore.SignalR.Client;
     private List<Message> messages = new List<Message>();
     private string messageInput;
     private User currentUser;
+    private User FromUser;
 
     private string selectorClass;
     protected override async Task OnInitializedAsync()
     {
 
-        currentUser = user.GetUserById(ToUserId);
+        currentUser = SqlUser.GetUserById(ToUserId);
         FromId = htp.HttpContext.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier).Value;
-        var fromMessages = SqlMessage.GetMessagesByIdFromAndIdTo(int.Parse(FromId), ToUserId).ToList();
-        var toMessages = SqlMessage.GetMessagesByIdFromAndIdTo(ToUserId, int.Parse(FromId)).ToList();
+        FromUser = SqlUser.GetUserById(int.Parse(FromId));
+        var fromMessages = SqlMessage.GetMessagesByIdFromAndIdTo(FromUser.Id, currentUser.Id).ToList();
+        var toMessages = SqlMessage.GetMessagesByIdFromAndIdTo(currentUser.Id, FromUser.Id).ToList();
         messages.AddRange(fromMessages);
         messages.AddRange(toMessages);
         hubConnection = new HubConnectionBuilder()
@@ -247,9 +249,9 @@ using Microsoft.AspNetCore.SignalR.Client;
 
         hubConnection.On<Message>("ReceiveMessage", (message) =>
         {
-            //if (message.FromUserId == int.Parse(FromId) || (message.ToUserId == int.Parse(FromId) && message.FromUserId == ToUserId))
-            //{
-            messages.Add(message);
+        //if (message.FromUserId == int.Parse(FromId) || (message.ToUserId == int.Parse(FromId) && message.FromUserId == ToUserId))
+        //{
+        messages.Add(message);
             StateHasChanged();
 
         });
@@ -257,6 +259,11 @@ using Microsoft.AspNetCore.SignalR.Client;
         await hubConnection.StartAsync();
 
 
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("scrollDown", "chat-content");
     }
 
     async Task Send()
@@ -288,8 +295,9 @@ using Microsoft.AspNetCore.SignalR.Client;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IMessage SqlMessage { get; set; }
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser user { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private Microsoft.AspNetCore.Http.IHttpContextAccessor htp { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
     }

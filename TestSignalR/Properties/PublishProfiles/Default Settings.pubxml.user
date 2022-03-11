@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Этот файл используется процессом публикации или упаковки вашего веб-проекта. Можно настроить поведение этого процесса,
+изменив этот файл MSBuild. Подробности см. на странице https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA8nEOsZ0qIEuYdGJ8anZoNgAAAAACAAAAAAAQZgAAAAEAACAAAACc3yeF6AWYFIuY6GdHRx3+XSIwL9FKWH6F39hL8kF09wAAAAAOgAAAAAIAACAAAAALv+KF7qRXqnz6sxcMzPGjtLIWuBMo1NQWLRKxL7M8AyAAAABXrVClxm9hGxIbuPlqSeHLqFaEeum+vwtDpYjUI9Di40AAAADXwvvggL1u5SzjXOPaG1xdyQFj08F4I5liXC4AE9FH7K7XQ1HJXcGVyuEmt8inBmPKv/oV1q/4pLjUUb7CrmyQ</EncryptedPassword>
+    <History>True|2022-03-01T11:59:16.8966544Z;False|2022-03-01T14:50:38.0717800+03:00;False|2022-03-01T14:44:57.6299077+03:00;False|2022-03-01T14:44:12.3598370+03:00;True|2022-03-01T14:42:09.9673174+03:00;False|2022-03-01T14:41:24.2808429+03:00;False|2022-03-01T14:37:48.7030411+03:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="ConnectionString">
+      <Value>server=sql5103.site4now.net%3bDatabase=db_a8395e_btp%3bInitial Catalog=db_a8395e_btp%3bUser Id=db_a8395e_btp_admin%3bPassword=sirius96in9248</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="TradingPlatformBlazor.Data.DBContext">
+      <Value>server=sql5103.site4now.net%3bDatabase=db_a8395e_btp%3bInitial Catalog=db_a8395e_btp%3bUser Id=db_a8395e_btp_admin%3bPassword=sirius96in9248</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

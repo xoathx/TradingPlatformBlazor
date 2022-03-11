@@ -10,10 +10,10 @@
                 <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
             </div>
             
-                <label for="file-upload" class="custom-file-upload">
-                    <i class="fa fa-cloud-upload material-icons">publish</i>
+                <label for="file" class="custom-file-upload">
+                    <span class="oi oi-cloud-upload"></span>Добавить фото
                 </label>
-                <InputFile class="file-select" OnChange="@LoadFile" type="file" id="file-upload" accept=".png,.jpg,.jpeg" placeholder="Обзор" />
+                <InputFile  OnChange="@LoadFile" id="file" accept=".png,.jpg,.jpeg"/>
             
 
             <div class="modal-footer">

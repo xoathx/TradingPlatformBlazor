@@ -12,30 +12,33 @@
     <div class="main">
         <AuthorizeView>
             <Authorized>
-                <div class="top-row px-4 d-flex">
-                    
-                        <a class="logo-site" href="/"><img src="img/resources/logo.png" /></a>
-                        <AuthorizeView Context="any" Roles="Administrator">
-                            <a href="/admin"><span class="oi oi-browser" alt="AdminPanel"></span></a>
-                        </AuthorizeView>
+                <div class="opasity-bg-main top-row px-4 d-flex">
 
-                        @if (user.IdShop != 0)
-                        {<a href="/shop/@ShopUrl(user.IdShop)"><span class="oi oi-briefcase" alt="Buisnes"></span></a>}
-                        @if (user.LevelUser == UserLevel.Third && user.IdShop == 0)
-                        {<a href="/createshop"><span class="oi oi-briefcase" alt="Buisnes"></span></a>}
-                        <a href="/purchases"><span class="oi oi-cart" alt="Покупки"></span></a>
-                        <a href="/sales"><span class="oi oi-transfer" alt="Продажи"></span></a>
-                        <a href="/messager"><span class="oi oi-chat" alt="Messeger"></span></a>
-                        <div class="move-block">
-                            <a class="a-logout" href="/logout"><span class="oi oi-account-logout"></span></a>
-                            <a href="/user/@user.Id" target="_top"><img class="user-img-top" src="/img/avatars/@user.PathAvatar" /></a>
-                        </div>
-                   
+                    <a class="logo-site" href="/"><img src="img/resources/logo.png" /></a>
+                    <AuthorizeView Context="any" Roles="Administrator">
+                        <a href="/admin"><span class="oi oi-browser" alt="AdminPanel"></span></a>
+                    </AuthorizeView>
+
+                    @if (user.IdShop != 0)
+                    {<a href="/shop/@ShopUrl(user.IdShop)"><span class="oi oi-briefcase" alt="Buisnes"></span></a>}
+                    @if (user.LevelUser == UserLevel.Third && user.IdShop == 0)
+                    {<a href="/createshop"><span class="oi oi-briefcase" alt="Buisnes"></span></a>}
+                    <a href="/purchases"><span class="oi oi-cart" alt="Покупки"></span></a>
+                    <a href="/sales"><span class="oi oi-transfer" alt="Продажи"></span></a>
+                    <a href="/messager"><span class="oi oi-chat" alt="Messeger"></span></a>
+                    @*<a class="finance-layout" href="#"><span class="oi oi-dollar" alt="finance"></span></a>*@
+                    <div class="balance-user">@user.Balance</div>
+                    <div class="move-block">
+
+                        <a class="a-logout" href="/logout"><span class="oi oi-account-logout"></span></a>
+                        <a href="/user/@user.Id" target="_top"><img class="user-img-top" src="/img/avatars/@user.PathAvatar" /></a>
                     </div>
+
+                </div>
 </Authorized>
             <NotAuthorized>
                 
-                <div class="top-row px-4 d-flex">
+                <div class="opasity-bg-main top-row px-4 d-flex">
                     <a class="logo-site" href="/"><img src="img/resources/logo.svg" /></a>
                     <div class="move-block">
                         <a href="/signup">Sign up</a>

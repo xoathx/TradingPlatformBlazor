@@ -17,7 +17,7 @@ namespace TradingPlatformBlazor.Data.Services
         }
         public async Task SetOnline(User user)
         {
-            if (!UserStatus.Contains(user))
+            if (UserStatus.FirstOrDefault(u => u.Id == user.Id) == null)
             {
                 UserStatus.Add(user);
             }

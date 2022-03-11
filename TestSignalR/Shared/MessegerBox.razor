@@ -4,6 +4,7 @@
 @inject IHttpContextAccessor htp
 @inject NavigationManager nav
 @implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
 
 <AuthorizeView>
     <NotAuthorized>Авторизуйтесь!</NotAuthorized>
@@ -19,11 +20,15 @@
             <div class="py-2 px-4 border-custom d-none d-lg-block">
                 <div class="d-flex align-items-center py-1">
                     <div class="position-relative">
-                        <img src="/img//avatars/@currentUser.PathAvatar" class="rounded-circle mr-1" alt="@currentUser.NickName" width="40" height="40">
+                        <a href="/user/@currentUser.Id"><img src="/img//avatars/@currentUser.PathAvatar" class="rounded-circle mr-1" alt="@currentUser.NickName" width="40" height="40"></a>
                     </div>
-                    <div class="flex-grow-1 pl-3">
-                        <strong>@currentUser.NickName</strong>
-                        <div class="text-muted small">@if(UserStatus.GetStatus(currentUser.Id)) {<em class="text-success">Online</em>} else {<em>Offline</em> }</div>
+                    <div class="flex-grow-1 pl-3 d-inline">
+                        <a class="link-chat-companion" href="/user/@currentUser.Id">
+                            <strong>@currentUser.NickName</strong></a>
+                            <div class="text-muted small">@if (UserStatus.GetStatus(currentUser.Id))
+                            {<em class="text-success">Online</em>}
+                            else
+                            {<em>Offline</em>}</div>
                     </div>
                     <div>
 
@@ -33,7 +38,7 @@
             </div>
 
             <div class="position-relative">
-                <div class="chat-messages p-4">
+                <div id="messeger-content" class="chat-messages p-4">
 
                     @foreach (var item in messages)
                     {
@@ -57,21 +62,22 @@
                         </div>
                     }
 
-                   
-                    <div class="flex-grow-0 py-3 px-4 border-top">
-                        <div class="input-group">
-                            <input type="text" @bind="messageInput" class="form-control" placeholder="Type your message">
-                            <button class="btn btn-primary" @onclick="Send">Send</button>
-                        </div>
-                    </div>
 
+
+
+                </div>
+                <div class="flex-grow-0 py-3 px-4 border-top">
+                    <div class="input-group">
+                        <input type="text" @bind="messageInput" class="form-control" placeholder="Type your message">
+                        <button class="btn btn-primary" @onclick="Send">Send</button>
+                    </div>
                 </div>
             </div>
         }
     </Authorized>
 </AuthorizeView>
 @code {
-    //[Parameter]
+        //[Parameter]
     public int IdСompanion { get; set; }
     private List<Message> messages = new List<Message>();
     private HubConnection hubConnection;
@@ -84,14 +90,15 @@
     protected override async Task OnInitializedAsync()
     {
 
+        myId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
         hubConnection = new HubConnectionBuilder()
-       .WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
-       {
-           if (htp.HttpContext.Request.Cookies.Count > 0)
-           {
-               opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
-           }
-       }).Build();
+.WithUrl(nav.ToAbsoluteUri("/hub"), opt =>
+{
+    if (htp.HttpContext.Request.Cookies.Count > 0)
+    {
+        opt.Cookies.Add(new Uri(nav.BaseUri), new System.Net.Cookie("Cookie", htp.HttpContext.Request.Cookies.Where(s => s.Key == "Cookie").FirstOrDefault().Value));
+    }
+}).Build();
 
         hubConnection.On<int>("Update", (id) =>
         {
@@ -112,6 +119,14 @@
         });
 
         await hubConnection.StartAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (currentUser != null) 
+        {
+            await JSRuntime.InvokeVoidAsync("scrollDown", "messeger-content"); 
+        }
     }
 
     async Task Send()
@@ -141,7 +156,7 @@
     {
         IdСompanion = id;
         currentUser = SqlUser.GetUserById(IdСompanion);
-        myId = int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
         var fromMessages = SqlMessage.GetMessagesByIdFromAndIdTo(myId, IdСompanion).ToList();
         var toMessages = SqlMessage.GetMessagesByIdFromAndIdTo(IdСompanion, myId).ToList();
         messages.AddRange(fromMessages);

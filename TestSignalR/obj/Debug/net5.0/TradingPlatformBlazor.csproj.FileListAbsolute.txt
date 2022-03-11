@@ -293,10 +293,10 @@ C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\R
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\AccessPage.razor.g.cs
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\MainPage.razor.rz.scp.css
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\ProfileUser.razor.rz.scp.css
-C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\bin\Debug\net5.0\ref\TradingPlatformBlazor.dll
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\PagePurchases.razor.rz.scp.css
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\PageSales.razor.rz.scp.css
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\CategoysLots.razor.rz.scp.css
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\PageShop.razor.rz.scp.css
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\Messager.razor.rz.scp.css
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\MessegerShop.razor.rz.scp.css
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\bin\Debug\net5.0\ref\TradingPlatformBlazor.dll

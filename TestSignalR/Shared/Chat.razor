@@ -2,48 +2,49 @@
 @inject NavigationManager nav
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor htp
 @implements IAsyncDisposable
-@inject TradingPlatformBlazor.Data.Repository.IUser user
+@inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
 @inject TradingPlatformBlazor.Data.Repository.IMessage SqlMessage
+@inject IJSRuntime JSRuntime
 
 
 <div class="page-content page-container" id="page-content">
-        <div class="row container d-flex justify-content-center">
-            <div class="col-md-6">
-                <div class="card card-bordered">
-                    <div class="card-header">
-                        <a href="/user/@currentUser.Id"><img class="avatar" src="/img/avatars/@currentUser.PathAvatar" alt="@currentUser.NickName">  <h4 class="card-title"><strong>@currentUser.NickName</strong></h4></a>
-                    </div>
-                    <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
-                        @foreach(var item in messages)
+    <div class="row container d-flex justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-bordered">
+                <div class="card-header">
+                    <a class="link-chat-companion" href="/user/@currentUser.Id"><img class="avatar d-inline" src="/img/avatars/@currentUser.PathAvatar" alt="@currentUser.NickName">  <h4 class="card-title d-inline"><strong>@currentUser.NickName</strong></h4></a>
+                </div>
+                <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
+                    @foreach (var item in messages)
+                    {
+                        if (item.FromUserId.ToString() == FromId)
                         {
-                            if(item.FromUserId.ToString() == FromId)
-                            {
-                                selectorClass = "media media-chat media-chat-reverse";
-                            }
-                            else { selectorClass = "media media-chat"; }
-                                <div class="@selectorClass">
-                                    <div class="media-body">
-                                        <p>@item.BodyMessage</p>
-                                        <p class="meta"><time datetime="@item.DateMessage.Year">@item.DateMessage.ToString("t")</time></p>
-                                    </div>
-                                </div>
-                            }
-                        
-                        
-                        <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
-                            <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                            selectorClass = "media media-chat media-chat-reverse";
+                        }
+                        else { selectorClass = "media media-chat"; }
+                        <div class="@selectorClass">
+                            <div class="media-body">
+                                <p>@item.BodyMessage</p>
+                                <p class="meta"><time datetime="@item.DateMessage.Year">@item.DateMessage.ToString("t")</time></p>
+                            </div>
                         </div>
-                        <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
-                            <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
-                        </div>
+                    }
+
+
+                    <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+                        <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
                     </div>
-                    <div class="publisher bt-1 border-light"> 
-                    <img class="avatar avatar-xs" src="/img/avatars/@htp.HttpContext.User.Claims.First(i => i.Type == "PathAvatar").Value" alt="..."> 
-                    <input class="publisher-input" @bind="messageInput" type="text" placeholder="Write something"> <button @onclick="Send" class="btn publisher-btn">Send</button> 
+                    <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
+                        <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
                     </div>
+                </div>
+                <div class="publisher bt-1 border-light">
+                    <img class="avatar avatar-xs" src="/img/avatars/@FromUser.PathAvatar" alt="...">
+                    <input class="publisher-input" @bind="messageInput" type="text" placeholder="Write something"> <button @onclick="Send" class="btn publisher-btn">Send</button>
                 </div>
             </div>
         </div>
+    </div>
 </div>
 
 @code {
@@ -54,15 +55,17 @@
     private List<Message> messages = new List<Message>();
     private string messageInput;
     private User currentUser;
+    private User FromUser;
 
     private string selectorClass;
     protected override async Task OnInitializedAsync()
     {
 
-        currentUser = user.GetUserById(ToUserId);
+        currentUser = SqlUser.GetUserById(ToUserId);
         FromId = htp.HttpContext.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier).Value;
-        var fromMessages = SqlMessage.GetMessagesByIdFromAndIdTo(int.Parse(FromId), ToUserId).ToList();
-        var toMessages = SqlMessage.GetMessagesByIdFromAndIdTo(ToUserId, int.Parse(FromId)).ToList();
+        FromUser = SqlUser.GetUserById(int.Parse(FromId));
+        var fromMessages = SqlMessage.GetMessagesByIdFromAndIdTo(FromUser.Id, currentUser.Id).ToList();
+        var toMessages = SqlMessage.GetMessagesByIdFromAndIdTo(currentUser.Id, FromUser.Id).ToList();
         messages.AddRange(fromMessages);
         messages.AddRange(toMessages);
         hubConnection = new HubConnectionBuilder()
@@ -76,9 +79,9 @@
 
         hubConnection.On<Message>("ReceiveMessage", (message) =>
         {
-            //if (message.FromUserId == int.Parse(FromId) || (message.ToUserId == int.Parse(FromId) && message.FromUserId == ToUserId))
-            //{
-            messages.Add(message);
+        //if (message.FromUserId == int.Parse(FromId) || (message.ToUserId == int.Parse(FromId) && message.FromUserId == ToUserId))
+        //{
+        messages.Add(message);
             StateHasChanged();
 
         });
@@ -86,6 +89,11 @@
         await hubConnection.StartAsync();
 
 
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("scrollDown", "chat-content");
     }
 
     async Task Send()

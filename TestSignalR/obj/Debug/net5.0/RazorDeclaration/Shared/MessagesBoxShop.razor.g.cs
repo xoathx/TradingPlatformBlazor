@@ -216,7 +216,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 137 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MessagesBoxShop.razor"
+#line 146 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MessagesBoxShop.razor"
        
     private HubConnection hubConnection;
     private User CurrentUser;
@@ -234,7 +234,7 @@ using Microsoft.Extensions.Primitives;
         if (htp.HttpContext.User.Claims.Any())
         {
             CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
-            if(CurrentUser.IdShop != 0)
+            if (CurrentUser.IdShop != 0)
             {
                 CurrentShop = SqlShop.GetShopById(CurrentUser.IdShop);
             }
@@ -271,6 +271,17 @@ using Microsoft.Extensions.Primitives;
         }
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (CompanionShop != null && CompanionUser == null)
+        {
+            await JSRuntime.InvokeVoidAsync("scrollDown", "messeger-content");
+        }
+        if (CompanionShop == null && CompanionUser != null)
+        {
+            await JSRuntime.InvokeVoidAsync("scrollDown", "messeger-content");
+        }
+    }
     private void ClearWin()
     {
         MessagesShop.Clear();
@@ -347,6 +358,7 @@ using Microsoft.Extensions.Primitives;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager nav { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Services.IUserStatus UserStatus { get; set; }

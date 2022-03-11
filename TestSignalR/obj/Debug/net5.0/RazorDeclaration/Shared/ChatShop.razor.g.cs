@@ -216,7 +216,7 @@ using Microsoft.AspNetCore.SignalR.Client;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 50 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ChatShop.razor"
+#line 52 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\ChatShop.razor"
        
     [Parameter]
     public int ToShopId { get; set; }
@@ -254,6 +254,11 @@ using Microsoft.AspNetCore.SignalR.Client;
         await hubConnection.StartAsync();
 
 
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("scrollDown", "chat-content");
     }
 
     async Task Send()
@@ -295,6 +300,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IMessageShop SqlMessageShop { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }

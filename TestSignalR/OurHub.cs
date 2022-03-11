@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +32,7 @@ namespace TradingPlatformBlazor
             
             if(Context.User.Claims.Any())
             {
+                var features = Context.Features.Get<IHttpConnectionFeature>();
                 CurrentUser = _userContext.GetUserById(int.Parse(Context.UserIdentifier));
                 _userStatus.SetOnline(CurrentUser);
                 _logger.LogWarning("{0} connect", Context.User.Claims.Where(s => s.Type == ClaimTypes.Name).FirstOrDefault().Value);

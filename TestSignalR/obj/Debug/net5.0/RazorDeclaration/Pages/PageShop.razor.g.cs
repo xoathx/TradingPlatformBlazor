@@ -217,7 +217,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 82 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageShop.razor"
+#line 90 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageShop.razor"
        
     [Parameter]
     public string NameShop { get; set; }
