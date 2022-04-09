@@ -216,7 +216,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 58 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MainLayout.razor"
+#line 158 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\MainLayout.razor"
       
         [Inject] IHttpContextAccessor htp { get; set; }
         HubConnection hubConnection;

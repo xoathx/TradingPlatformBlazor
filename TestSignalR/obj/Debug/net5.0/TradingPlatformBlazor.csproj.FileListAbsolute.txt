@@ -300,3 +300,11 @@ C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\s
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\Messager.razor.rz.scp.css
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\MessegerShop.razor.rz.scp.css
 C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\bin\Debug\net5.0\ref\TradingPlatformBlazor.dll
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\PageAboutProject.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\PageAboutProject.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\PageAboutProject.razor.rz.scp.css
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\RazorDeclaration\Pages\PageTermsofuse.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\Razor\Pages\PageTermsofuse.razor.g.cs
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\PageTermsofuse.razor.rz.scp.css
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\LoginPage.razor.rz.scp.css
+C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\obj\Debug\net5.0\scopedcss\Pages\RegistrationPage.razor.rz.scp.css

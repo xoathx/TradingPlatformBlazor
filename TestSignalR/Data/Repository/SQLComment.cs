@@ -32,6 +32,11 @@ namespace TradingPlatformBlazor.Data.Repository
             return _context.Comments.FirstOrDefault(com => com.OfferId == offerId);
         }
 
+        public IEnumerable<Comment> GetCommentsByShopId(int shopId)
+        {
+            return _context.Comments.Where(com => com.ShopId == shopId);
+        }
+
         public IEnumerable<Comment> GetCommentsByToUserId(int toUserId)
         {
             return _context.Comments.Where(com => com.ToUserId == toUserId);

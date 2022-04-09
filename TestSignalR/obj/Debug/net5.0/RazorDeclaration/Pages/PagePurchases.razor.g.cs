@@ -209,7 +209,7 @@ using Microsoft.Extensions.Primitives;
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PagePurchases.razor"
+#line 7 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PagePurchases.razor"
            [Authorize]
 
 #line default
@@ -224,12 +224,11 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 54 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PagePurchases.razor"
+#line 55 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PagePurchases.razor"
            
         private IEnumerable<Offer> Offers;
         private int CurrentUserId;
         private string State;
-
         protected override async Task OnInitializedAsync()
         {
             if (htp.HttpContext.User.Claims.Count() > 0)
@@ -262,6 +261,42 @@ using Microsoft.Extensions.Primitives;
             }
             return State;
         }
+
+        string GetName(Offer item)
+        {
+            if(item.VendorId != 0)
+            {
+                return SqlUser.GetUserById(item.VendorId).NickName;
+            }
+            else
+            {
+                return SqlShop.GetShopById(item.VendorShopId).NameShop;
+            }
+        }
+
+        string GetPathAvatar(Offer item)
+        {
+            if (item.VendorId != 0)
+            {
+                return SqlUser.GetUserById(item.VendorId).PathAvatar;
+            }
+            else
+            {
+                return SqlShop.GetShopById(item.VendorShopId).PathAvatarShop;
+            }
+        }
+
+        string GetUrl(Offer item)
+        {
+            if (item.VendorId != 0)
+            {
+                return "/user/" + item.VendorId;
+            }
+            else
+            {
+                return "/shop/" + SqlShop.GetShopById(item.VendorShopId).ShortNameShop;
+            }
+        }
     
 
 #line default
@@ -269,6 +304,7 @@ using Microsoft.Extensions.Primitives;
 #nullable disable
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IOffer SqlOffer { get; set; }
     }

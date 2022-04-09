@@ -9,7 +9,7 @@ namespace TradingPlatformBlazor.Data.Repository
    public interface ICategory
     {
         IEnumerable<Category> AllCategories();
-
+        Category GetCategoryById(int categoryId);
         void AddCategory(string nameCategory, string descCategory);
         void DeleteCategory(int id);
         void ChangeCategory(Category changedCategory);

@@ -825,6 +825,7 @@ body {
 
 .main {
     flex: 1;
+    min-height: 100%;
 }
 
 .sidebar {
@@ -920,16 +921,52 @@ a {
 }
 .balance-user {
     margin-left: 15px;
-    height: auto;
-    width: auto;
+    width:auto;
+    max-width: 100px;
     background: #d6d5d5;
     color: #7898f6;
     border: 1px solid #d6d5d5;
     padding:2px;
     border-radius: 10px;
+    max-height:50px;
 }
 .finance-layout{
     margin-bottom:3px;
+}
+
+#footer {
+    position:fixed;
+    bottom: 0;
+    left: 0;
+    width: 95%;
+    height:50px;
+}
+.footer-line {
+    border: 1px solid #d6d5d5;
+    width: 80%;
+    margin-left: auto;
+    margin-left:13%;
+    margin-right: auto;
+}
+.footer-content {
+    margin-top: 7px;
+    margin-left: 8%;
+    font-family: 'Rubik', sans-serif;
+}
+.footer-content-item{
+    margin-left:5px;
+}
+.footer-content-item span{
+    font-size:30px;
+    padding-bottom:10px;
+}
+.revers-content {
+    margin-left: 20px;
+}
+
+.content-pos{
+    margin-left:15px;
+    font-size:30px;
 }
 /* Layout*/
 /* ErrorComponent */

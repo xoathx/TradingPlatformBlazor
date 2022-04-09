@@ -217,7 +217,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 26 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\RegistrationPage.razor"
+#line 28 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\RegistrationPage.razor"
        
 
 

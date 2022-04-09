@@ -22,5 +22,10 @@ namespace TradingPlatformBlazor.Data.Models
         public DateTime DateComment { get; set; }
         [Column("value_rating")]
         public byte ValueRating { get; set; }
+        [Column("is_to_shop_comment")]
+        public bool IsToShopComment { get; set; }
+        [Column("to_shop_id")]
+        public int ShopId { get; set; }
+
     }
 }

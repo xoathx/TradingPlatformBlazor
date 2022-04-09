@@ -12,48 +12,148 @@
     <div class="main">
         <AuthorizeView>
             <Authorized>
-                <div class="opasity-bg-main top-row px-4 d-flex">
+                @* <div class="opasity-bg-main top-row px-4 d-flex">
 
-                    <a class="logo-site" href="/"><img src="img/resources/logo.png" /></a>
-                    <AuthorizeView Context="any" Roles="Administrator">
-                        <a href="/admin"><span class="oi oi-browser" alt="AdminPanel"></span></a>
-                    </AuthorizeView>
+            <a class="logo-site" href="/"><img src="img/resources/logo.png" /></a>
+            <AuthorizeView Context="any" Roles="Administrator">
+                <a href="/admin"><span class="oi oi-browser" alt="AdminPanel"></span></a>
+            </AuthorizeView>
 
-                    @if (user.IdShop != 0)
-                    {<a href="/shop/@ShopUrl(user.IdShop)"><span class="oi oi-briefcase" alt="Buisnes"></span></a>}
-                    @if (user.LevelUser == UserLevel.Third && user.IdShop == 0)
-                    {<a href="/createshop"><span class="oi oi-briefcase" alt="Buisnes"></span></a>}
-                    <a href="/purchases"><span class="oi oi-cart" alt="Покупки"></span></a>
-                    <a href="/sales"><span class="oi oi-transfer" alt="Продажи"></span></a>
-                    <a href="/messager"><span class="oi oi-chat" alt="Messeger"></span></a>
-                    @*<a class="finance-layout" href="#"><span class="oi oi-dollar" alt="finance"></span></a>*@
-                    <div class="balance-user">@user.Balance</div>
-                    <div class="move-block">
+            @if (user.IdShop != 0)
+            {<a href="/shop/@ShopUrl(user.IdShop)"><span class="oi oi-briefcase" alt="Buisnes"></span></a>}
+            @if (user.LevelUser == UserLevel.Third && user.IdShop == 0)
+            {<a href="/createshop"><span class="oi oi-briefcase" alt="Buisnes"></span></a>}
+            <a href="/purchases"><span class="oi oi-cart" alt="Покупки"></span></a>
+            <a href="/sales"><span class="oi oi-transfer" alt="Продажи"></span></a>
+            <a href="/messager"><span class="oi oi-chat" alt="Messeger"></span></a>
 
-                        <a class="a-logout" href="/logout"><span class="oi oi-account-logout"></span></a>
-                        <a href="/user/@user.Id" target="_top"><img class="user-img-top" src="/img/avatars/@user.PathAvatar" /></a>
+            <div class="balance-user">@user.Balance</div>
+            <div class="move-block">
+
+                <a class="a-logout" href="/logout"><span class="oi oi-account-logout"></span></a>
+                <a href="/user/@user.Id" target="_top"><img class="user-img-top" src="/img/avatars/@user.PathAvatar" /></a>
+            </div>
+
+        </div>*@
+                <nav class="navbar navbar-expand-lg navbar-light border">
+                    @*<div class="container-fluid">*@
+                    <a class="navbar-brand" href="/">
+                        <img src="img/resources/logo.svg" width="140" height="30" alt="">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse " id="navbarToggler">
+                        <ul class="navbar-nav  mb-2 mb-lg-0 ms-auto">
+                            <AuthorizeView Context="any" Roles="Administrator">
+                                <li class="nav-item content-pos">
+                                    <a href="/admin"><span class="oi oi-browser" alt="AdminPanel"></span></a>
+                                </li>
+                            </AuthorizeView>
+                            @if (user.IdShop != 0)
+                            {
+                                <li class="nav-item content-pos">
+                                    <a href="/shop/@ShopUrl(user.IdShop)"><span class="oi oi-briefcase" alt="Buisnes"></span></a>
+                                </li>
+                            }
+                            @if (user.LevelUser == UserLevel.Third && user.IdShop == 0)
+                            {
+                                <li class="nav-item content-pos">
+                                    <a href="/createshop"><span class="oi oi-briefcase" alt="Buisnes"></span></a>
+                                </li>
+                            }
+                            <li class="nav-item content-pos">
+                                <a href="/purchases"><span class="oi oi-cart" alt="Покупки"></span></a>
+                            </li>
+                            <li class="nav-item content-pos">
+                                <a href="/sales"><span class="oi oi-transfer" alt="Продажи"></span></a>
+                            </li>
+                            <li class="nav-item content-pos">
+                                <a href="/messager"><span class="oi oi-chat" alt="Messeger"></span></a>
+                            </li>
+                            <li class="nav-item">
+                                <div class="balance-user">@user.Balance</div>
+                            </li>
+                        </ul>
+                        <div class="move-block">
+
+                            <a class="a-logout content-pos" href="/logout"><span class="oi oi-account-logout"></span></a>
+                            <a href="/user/@user.Id" target="_top"><img class="user-img-top" src="/img/avatars/@user.PathAvatar" /></a>
+                        </div>
                     </div>
-
-                </div>
-</Authorized>
+                    @*</div>*@
+                </nav>
+            </Authorized>
             <NotAuthorized>
-                
-                <div class="opasity-bg-main top-row px-4 d-flex">
-                    <a class="logo-site" href="/"><img src="img/resources/logo.svg" /></a>
-                    <div class="move-block">
-                        <a href="/signup">Sign up</a>
-                        <a href="/signin">Sign in</a>
+
+                @*<div class="opasity-bg-main top-row px-4 d-flex">
+            <a class="logo-site" href="/"><img src="img/resources/logo.svg" /></a>
+            <div class="move-block">
+                <a href="/signup">Sign up</a>
+                <a href="/signin">Sign in</a>
+            </div>
+        </div>*@
+                <nav class="navbar navbar-expand-lg navbar-light d-flex border">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="/">
+                            <img src="img/resources/logo.svg" width="140" height="30" alt="">
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse " id="navbarToggler">
+                            <ul class="navbar-nav  mb-2 mb-lg-0 ms-auto  ">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="/signup">Sign up</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/signin">Sign in</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                
+                </nav>
+
             </NotAuthorized>
         </AuthorizeView>
 
         <div class="content px-4">
             @Body
+
         </div>
+
+
+
     </div>
+    
 </div>
+<footer id="footer">
+    <div class="footer-line"></div>
+    <div class="footer-content">
+        <div class="row">
+            <div class="col justify-content-start">
+                <div class="footer-content-item d-inline-block">
+                    <p class="copyright ">&#169; 2021-2022 TradingPlatform</p>
+                </div>
+                <div class="footer-content-item d-inline-block">
+                    <a  href="/terms">Пользовательское соглашение</a>
+                </div>
+                <div class="footer-content-item d-inline-block">
+                    <a  href="/about">О проекте</a>
+                </div> 
+            </div>
+        
+            <div class="col-4 revers-content">
+                <div class="footer-content-item d-inline-block">
+                    <a href="https://github.com/xoathx/TradingPlatformBlazor"><span class="oi oi-cloud"></span></a>
+                </div>
+            </div>
+        </div>
+            
+        
+    </div>
+    
+</footer>
 
 @code{
         [Inject] IHttpContextAccessor htp { get; set; }

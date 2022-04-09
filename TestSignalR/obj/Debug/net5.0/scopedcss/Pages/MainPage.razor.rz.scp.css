@@ -6,10 +6,15 @@ body[b-ywmoonnn9r] {
 }
 a[b-ywmoonnn9r] {
     color: #7898f6;
+    text-decoration:none;
 }
 .news-block[b-ywmoonnn9r] {
     border: 1px solid #d6d5d5;
     border-radius: 5px;
     width: 70%;
     height: 500px;
+}
+.category-line[b-ywmoonnn9r] {
+    border: 0.5px solid #d6d5d5;
+    width:100%;
 }

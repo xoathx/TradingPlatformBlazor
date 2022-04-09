@@ -3,18 +3,21 @@
 @inject IHttpContextAccessor http
 @inject IJSRuntime JSRuntime
 
-<h3>Login</h3>
+
 <AuthorizeView>
     <Authorized>
-        Вы уже в системе!
+        <p class="alert-info">Вы уже в системе!</p>
     </Authorized>
     <NotAuthorized>
-        <div class="text-danger">@Message</div>
-        <form method="post" action="login">
-            <input class="form-control col-4" type="text" name="userName" />
-            <input class="form-control col-4" type="password" name="passWord" />
-            <button class="btn btn-secondary">Log in</button>
-        </form>
+        <div class="login-place">
+            <h3 class="text-center">Авторизация</h3>
+            <div class="text-danger">@Message</div>
+            <form method="post" action="login">
+                <input class="form-control col-4" type="text" name="userName" placeholder="Имя" />
+                <input class="form-control col-4" type="password" name="passWord" placeholder="Пароль" />
+                <button class="btn btn-primary login-btn">Войти</button>
+            </form>
+        </div>
     </NotAuthorized>
 </AuthorizeView>
 

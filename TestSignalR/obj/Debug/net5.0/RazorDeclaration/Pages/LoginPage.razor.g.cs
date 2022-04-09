@@ -217,7 +217,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 21 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\LoginPage.razor"
+#line 24 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\LoginPage.razor"
        
 
     public string Message { get; set; } = null;

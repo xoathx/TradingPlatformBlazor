@@ -20,6 +20,9 @@ namespace TradingPlatformBlazor.Data.Models
         public string DescShop { get; set; }
         [Column("shop_avatar")]
         public string PathAvatarShop { get; set; }
+        [Column("shop_balance")]
+        public double ShopBalance { get; set; }
+
 
     }
 }

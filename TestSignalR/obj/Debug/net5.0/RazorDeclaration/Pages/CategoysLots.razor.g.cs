@@ -217,7 +217,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 75 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\CategoysLots.razor"
+#line 84 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\CategoysLots.razor"
        
     [Parameter]
     public int Id { get; set; }
@@ -225,16 +225,21 @@ using Microsoft.Extensions.Primitives;
     private string nameCategory;
     IEnumerable<Lot> allLots = new List<Lot>();
     public bool DialogOpen { get; set; }
-
+    Category CurrentCategory { get; set; }
     IEnumerable<ShopLot> allShopLots = new List<ShopLot>();
 
     protected override async Task OnInitializedAsync()
     {
-        nameCategory = SqlCategory.AllCategories().First(c => c.Id == Id).NameCategory;
-        allLots = SqlLot.LotsByID(Id).ToList();
+        CurrentCategory = SqlCategory.GetCategoryById(Id);
+        if (CurrentCategory != null)
+        {
+            nameCategory = CurrentCategory.NameCategory;
+            allLots = SqlLot.LotsByID(CurrentCategory.Id).ToList();
 
-        allShopLots = SqlShopLot.ShopLotsByCategoryId(Id).ToList();
-        await JSRuntime.InvokeVoidAsync("setTitle", nameCategory);
+            allShopLots = SqlShopLot.ShopLotsByCategoryId(CurrentCategory.Id).ToList();
+            await JSRuntime.InvokeVoidAsync("setTitle", nameCategory);
+        }
+
     }
 
 

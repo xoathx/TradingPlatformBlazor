@@ -217,7 +217,7 @@ using Microsoft.AspNetCore.SignalR.Client;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 42 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\MainPage.razor"
+#line 43 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\MainPage.razor"
        
     IEnumerable<Category> categories = new List<Category>();
     IEnumerable<Category> sorted = new List<Category>();

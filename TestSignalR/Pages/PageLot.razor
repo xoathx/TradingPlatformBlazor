@@ -8,7 +8,10 @@
 @inject IHttpContextAccessor htp
 @inject IJSRuntime JSRuntime
 
-@if(currentLot == null) {<ErrorComponent ErrorCode="404"></ErrorComponent> }
+@if (currentLot == null)
+{<ErrorComponent ErrorCode="404"></ErrorComponent>}
+else
+{
 @if (htp.HttpContext.User.Claims.Count() < 1)
 {
 <ErrorComponent ErrorCode="401"></ErrorComponent>
@@ -54,7 +57,7 @@ else
     {
         <UpdateLot UpdatingLot="@currentLot" OnClose="OnDialogClose"></UpdateLot>
     }
-
+    }
 }
 
 

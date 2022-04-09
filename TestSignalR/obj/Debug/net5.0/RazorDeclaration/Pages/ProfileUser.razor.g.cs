@@ -217,7 +217,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 113 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\ProfileUser.razor"
+#line 112 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\ProfileUser.razor"
        
     [Parameter]
     public int Id { get; set; }

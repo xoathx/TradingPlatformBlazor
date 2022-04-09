@@ -12,6 +12,7 @@ namespace TradingPlatformBlazor.Data.Repository
         void AddShop(Shop shop);
         void RemoveShop(int shopId);
         void UpdateShop(Shop updateShop);
+        void ManyBack(int shopId, double amount);
         Shop GetShopByCreatedId(int createdId);
         Shop GetShopByShortUrl(string shortUrl);
         bool IsNameTaken(string nameShop);

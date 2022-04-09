@@ -32,6 +32,10 @@ namespace TradingPlatformBlazor.Data
         public async Task<ActionResult> LoginMethod([FromForm] string userName, [FromForm] string passWord)
         {
            
+            if(string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(passWord))
+            {
+                return Redirect("/signin?message=error");
+            }
             var currentUser = _context.GetUserByNickname(userName);
             if (currentUser != null)
             {

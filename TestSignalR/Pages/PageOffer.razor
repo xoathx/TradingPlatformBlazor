@@ -215,7 +215,15 @@ else
         currentOffer.IsOpenned = false;
         currentOffer.DateClosing = DateTime.Now;
         currentOffer.StateOffer = StateOffer.Completed;
-        SqlUser.ManyBack(Vendor.Id, currentOffer.LotsPrice);
+        if (currentOffer.VendorId != 0)
+        {
+            SqlUser.ManyBack(Vendor.Id, currentOffer.LotsPrice);
+        }
+        else
+        {
+            SqlShop.ManyBack(currentOffer.VendorShopId, currentOffer.LotsPrice);
+        }
+        SqlUser.ReduceBalance(Customer.Id, currentOffer.LotsPrice);
         SqlOffer.UpdateOffer(currentOffer);
         SqlLot.DeleteLot(SqlLot.GetLotByID(currentOffer.LotId));
 

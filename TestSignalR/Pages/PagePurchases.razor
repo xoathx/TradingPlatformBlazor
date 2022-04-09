@@ -1,6 +1,7 @@
 ﻿@page "/purchases"
 @inject TradingPlatformBlazor.Data.Repository.IOffer SqlOffer
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
 @inject IHttpContextAccessor htp
 @inject IJSRuntime JSRuntime
 @attribute [Authorize]
@@ -30,9 +31,9 @@
                             <div class="col border-right"><p>#@item.IdentifierName</p></div>
                             <div class="col-2 border-right desc-offer-sales"><p>@item.LotsDesc</p></div>
                             <div class="col border-right vendor-info-pagepurchases d-inline">
-                                <a class="a-pagesales" href="/user/@item.VendorId">
-                                    <img class="avatar avatar-customer-pagesales" src="img/avatars/@SqlUser.GetUserById(item.VendorId).PathAvatar" />
-                                    <div class="nickname-customer-pagesales">@SqlUser.GetUserById(item.VendorId).NickName</div>
+                                <a class="a-pagesales" href="@GetUrl(item)">
+                                    <img class="avatar avatar-customer-pagesales" src="img/avatars/@GetPathAvatar(item)" />
+                                    <div class="nickname-customer-pagesales">@GetName(item)</div>
                                 </a>
                             </div>
                             <div class="col border-right"><p>@StateCurOffer(item.StateOffer)</p></div>
@@ -55,7 +56,6 @@
         private IEnumerable<Offer> Offers;
         private int CurrentUserId;
         private string State;
-
         protected override async Task OnInitializedAsync()
         {
             if (htp.HttpContext.User.Claims.Count() > 0)
@@ -87,6 +87,42 @@
                     break;
             }
             return State;
+        }
+
+        string GetName(Offer item)
+        {
+            if(item.VendorId != 0)
+            {
+                return SqlUser.GetUserById(item.VendorId).NickName;
+            }
+            else
+            {
+                return SqlShop.GetShopById(item.VendorShopId).NameShop;
+            }
+        }
+
+        string GetPathAvatar(Offer item)
+        {
+            if (item.VendorId != 0)
+            {
+                return SqlUser.GetUserById(item.VendorId).PathAvatar;
+            }
+            else
+            {
+                return SqlShop.GetShopById(item.VendorShopId).PathAvatarShop;
+            }
+        }
+
+        string GetUrl(Offer item)
+        {
+            if (item.VendorId != 0)
+            {
+                return "/user/" + item.VendorId;
+            }
+            else
+            {
+                return "/shop/" + SqlShop.GetShopById(item.VendorShopId).ShortNameShop;
+            }
         }
     }
 

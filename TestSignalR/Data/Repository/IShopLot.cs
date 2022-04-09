@@ -10,10 +10,12 @@ namespace TradingPlatformBlazor.Data.Repository
     {
         IEnumerable<ShopLot> AllLots();
         IEnumerable<ShopLot> ShopLotsByCategoryId(int categoryId);
+        IEnumerable<ShopLot> GetShopLotsByShopId(int shopId);
+        ShopLot GetShopLotById(int shopLotId);
         void AddLot(ShopLot addedLot);
         void DeleteLot(ShopLot deletedLot);
         void UpdateLot(ShopLot changedLot);
-        IEnumerable<ShopLot> GetShopLotsByShopId(int shopId);
-        ShopLot GetShopLotById(int shopLotId);
+        void RemoveAllShopLotsByCategoryId(int categoryId);
+        
     }
 }

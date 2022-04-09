@@ -6,20 +6,28 @@
 @attribute [Authorize]
 
 @if(valueClaim != "Administrator") { <ErrorComponent ErrorCode="404"></ErrorComponent>}
-<AuthorizeView Roles="Administrator">
+<AuthorizeView Context="authCtx" Roles="Administrator">
     <h3>PageAdminPanel</h3>
     <a href="/add_category" class="btn btn-group">Добавить категорию</a>
 
-    <button @onclick="OpenDialog">Поиск пользователя</button>
+    <button  @onclick="OpenDialog">Поиск пользователя</button>
 
-
+    
     @if (DialogOpen)
     {
-        <FindUser OnClose="OnDialogClose"></FindUser>
+        <FindUser  OnClose="OnDialogClose"></FindUser>
     }
     <button @onclick="Test">test</button>
+
+    <button onclick="returnArrayAsync()">
+        Trigger .NET static method
+    </button>
+    
 </AuthorizeView>
 
+<CascadingValue Value="info">
+    
+</CascadingValue>
 
 
 
@@ -27,6 +35,7 @@
 @code {
     private List<User> onlineUsers;
 
+    private string info = "Tested cascading value!";
 
     public bool DialogOpen { get; set; }
 
@@ -51,6 +60,12 @@
 
     private void Test()
     {
-        onlineUsers = userStatus.GetOnlineUsers();
+
+    }
+
+    [JSInvokable]
+    public static Task<int[]> ReturnArrayAsync()
+    {
+        return Task.FromResult(new int[] { 1, 2, 3 });
     }
 }

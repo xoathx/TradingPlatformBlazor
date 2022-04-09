@@ -93,9 +93,17 @@ namespace TradingPlatformBlazor.Migrations
                         .HasColumnType("int")
                         .HasColumnName("from_user_id");
 
+                    b.Property<bool>("IsToShopComment")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_to_shop_comment");
+
                     b.Property<int>("OfferId")
                         .HasColumnType("int")
                         .HasColumnName("offer_id");
+
+                    b.Property<int>("ShopId")
+                        .HasColumnType("int")
+                        .HasColumnName("to_shop_id");
 
                     b.Property<int>("ToUserId")
                         .HasColumnType("int")
@@ -312,6 +320,10 @@ namespace TradingPlatformBlazor.Migrations
                     b.Property<string>("PathAvatarShop")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("shop_avatar");
+
+                    b.Property<double>("ShopBalance")
+                        .HasColumnType("float")
+                        .HasColumnName("shop_balance");
 
                     b.Property<string>("ShortNameShop")
                         .HasColumnType("nvarchar(max)")

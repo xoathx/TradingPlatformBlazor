@@ -228,6 +228,7 @@ using Microsoft.Extensions.Primitives;
 
     protected override async Task OnInitializedAsync()
     {
+       
 
         CurrentAccessToken = SqlToken.FindToken(Token);
         if (CurrentAccessToken == null)

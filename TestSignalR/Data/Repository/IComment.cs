@@ -10,6 +10,7 @@ namespace TradingPlatformBlazor.Data.Repository
     {
         Comment GetCommentByOfferId(int offerId);
         IEnumerable<Comment> GetCommentsByToUserId(int toUserId);
+        IEnumerable<Comment> GetCommentsByShopId(int shopId);
         void AddComment(Comment comment);
         void RemoveComment(int commentId);
         void ChangeComment(Comment changedComment);

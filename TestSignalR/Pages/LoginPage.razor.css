@@ -1,0 +1,13 @@
+﻿body {
+}
+.login-place{
+    max-width: 500px;
+    margin-top:5%;
+    margin-left:auto;
+    margin-right:auto;
+}
+.login-btn {
+    margin-left: 40%;
+    margin-top: 10px;
+
+}

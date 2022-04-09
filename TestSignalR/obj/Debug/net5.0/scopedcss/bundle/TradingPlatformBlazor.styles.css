@@ -7,22 +7,50 @@ button[b-izu0hnn6a8]{
 .addlot[b-izu0hnn6a8] {
     margin: auto;
     cursor: pointer;
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     border: 5px solid #7898f6;
     border-radius: 50px;
 }
     .addlot span[b-izu0hnn6a8] {
         text-align: center;
         color: ;
-        font-size: 30px;
+        font-size: 24px;
         display: block;
-        margin-top: 32%;
+        margin-top: 17%;
         margin-left: auto;
         margin-right: auto;
     }
 .name-category[b-izu0hnn6a8] {
     color: #d6d5d5;
+}
+.block-addlot[b-izu0hnn6a8]{
+    margin-left:1%;
+}
+
+@media (max-width: 900px){
+    .users-lots[b-izu0hnn6a8] {
+        display: flex;
+        flex-direction: column;
+    }
+    .shops-lots[b-izu0hnn6a8] {
+        display: flex;
+        flex-direction: column;
+    }
+}
+/* _content/TradingPlatformBlazor/Pages/LoginPage.razor.rz.scp.css */
+body[b-nm27jlav4c] {
+}
+.login-place[b-nm27jlav4c]{
+    max-width: 500px;
+    margin-top:5%;
+    margin-left:auto;
+    margin-right:auto;
+}
+.login-btn[b-nm27jlav4c] {
+    margin-left: 40%;
+    margin-top: 10px;
+
 }
 /* _content/TradingPlatformBlazor/Pages/MainPage.razor.rz.scp.css */
 body[b-ywmoonnn9r] {
@@ -33,12 +61,17 @@ body[b-ywmoonnn9r] {
 }
 a[b-ywmoonnn9r] {
     color: #7898f6;
+    text-decoration:none;
 }
 .news-block[b-ywmoonnn9r] {
     border: 1px solid #d6d5d5;
     border-radius: 5px;
     width: 70%;
     height: 500px;
+}
+.category-line[b-ywmoonnn9r] {
+    border: 0.5px solid #d6d5d5;
+    width:100%;
 }
 /* _content/TradingPlatformBlazor/Pages/Messager.razor.rz.scp.css */
 body[b-sq7nxjr1ul] {
@@ -96,6 +129,41 @@ body[b-zk8afb1vjv] {
 
 .chats[b-zk8afb1vjv] {
 }
+/* _content/TradingPlatformBlazor/Pages/PageAboutProject.razor.rz.scp.css */
+body[b-b0apug4u8t] {
+}
+
+.name-project[b-b0apug4u8t]{
+
+}
+.line[b-b0apug4u8t] {
+    border: 1px solid #f2f2f2;
+    max-width: 90%;
+}
+.dependes[b-b0apug4u8t] {
+    text-align: center;
+    font-family: 'Rubik', sans-serif;
+}
+
+.dependes li[b-b0apug4u8t] {
+    list-style-type: none;
+    margin-top: 10px;
+}
+.content p[b-b0apug4u8t]{
+    text-align:center;
+}
+.chapter[b-b0apug4u8t] {
+    font-family: 'Courier New', Courier, monospace;
+    text-align:left;
+}
+
+.copy[b-b0apug4u8t]{
+    margin-top:10%;
+    text-align:center;
+}
+.p-thema[b-b0apug4u8t]{
+    font-size:24px;
+}
 /* _content/TradingPlatformBlazor/Pages/PagePurchases.razor.rz.scp.css */
 body[b-419ogtr201] {
 }
@@ -134,8 +202,8 @@ h1[b-0i4a7kztm1] {
 .settings[b-0i4a7kztm1] {
     margin: auto;
     cursor: pointer;
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     border: 5px solid #7898f6;
     border-radius: 50px;
 }
@@ -143,7 +211,7 @@ h1[b-0i4a7kztm1] {
     .settings span[b-0i4a7kztm1] {
         text-align: center;
         color: #7898f6;
-        font-size: 30px;
+        font-size: 14px;
         display: block;
         margin-top: 32%;
         margin-left: auto;
@@ -157,6 +225,80 @@ h1[b-0i4a7kztm1] {
     margin: 15px;
 }
 
+.a-comment-user[b-0i4a7kztm1] {
+    color: black;
+    text-decoration: none;
+}
+
+    .a-comment-user:hover[b-0i4a7kztm1] {
+        color: black;
+        text-decoration: none;
+    }
+.comment-body[b-0i4a7kztm1] {
+    max-height: 50px;
+    height: 50px;
+    margin-top: 0;
+    text-align: center;
+}
+
+    .comment-body:hover[b-0i4a7kztm1] {
+        background-color: #ECECEC;
+    }
+.nickname-comment-user[b-0i4a7kztm1] {
+    padding-top: 10px;
+}
+
+.avatar-comment-user[b-0i4a7kztm1] {
+    margin-bottom: 5px;
+}
+
+.bodytext-comment-user[b-0i4a7kztm1] {
+    padding-top: 10px;
+    word-break: break-all;
+    min-height: 50px;
+}
+.rating-mini[b-0i4a7kztm1] {
+    display: inline-block;
+    font-size: 0;
+}
+
+    .rating-mini span[b-0i4a7kztm1] {
+        padding: 0;
+        font-size: 20px;
+        line-height: 1;
+        color: lightgrey;
+    }
+
+    .rating-mini > span[b-0i4a7kztm1]:before {
+        content: '★';
+    }
+
+    .rating-mini > span.active[b-0i4a7kztm1] {
+        color: gold;
+    }
+.rating-comment-user[b-0i4a7kztm1] {
+    padding-top: 15px;
+    padding-left: 80px;
+}
+.comments-user[b-0i4a7kztm1] {
+    max-width: 700px;
+    margin-top: 30px;
+}
+.h-comments-user[b-0i4a7kztm1] {
+    margin-left: 14px;
+}
+/* _content/TradingPlatformBlazor/Pages/PageTermsofuse.razor.rz.scp.css */
+body[b-0zdrqqkmxt] {
+
+}
+
+.article[b-0zdrqqkmxt]{
+    margin-left:100px;
+    margin-top:20px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size:20px;
+    
+}
 /* _content/TradingPlatformBlazor/Pages/ProfileUser.razor.rz.scp.css */
 body[b-jno4ptqhca] {
 }
@@ -222,20 +364,17 @@ body[b-jno4ptqhca] {
 }
 
 .nickname-comment-user[b-jno4ptqhca] {
-    height: 50px;
     padding-top: 10px;
 }
 
 .bodytext-comment-user[b-jno4ptqhca] {
-    height: 50px;
     padding-top: 10px;
     word-break: break-all;
     min-height: 50px;
-    height: auto;
 }
 
 .rating-comment-user[b-jno4ptqhca] {
-    height: 50px;
+
     padding-top: 15px;
     padding-left: 80px;
 }
@@ -245,8 +384,8 @@ body[b-jno4ptqhca] {
 }
 
 .comment-body[b-jno4ptqhca] {
-    min-height: 50px;
-    height: auto;
+    max-height: 50px;
+    height:50px;
     margin-top: 0;
     text-align: center;
 }
@@ -282,18 +421,40 @@ body[b-jno4ptqhca] {
 .lot-body:hover[b-jno4ptqhca] {
     background-color: #ECECEC;
 }
-.set-button[b-jno4ptqhca]{
-    display:none;
+.set-button[b-jno4ptqhca] {
+    display: none;
 }
-.input-file-block[b-jno4ptqhca] {
-    border: 1px solid #7898f6;
-    padding: 3px;
-    width: auto;
-    height: auto;
-    color: white;
-    background: #7898f6;
-    cursor:pointer;
-    border-radius:5px;
+
+.settings[b-jno4ptqhca] {
+    margin: auto;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #7898f6;
+    border-radius: 50px;
+}
+
+    .settings span[b-jno4ptqhca] {
+        text-align: center;
+        color: #7898f6;
+        font-size: 14px;
+        display: block;
+        margin-top: 32%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+/* _content/TradingPlatformBlazor/Pages/RegistrationPage.razor.rz.scp.css */
+body[b-1o0c4h7lly] {
+}
+.reg-place[b-1o0c4h7lly] {
+    max-width: 500px;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.reg-btn[b-1o0c4h7lly] {
+    margin-left: 35%;
+    margin-top: 10px;
 }
 /* _content/TradingPlatformBlazor/Shared/NavMenu.razor.rz.scp.css */
 .navbar-toggler[b-we45fpdhti] {

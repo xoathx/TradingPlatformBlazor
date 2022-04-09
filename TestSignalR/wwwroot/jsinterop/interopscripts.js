@@ -18,3 +18,10 @@ function getRandomInt(max) {
 //    var path = 'url(img/bg-main/bg-' + id + '.png)';
 //    document.body.style.backgroundImage = path;
 //});
+
+window.returnArrayAsync = () => {
+    DotNet.invokeMethodAsync('TradingPlatformBlazor', 'ReturnArrayAsync')
+        .then(data => {
+            console.log(data);
+        });
+};

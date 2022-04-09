@@ -52,5 +52,17 @@ namespace TradingPlatformBlazor.Data.Repository
             _context.SaveChanges();
             
         }
+
+        public void RemoveAllShopLotsByCategoryId(int categoryId)
+        {
+            var categoryLots = _context.ShopLots.Where(lots => lots.CategoryId == categoryId).ToList();
+            if (categoryLots.Any())
+            {
+                foreach (var lot in categoryLots)
+                {
+                    DeleteLot(lot);
+                }
+            }
+        }
     }
 }

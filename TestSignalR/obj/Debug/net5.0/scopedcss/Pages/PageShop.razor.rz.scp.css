@@ -9,8 +9,8 @@ h1[b-0i4a7kztm1] {
 .settings[b-0i4a7kztm1] {
     margin: auto;
     cursor: pointer;
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     border: 5px solid #7898f6;
     border-radius: 50px;
 }
@@ -18,7 +18,7 @@ h1[b-0i4a7kztm1] {
     .settings span[b-0i4a7kztm1] {
         text-align: center;
         color: #7898f6;
-        font-size: 30px;
+        font-size: 14px;
         display: block;
         margin-top: 32%;
         margin-left: auto;
@@ -32,3 +32,65 @@ h1[b-0i4a7kztm1] {
     margin: 15px;
 }
 
+.a-comment-user[b-0i4a7kztm1] {
+    color: black;
+    text-decoration: none;
+}
+
+    .a-comment-user:hover[b-0i4a7kztm1] {
+        color: black;
+        text-decoration: none;
+    }
+.comment-body[b-0i4a7kztm1] {
+    max-height: 50px;
+    height: 50px;
+    margin-top: 0;
+    text-align: center;
+}
+
+    .comment-body:hover[b-0i4a7kztm1] {
+        background-color: #ECECEC;
+    }
+.nickname-comment-user[b-0i4a7kztm1] {
+    padding-top: 10px;
+}
+
+.avatar-comment-user[b-0i4a7kztm1] {
+    margin-bottom: 5px;
+}
+
+.bodytext-comment-user[b-0i4a7kztm1] {
+    padding-top: 10px;
+    word-break: break-all;
+    min-height: 50px;
+}
+.rating-mini[b-0i4a7kztm1] {
+    display: inline-block;
+    font-size: 0;
+}
+
+    .rating-mini span[b-0i4a7kztm1] {
+        padding: 0;
+        font-size: 20px;
+        line-height: 1;
+        color: lightgrey;
+    }
+
+    .rating-mini > span[b-0i4a7kztm1]:before {
+        content: '★';
+    }
+
+    .rating-mini > span.active[b-0i4a7kztm1] {
+        color: gold;
+    }
+.rating-comment-user[b-0i4a7kztm1] {
+    padding-top: 15px;
+    padding-left: 80px;
+}
+.comments-user[b-0i4a7kztm1] {
+    max-width: 700px;
+    margin-top: 30px;
+}
+.h-comments-user[b-0i4a7kztm1] {
+    margin-left: 14px;
+}

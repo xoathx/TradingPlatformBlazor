@@ -225,6 +225,7 @@ using Microsoft.Extensions.Primitives;
     private byte Rate;
     private string message;
     private string BodyCommentText;
+    private int ToId;
 
     private Task ModalCancel()
     {
@@ -237,18 +238,38 @@ using Microsoft.Extensions.Primitives;
             return Task.CompletedTask;
         }
         else {
-            Comment comment = new Comment()
+            if(CurrentOffer.VendorId != 0)
             {
-                FromUserId = CurrentOffer.CustomerId,
-                ToUserId = CurrentOffer.VendorId,
-                OfferId = CurrentOffer.Id,
-                BodyComment = BodyCommentText,
-                DateComment = DateTime.Now,
-                ValueRating = Rate
-            };
-            SqlComment.AddComment(comment);
-            CurrentOffer.IsCommented = true;
-            SqlOffer.UpdateOffer(CurrentOffer);
+                Comment comment = new Comment()
+                {
+                    FromUserId = CurrentOffer.CustomerId,
+                    ToUserId = CurrentOffer.VendorId,
+                    OfferId = CurrentOffer.Id,
+                    BodyComment = BodyCommentText,
+                    DateComment = DateTime.Now,
+                    ValueRating = Rate
+                };
+                SqlComment.AddComment(comment);
+                CurrentOffer.IsCommented = true;
+                SqlOffer.UpdateOffer(CurrentOffer);
+            }
+            else
+            {
+                Comment comment = new Comment()
+                {
+                    FromUserId = CurrentOffer.CustomerId,
+                    ShopId = CurrentOffer.VendorShopId,
+                    OfferId = CurrentOffer.Id,
+                    BodyComment = BodyCommentText,
+                    DateComment = DateTime.Now,
+                    ValueRating = Rate,
+                    IsToShopComment = true
+                };
+                SqlComment.AddComment(comment);
+                CurrentOffer.IsCommented = true;
+                SqlOffer.UpdateOffer(CurrentOffer);
+            }
+
             return OnClose.InvokeAsync(false);
         }
     }

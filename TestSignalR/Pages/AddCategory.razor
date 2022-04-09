@@ -1,4 +1,6 @@
 ﻿@inject TradingPlatformBlazor.Data.Repository.ICategory SqlCategory
+@inject TradingPlatformBlazor.Data.Repository.ILot SqlLot
+@inject TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot
 @inject IJSRuntime JSRuntime
 @page "/add_category"
 @attribute [Authorize(Roles = nameof(UserRole.Administrator))]
@@ -67,6 +69,9 @@
 
     private void DeleteCategory(int id)
     {
+        SqlShopLot.RemoveAllShopLotsByCategoryId(id);
+        SqlLot.RemoveAllLotsByCategoryId(id);
         SqlCategory.DeleteCategory(id);
+
     }
 }

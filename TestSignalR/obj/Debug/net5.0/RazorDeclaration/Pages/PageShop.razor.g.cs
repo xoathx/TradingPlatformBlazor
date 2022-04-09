@@ -217,14 +217,16 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 90 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageShop.razor"
+#line 132 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageShop.razor"
        
     [Parameter]
     public string NameShop { get; set; }
     private Shop CurrentShop;
     private User CurrentUser;
     private string role;
+    string selector;
     IEnumerable<ShopLot> shopLots = new List<ShopLot>();
+    IEnumerable<Comment> Comments = new List<Comment>();
 
     public bool DialogOpen { get; set; }
 
@@ -238,6 +240,7 @@ using Microsoft.Extensions.Primitives;
             {
                 CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
             }
+            Comments = SqlComment.GetCommentsByShopId(CurrentShop.Id).ToList();
             role = SqlUser.GetUserById(CurrentShop.CreatedId).NickName;
             shopLots = SqlShopLot.GetShopLotsByShopId(CurrentShop.Id).ToList();
             await JSRuntime.InvokeVoidAsync("setTitle", "Магазин " + CurrentShop.NameShop);
@@ -278,6 +281,7 @@ using Microsoft.Extensions.Primitives;
 #nullable disable
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IHttpContextAccessor htp { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IComment SqlComment { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IUser SqlUser { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShop SqlShop { get; set; }

@@ -62,20 +62,17 @@ body[b-jno4ptqhca] {
 }
 
 .nickname-comment-user[b-jno4ptqhca] {
-    height: 50px;
     padding-top: 10px;
 }
 
 .bodytext-comment-user[b-jno4ptqhca] {
-    height: 50px;
     padding-top: 10px;
     word-break: break-all;
     min-height: 50px;
-    height: auto;
 }
 
 .rating-comment-user[b-jno4ptqhca] {
-    height: 50px;
+
     padding-top: 15px;
     padding-left: 80px;
 }
@@ -85,8 +82,8 @@ body[b-jno4ptqhca] {
 }
 
 .comment-body[b-jno4ptqhca] {
-    min-height: 50px;
-    height: auto;
+    max-height: 50px;
+    height:50px;
     margin-top: 0;
     text-align: center;
 }
@@ -122,16 +119,25 @@ body[b-jno4ptqhca] {
 .lot-body:hover[b-jno4ptqhca] {
     background-color: #ECECEC;
 }
-.set-button[b-jno4ptqhca]{
-    display:none;
+.set-button[b-jno4ptqhca] {
+    display: none;
 }
-.input-file-block[b-jno4ptqhca] {
-    border: 1px solid #7898f6;
-    padding: 3px;
-    width: auto;
-    height: auto;
-    color: white;
-    background: #7898f6;
-    cursor:pointer;
-    border-radius:5px;
+
+.settings[b-jno4ptqhca] {
+    margin: auto;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #7898f6;
+    border-radius: 50px;
 }
+
+    .settings span[b-jno4ptqhca] {
+        text-align: center;
+        color: #7898f6;
+        font-size: 14px;
+        display: block;
+        margin-top: 32%;
+        margin-left: auto;
+        margin-right: auto;
+    }

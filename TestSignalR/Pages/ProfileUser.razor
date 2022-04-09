@@ -17,12 +17,11 @@ else
     <img class="profile-avatar d-inline" src="/img/avatars/@user.PathAvatar" />
     <AuthorizeView Roles="@user.NickName">
         @*<button class="material-icons" @onclick="OpenSettings">publish</button>*@
-        <div class="input-avatar d-inline">
-                <label for="file-upload" class="input-file-block">
-                    <i class="oi oi-data-transfer-upload"></i>Upload
-                </label>
-            
-            <button id="file-upload" class="set-button" @onclick="@OpenSettings"></button>
+        <div class="d-inline">
+            <label class="settings" for="set-button">
+                <span class="oi oi-terminal"></span>
+            </label>
+            <button class="set-button" id="set-button" @onclick="OpenSettings"></button>
         </div>
     </AuthorizeView>
 
@@ -70,39 +69,39 @@ else
         <div class="container">
             @foreach (var item in CommentsAbUser)
             {
-                <a class="a-comment-user" href="/offer/@item.OfferId">
-                    <div class="row border comment-body">
+                
+            <a class="a-comment-user" href="/offer/@item.OfferId">
+                <div class="row border comment-body">
 
-                        <a class="a-comment-user" href="/user/@item.FromUserId" target="_top">
-                            <div class="col nickname-comment-user ">
-                                <img class="avatar d-inline avatar-comment-user" src="/img/avatars/@SqlUser.GetUserById(item.FromUserId).PathAvatar" />
-                                @SqlUser.GetUserById(item.FromUserId).NickName
-                            </div>
-                        </a>
-                        <div class="col-6 col-sm-3 bodytext-comment-user">
-                            <p>@item.BodyComment</p>
-                        </div>
-                        <div class="col">
-                            <div class="rating-mini rating-comment-user">
-                                @for (int i = 1; i <= 5; i++)
+
+                    <div class="col nickname-comment-user">
+                        <img class="avatar d-inline avatar-comment-user" src="/img/avatars/@SqlUser.GetUserById(item.FromUserId).PathAvatar" />
+                        @SqlUser.GetUserById(item.FromUserId).NickName
+                    </div>
+                    <div class="col bodytext-comment-user"><p>@item.BodyComment</p></div>
+                    <div class="col">
+                        <div class="rating-mini rating-comment-user">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= item.ValueRating)
                                 {
-                                    if (i <= item.ValueRating)
-                                    {
-                                        selector = "active";
-                                        <span class="@selector"></span>
-                                    }
-                                    else
-                                    {
-                                        <span></span>
-                                    }
+                                    selector = "active";
+                                    <span class="@selector"></span>
                                 }
+                                else
+                                {
+                                    <span></span>
+                                }
+                            }
 
-                            </div>
                         </div>
                     </div>
-                </a>
-            }
-        </div>
+                </div>
+
+            </a>
+
+                    }
+            </div>
     </div>
     @if (DialogOpen)
     {

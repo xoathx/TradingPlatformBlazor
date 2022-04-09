@@ -3,6 +3,7 @@
 @inject TradingPlatformBlazor.Data.Repository.IShop SqlShop
 @inject TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot
 @inject TradingPlatformBlazor.Data.Repository.IUser SqlUser
+@inject TradingPlatformBlazor.Data.Repository.IComment SqlComment
 @inject IHttpContextAccessor htp
 @inject IJSRuntime JSRuntime
 
@@ -74,6 +75,47 @@
                         }
                     </div>
                 </div>
+                <div class="row">
+                    <div class="comments-user ">
+                        <div class="h-comments-user">
+                            <p class="text-muted">Отзывы</p>
+                        </div>
+                        <div class="container">
+                            @foreach (var comment in Comments)
+                            {
+                                <a class="a-comment-user" href="/offer/@comment.OfferId">
+                                    <div class="row border comment-body">
+
+
+                                        <div class="col nickname-comment-user">
+                                            <img class="avatar d-inline avatar-comment-user" src="/img/avatars/@SqlUser.GetUserById(comment.FromUserId).PathAvatar" />
+                                            @SqlUser.GetUserById(comment.FromUserId).NickName
+                                        </div>
+                                        <div class="col bodytext-comment-user"><p>@comment.BodyComment</p></div>
+                                        <div class="col">
+                                            <div class="rating-mini rating-comment-user">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= comment.ValueRating)
+                                                    {
+                                                        selector = "active";
+                                                        <span class="@selector"></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span></span>
+                                                    }
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
         }
 
@@ -93,7 +135,9 @@
     private Shop CurrentShop;
     private User CurrentUser;
     private string role;
+    string selector;
     IEnumerable<ShopLot> shopLots = new List<ShopLot>();
+    IEnumerable<Comment> Comments = new List<Comment>();
 
     public bool DialogOpen { get; set; }
 
@@ -107,6 +151,7 @@
             {
                 CurrentUser = SqlUser.GetUserById(int.Parse(htp.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
             }
+            Comments = SqlComment.GetCommentsByShopId(CurrentShop.Id).ToList();
             role = SqlUser.GetUserById(CurrentShop.CreatedId).NickName;
             shopLots = SqlShopLot.GetShopLotsByShopId(CurrentShop.Id).ToList();
             await JSRuntime.InvokeVoidAsync("setTitle", "Магазин " + CurrentShop.NameShop);

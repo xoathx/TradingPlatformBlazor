@@ -49,6 +49,11 @@ namespace TradingPlatformBlazor.Data.Repository
             _context.SaveChanges();
         }
 
+        public Category GetCategoryById(int categoryId)
+        {
+            return _context.Categories.FirstOrDefault(category => category.Id == categoryId);
+        }
+
         public string GetNameCategory(int id)
         {
             return _context.Categories.FirstOrDefault(n => n.Id == id).NameCategory;

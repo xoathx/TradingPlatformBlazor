@@ -224,10 +224,11 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 27 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageAdminPanel.razor"
+#line 35 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageAdminPanel.razor"
        
     private List<User> onlineUsers;
 
+    private string info = "Tested cascading value!";
 
     public bool DialogOpen { get; set; }
 
@@ -252,7 +253,13 @@ using Microsoft.Extensions.Primitives;
 
     private void Test()
     {
-        onlineUsers = userStatus.GetOnlineUsers();
+
+    }
+
+    [JSInvokable]
+    public static Task<int[]> ReturnArrayAsync()
+    {
+        return Task.FromResult(new int[] { 1, 2, 3 });
     }
 
 #line default

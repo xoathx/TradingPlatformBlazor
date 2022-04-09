@@ -7,19 +7,21 @@
         <p class="alert-info">Вы уже зарегистрированы</p>
     </Authorized>
     <NotAuthorized>
-        <h3>Registration</h3>
-        <div class="text-danger">@Message</div>
-        <form method="post" action="registration">
-            <label for="input-nick">Desired Nickname:</label>
-            <input name="UserName" type="text" id="input-nick" class="form-control col-4" placeholder="Nickname" />
-            <label for="input-pass">Desired Password:</label>
-            <input name="PwdCrypt" type="password" id="input-pass" class="form-control col-4" placeholder="Password" />
-            <label for="input-apass">Password again:</label>
-            <input name="rPwdCrypt" type="password" id="input-apass" class="form-control col-4" placeholder="Password again" />
-            <label for="input-email">Your e-mail:</label>
-            <input name="Email" type="email" id="input-email" class="form-control col-4" placeholder="E-mail" />
-            <button class="btn btn-primary">Registrtation</button>
-        </form>
+        <div class="reg-place">
+            <h3 class="text-center">Регистрация</h3>
+            <div class="text-danger">@Message</div>
+            <form method="post" action="registration">
+
+                <input name="UserName" type="text" id="input-nick" class="form-control col-4" placeholder="Придумайте имя" />
+                
+                <input name="PwdCrypt" type="password" id="input-pass" class="form-control col-4" placeholder="Пароль" />
+
+                <input name="rPwdCrypt" type="password" id="input-apass" class="form-control col-4" placeholder="Повторите пароль" />
+
+                <input name="Email" type="email" id="input-email" class="form-control col-4" placeholder="Ваш E-mail" />
+                <button class="btn btn-primary reg-btn">Регистрация</button>
+            </form>
+        </div>
         <h3 class="text-success text-center">@Done</h3>
     </NotAuthorized>
 </AuthorizeView>

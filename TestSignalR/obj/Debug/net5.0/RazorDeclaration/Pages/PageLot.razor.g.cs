@@ -217,7 +217,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 61 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageLot.razor"
+#line 64 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\PageLot.razor"
        
 
     [Parameter]

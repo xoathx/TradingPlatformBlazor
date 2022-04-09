@@ -1,0 +1,12 @@
+﻿body {
+}
+.reg-place {
+    max-width: 500px;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.reg-btn {
+    margin-left: 35%;
+    margin-top: 10px;
+}

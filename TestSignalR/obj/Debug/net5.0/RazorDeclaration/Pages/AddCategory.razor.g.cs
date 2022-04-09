@@ -209,7 +209,7 @@ using Microsoft.Extensions.Primitives;
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AddCategory.razor"
+#line 6 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AddCategory.razor"
            [Authorize(Roles = nameof(UserRole.Administrator))]
 
 #line default
@@ -224,7 +224,7 @@ using Microsoft.Extensions.Primitives;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 37 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AddCategory.razor"
+#line 39 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Pages\AddCategory.razor"
        
 
 
@@ -258,13 +258,18 @@ using Microsoft.Extensions.Primitives;
 
     private void DeleteCategory(int id)
     {
+        SqlShopLot.RemoveAllShopLotsByCategoryId(id);
+        SqlLot.RemoveAllLotsByCategoryId(id);
         SqlCategory.DeleteCategory(id);
+
     }
 
 #line default
 #line hidden
 #nullable disable
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime JSRuntime { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.IShopLot SqlShopLot { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ILot SqlLot { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private TradingPlatformBlazor.Data.Repository.ICategory SqlCategory { get; set; }
     }
 }

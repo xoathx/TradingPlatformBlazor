@@ -5,10 +5,18 @@
 
 @page "/lots/{id:int}"
 
-<h1 class="name-category">@nameCategory</h1>
+
+@if (CurrentCategory == null)
+{
+    <ErrorComponent ErrorCode="404"></ErrorComponent>
+}
+else
+{
+<h1 class="name-category d-inline">@nameCategory</h1>
+
 <AuthorizeView>
     <Authorized>
-        <div class="block-addlot">
+        <div class="block-addlot d-inline">
             <label class="addlot" for="button-addlot">
                 <span class="oi oi-plus"></span>
             </label>
@@ -17,7 +25,7 @@
     </Authorized>
 </AuthorizeView>
 <div class="row">
-    <div class="col">
+    <div class="col users-lots">
 
         <div class="content-categorylots">
             <div class="container">
@@ -42,7 +50,7 @@
             </div>
         </div>
     </div>
-    <div class="col">
+    <div class="col shops-lots">
         <div class="content-categorylots">
             <div class="container">
                 <div class="row">
@@ -71,6 +79,7 @@
 {
     <AddLots Title="@nameCategory" OnClose="OnDialogClose" CategoryId="@Id" />
 
+    }
 }
 @code {
     [Parameter]
@@ -79,16 +88,21 @@
     private string nameCategory;
     IEnumerable<Lot> allLots = new List<Lot>();
     public bool DialogOpen { get; set; }
-
+    Category CurrentCategory { get; set; }
     IEnumerable<ShopLot> allShopLots = new List<ShopLot>();
 
     protected override async Task OnInitializedAsync()
     {
-        nameCategory = SqlCategory.AllCategories().First(c => c.Id == Id).NameCategory;
-        allLots = SqlLot.LotsByID(Id).ToList();
+        CurrentCategory = SqlCategory.GetCategoryById(Id);
+        if (CurrentCategory != null)
+        {
+            nameCategory = CurrentCategory.NameCategory;
+            allLots = SqlLot.LotsByID(CurrentCategory.Id).ToList();
 
-        allShopLots = SqlShopLot.ShopLotsByCategoryId(Id).ToList();
-        await JSRuntime.InvokeVoidAsync("setTitle", nameCategory);
+            allShopLots = SqlShopLot.ShopLotsByCategoryId(CurrentCategory.Id).ToList();
+            await JSRuntime.InvokeVoidAsync("setTitle", nameCategory);
+        }
+
     }
 
 

@@ -44,6 +44,15 @@ namespace TradingPlatformBlazor.Data.Repository
             return _context.Shops.Any(item => item.NameShop == nameShop);
         }
 
+        public void ManyBack(int shopId, double amount)
+        {
+            Shop shop = GetShopById(shopId);
+            shop.ShopBalance += amount;
+            var s = _context.Attach(shop);
+            s.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.SaveChanges();
+        }
+
         public void RemoveShop(int shopId)
         {
             _context.Shops.Remove(GetShopById(shopId));
