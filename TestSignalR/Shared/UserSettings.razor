@@ -27,10 +27,10 @@
     </div>
 </div>
 @code {
-    [Parameter]
-    public User CurrentUser { get; set; }
-    [Parameter]
-    public EventCallback<bool> OnClose { get; set; }
+        [Parameter]
+        public User CurrentUser { get; set; }
+        [Parameter]
+        public EventCallback<bool> OnClose { get; set; }
 
 
     private string filename;
@@ -52,12 +52,15 @@
             var path = Path.Combine(/*host.ContentRootPath*/webHost.ContentRootPath, /*host.WebRootPath*/webHost.WebRootPath, "img", "avatars", filename + file.Extension);
             await using FileStream fs = new FileStream(path, FileMode.Create);
             await browserFile[0].OpenReadStream(maxFileSize).CopyToAsync(fs);
-
-            var delPath = Path.Combine(/*host.ContentRootPath*/webHost.ContentRootPath, /*host.WebRootPath*/webHost.WebRootPath, "img", "avatars", CurrentUser.PathAvatar);
-            File.Delete(delPath);
+            if (CurrentUser.PathAvatar != "default.png")
+            {
+                var delPath = Path.Combine(/*host.ContentRootPath*/webHost.ContentRootPath, /*host.WebRootPath*/webHost.WebRootPath, "img", "avatars", CurrentUser.PathAvatar);
+                File.Delete(delPath);
+            }
             CurrentUser.PathAvatar = filename + file.Extension;
             SqlUser.UpdateUser(CurrentUser);
             isLoading = false;
+
         }
         await OnClose.InvokeAsync(true);
     }

@@ -218,10 +218,10 @@ using Microsoft.Extensions.Primitives;
 #nullable restore
 #line 29 "C:\Users\uothy\source\repos\TradingPlatformBlazor\TestSignalR\Shared\UserSettings.razor"
        
-    [Parameter]
-    public User CurrentUser { get; set; }
-    [Parameter]
-    public EventCallback<bool> OnClose { get; set; }
+        [Parameter]
+        public User CurrentUser { get; set; }
+        [Parameter]
+        public EventCallback<bool> OnClose { get; set; }
 
 
     private string filename;
@@ -243,12 +243,15 @@ using Microsoft.Extensions.Primitives;
             var path = Path.Combine(/*host.ContentRootPath*/webHost.ContentRootPath, /*host.WebRootPath*/webHost.WebRootPath, "img", "avatars", filename + file.Extension);
             await using FileStream fs = new FileStream(path, FileMode.Create);
             await browserFile[0].OpenReadStream(maxFileSize).CopyToAsync(fs);
-
-            var delPath = Path.Combine(/*host.ContentRootPath*/webHost.ContentRootPath, /*host.WebRootPath*/webHost.WebRootPath, "img", "avatars", CurrentUser.PathAvatar);
-            File.Delete(delPath);
+            if (CurrentUser.PathAvatar != "default.png")
+            {
+                var delPath = Path.Combine(/*host.ContentRootPath*/webHost.ContentRootPath, /*host.WebRootPath*/webHost.WebRootPath, "img", "avatars", CurrentUser.PathAvatar);
+                File.Delete(delPath);
+            }
             CurrentUser.PathAvatar = filename + file.Extension;
             SqlUser.UpdateUser(CurrentUser);
             isLoading = false;
+
         }
         await OnClose.InvokeAsync(true);
     }
